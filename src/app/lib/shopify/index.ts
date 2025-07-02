@@ -6,13 +6,13 @@ import {
 } from "../constants";
 import { isShopifyError } from "../type-guards";
 import { ensureStartWith } from "../utils";
-import {
-  addToCartMutation,
-  createCartMutation,
-  editCartItemsMutation,
-  removeFromCartMutation,
-} from "./mutations/cart";
-import { getCartQuery } from "./queries/cart";
+// import {
+//   addToCartMutation,
+//   createCartMutation,
+//   editCartItemsMutation,
+//   removeFromCartMutation,
+// } from "./mutations/cart";
+// import { getCartQuery } from "./queries/cart";
 import {
   getCollectionProductsQuery,
   getCollectionsQuery,

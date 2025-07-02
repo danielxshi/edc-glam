@@ -1,51 +1,34 @@
-export const TAGS = {
-  collections: "collections",
-  products: "products",
-  cart: "cart",
-};
+import { collectionFragment } from "../fragments/collection";
+import { productFragment } from "../fragments/product";
 
-export type SortFilterItem = {
-  title: string;
-  slug: string | null;
-  sortKey: "RELEVANCE" | "BEST_SELLING" | "CREATED_AT" | "PRICE";
-  reverse: boolean;
-};
+export const getCollectionsQuery = /* GraphQL */ `
+  query getCollections {
+    collections(first: 100, sortKey: TITLE) {
+      edges {
+        node {
+          ...collection
+        }
+      }
+    }
+  }
+  ${collectionFragment}
+`;
 
-export const defaultSort: SortFilterItem = {
-  title: "Relevance",
-  slug: null,
-  sortKey: "RELEVANCE",
-  reverse: false,
-};
-
-export const sorting: SortFilterItem[] = [
-  defaultSort,
-  {
-    title: "Trending",
-    slug: "trending-desc",
-    sortKey: "BEST_SELLING",
-    reverse: false,
-  }, // asc
-  {
-    title: "Latest arrivals",
-    slug: "latest-desc",
-    sortKey: "CREATED_AT",
-    reverse: true,
-  },
-  {
-    title: "Price: Low to high",
-    slug: "price-asc",
-    sortKey: "PRICE",
-    reverse: false,
-  }, // asc
-  {
-    title: "Price: High to low",
-    slug: "price-desc",
-    sortKey: "PRICE",
-    reverse: true,
-  },
-];
-
-export const HIDDEN_PRODUCT_TAG = "nextjs-frontend-hidden";
-export const DEFAULT_OPTION = "Default Title";
-export const SHOPIFY_GRAPHQL_API_ENDPOINT = "/api/2024-07/graphql.json";
+export const getCollectionProductsQuery = /* GraphQL */ `
+  query getCollectionProducts(
+    $handle: String!
+    $sortKey: ProductCollectionSortKeys
+    $reverse: Boolean
+  ) {
+    collection(handle: $handle) {
+      products(sortKey: $sortKey, reverse: $reverse, first: 100) {
+        edges {
+          node {
+            ...product
+          }
+        }
+      }
+    }
+  }
+  ${productFragment}
+`;
