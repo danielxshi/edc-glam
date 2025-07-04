@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { useFormStatus } from 'react-dom'
 import { Dialog, Transition } from '@headlessui/react'
 import { ShoppingCartIcon } from '@heroicons/react/24/outline'
 import { Fragment, useEffect, useRef, useState } from 'react'
@@ -246,20 +247,14 @@ export default function CartModal() {
   )
 }
 
-/* -------- Checkout button uses React.useFormStatus() ---------- */
 function CheckoutButton() {
-  const [pending, setPending] = useState(false)
+  const { pending } = useFormStatus()
 
   return (
     <button
       className="block w-full rounded-full bg-blue-600 p-3 text-center text-sm font-medium text-white opacity-90 hover:opacity-100"
-      type="button"
+      type="submit"
       disabled={pending}
-      onClick={() => {
-        setPending(true)
-        // Simulate form submission or action
-        setTimeout(() => setPending(false), 2000)
-      }}
     >
       {pending ? <LoadingDots className="bg-white" /> : 'Proceed to Checkout'}
     </button>
