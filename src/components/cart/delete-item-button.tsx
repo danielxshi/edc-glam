@@ -1,7 +1,8 @@
 "use client";
+
+import React from "react";
 import { CartItem } from "../../lib/shopify/types";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { useFormState } from "react-dom";
 import { removeItem } from "./actions";
 
 export function DeleteItemButton({
@@ -9,19 +10,21 @@ export function DeleteItemButton({
   optimisticUpdate,
 }: {
   item: CartItem;
-  optimisticUpdate: any;
+  optimisticUpdate: (id: string, type: "delete") => void;
 }) {
-  const [message, formAction] = useFormState(removeItem, null);
-  const merchandiseId = item.merchandise.id;
-  const actionWithVariant = formAction.bind(null, merchandiseId);
+  const [message, formAction] = React.useActionState(
+    async (_prevState: any, formData: FormData) => {
+      const merchandiseId = formData.get("merchandiseId") as string;
+      if (!merchandiseId) return "Missing merchandise ID";
+      optimisticUpdate(merchandiseId, "delete");
+      return await removeItem(_prevState, merchandiseId);
+    },
+    null
+  );
 
   return (
-    <form
-      action={async () => {
-        optimisticUpdate(merchandiseId, "delete");
-        await actionWithVariant();
-      }}
-    >
+    <form action={formAction}>
+      <input type="hidden" name="merchandiseId" value={item.merchandise.id} />
       <button
         type="submit"
         aria-label="Remove cart item"
