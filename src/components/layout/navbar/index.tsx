@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { getMenu } from "../../../app/lib/shopify";
-import { Menu } from "../../../app/lib/shopify/types";
+import { getMenu } from "../../../lib/shopify";
+import { Menu } from "../../../lib/shopify/types";
 // import Link from "../../../components/link";
 import MobileMenu from "./mobile-menu";
 import Search from "./search";
