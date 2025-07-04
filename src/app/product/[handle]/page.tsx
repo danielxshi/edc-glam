@@ -13,14 +13,15 @@ import { Suspense } from "react";
 export async function generateMetadata({
   params,
 }: {
-  params: { handle: string };
+  params: { handle: string }
 }): Promise<Metadata> {
-  const product = await getProduct(params.handle);
+  const { handle } = await params
+  const product = await getProduct(handle)
 
-  if (!product) return notFound();
+  if (!product) return notFound()
 
-  const { url, width, height, altText: alt } = product.featuredImage || {};
-  const indexable = !product.tags.includes(HIDDEN_PRODUCT_TAG);
+  const { url, width, height, altText: alt } = product.featuredImage || {}
+  const indexable = !product.tags.includes(HIDDEN_PRODUCT_TAG)
 
   return {
     title: product.seo.title || product.title,
@@ -45,16 +46,19 @@ export async function generateMetadata({
           ],
         }
       : null,
-  };
+  }
 }
 
 export default async function ProductPage({
   params,
 }: {
-  params: { handle: string };
+  params: { handle: string }
 }) {
-  const product = await getProduct(params.handle);
-  if (!product) return notFound();
+  const { handle } = await params
+  const product = await getProduct(handle)
+
+  if (!product) return notFound()
+
   return (
     <ProductProvider>
       <div className="mx-auto max-w-screen-2xl px-4">
@@ -73,22 +77,24 @@ export default async function ProductPage({
               />
             </Suspense>
           </div>
+
           <div className="basis-full lg:basis-2/6">
             <Suspense fallback={null}>
               <ProductDescription product={product} />
             </Suspense>
           </div>
         </div>
-        <RelatedPRoducts id={product.id} />
+
+        <RelatedProducts id={product.id} />
       </div>
     </ProductProvider>
-  );
+  )
 }
 
-async function RelatedPRoducts({ id }: { id: string }) {
-  const relatedProducts = await getProductRecommendations(id);
+async function RelatedProducts({ id }: { id: string }) {
+  const relatedProducts = await getProductRecommendations(id)
 
-  if (!relatedProducts) return null;
+  if (!relatedProducts) return null
 
   return (
     <div className="py-8">
@@ -120,5 +126,5 @@ async function RelatedPRoducts({ id }: { id: string }) {
         ))}
       </ul>
     </div>
-  );
+  )
 }

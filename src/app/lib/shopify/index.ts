@@ -6,13 +6,13 @@ import {
 } from "../constants";
 import { isShopifyError } from "../type-guards";
 import { ensureStartWith } from "../utils";
-// import {
-//   addToCartMutation,
-//   createCartMutation,
-//   editCartItemsMutation,
-//   removeFromCartMutation,
-// } from "./mutations/cart";
-// import { getCartQuery } from "./queries/cart";
+import {
+  addToCartMutation,
+  createCartMutation,
+  editCartItemsMutation,
+  removeFromCartMutation,
+} from "./mutations/cart";
+import { getCartQuery } from "./queries/cart";
 import {
   getCollectionProductsQuery,
   getCollectionsQuery,
@@ -422,7 +422,7 @@ export async function revalidate(req: NextRequest): Promise<NextResponse> {
     "products/delete",
     "products/update",
   ];
-  const topic = headers().get("x-shopify-topic") || "unknown";
+  const topic = (await headers()).get("x-shopify-topic") || "unknown";
   const secret = req.nextUrl.searchParams.get("secret");
   const isCollectionUpdate = collectionWebhooks.includes(topic);
   const isProductUpdate = productWebhooks.includes(topic);
