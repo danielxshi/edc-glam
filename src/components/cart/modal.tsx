@@ -90,8 +90,7 @@ export default function CartModal() {
               </div>
 
               {/* Empty state */}
-              {!cart || cart.lines.length === 0 ? (
-                <div>
+              {!cart?.lines?.length ? (                <div>
                   <ShoppingCartIcon className="h-16" />
                   <p className="mt-6 text-center text-2xl font-bold">
                     Your Cart is Empty.
