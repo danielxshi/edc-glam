@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import FallbackImage from './fallback-image';
 
 const SignupBanner: React.FC = () => {
   const [form, setForm] = useState({ name: '', email: '' });
@@ -21,7 +22,7 @@ const SignupBanner: React.FC = () => {
       <div className="container mx-auto px-4 flex flex-col lg:flex-row items-center justify-between gap-12">
         {/* Left Image */}
         <div className="w-full lg:w-1/2 flex justify-center">
-          <Image
+          <FallbackImage
             src="/images/metal-heart.png" // replace with your actual path
             alt="metal heart"
             width={240}

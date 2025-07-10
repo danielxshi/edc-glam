@@ -10,7 +10,7 @@ export async function Navbar() {
   const menu = await getMenu("next-js-frontend-menu");
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-[999] bg-white/80 dark:bg-black/80 backdrop-blur-sm border-b border-neutral-200 dark:border-neutral-700">
+    <nav className="sticky top-0 left-0 w-full z-[999] bg-white/80 dark:bg-black/80 backdrop-blur-sm border-b border-neutral-200 dark:border-neutral-700">
       <div className="flex items-center justify-between h-16 px-4 lg:px-6">
         {/* Left: Mobile menu & logo */}
         <div className="flex items-center space-x-4 w-full md:w-1/3">

@@ -123,10 +123,6 @@ body {
       display: flex;
       flex-wrap: wrap;
     }
-    a {
-      font-size: 1.5rem;
-      line-height: 150%;
-    }
     h5,
     span {
       color: var(--Text-Color, #ffffff);

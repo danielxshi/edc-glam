@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
+import FallbackImage from '../fallback-image';
 
 const features = [
   {
@@ -48,7 +49,7 @@ const FeatureCarousel: React.FC = () => {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <Image
+              <FallbackImage
                 src={features[index].imageUrl}
                 alt={features[index].title}
                 layout="fill"

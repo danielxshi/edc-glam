@@ -1,6 +1,7 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
+import Image from "next/image";
+import FallbackImage from "./fallback-image"; // Adjust the path as needed
 
 interface FullScreenBannerProps {
   imageUrl: string;
@@ -16,7 +17,7 @@ const FullScreenBanner: React.FC<FullScreenBannerProps> = ({
   return (
     <section className="mt-12 md:mt-24 lg:mt-32 relative w-full h-screen flex items-center justify-center text-white text-center px-4">
       {/* Background Image */}
-      <Image
+      <FallbackImage
         src={imageUrl}
         alt={title}
         fill

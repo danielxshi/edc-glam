@@ -13,13 +13,16 @@ const FooterItems = [
     education: {
       link: [
         {
-          school: "Simon Fraser University",
-          certification: "BSc., Interactive Arts & Technology",
-          reward: "President's Honour Roll, 4.0 GPA",
+          school: "Collection 1 ",
         },
         {
-          school: "Red Academy | Vancouver",
-          certification: "Web Development Bootcamp",
+          school: "Collection 2",
+        },
+        {
+          school: "Collection 3",
+        },
+        {
+          school: "Collection 4",
         },
       ],
     },
@@ -28,34 +31,22 @@ const FooterItems = [
     experience: {
       link: [
         {
-          company: "Verscape Technology Ltd.",
-          position: "Web Developer",
-          date: "July '24 - Dec '24",
+          company: "Sizing",
         },
         {
-          company: "Juice Group",
-          position: "Web Developer",
-          date: "Mar '24 - Present",
+          company: "FAQ",
         },
         {
-          company: "A-LAB Creative Agency",
-          position: "Senior UXUI Designer",
-          date: "Nov '23 - Feb '24",
+          company: "Shipping",
         },
         {
-          company: "BGM Dance Studio",
-          position: "Marketing Manager",
-          date: "Mar '23 - Aug '23",
+          company: "Return & Exchange Policy",
         },
         {
-          company: "005F Agency",
-          position: "Director of Web Development",
-          date: "Sept '21 - Present",
+          company: "Privacy Policy",
         },
         {
-          company: "Pacific Northwest Group",
-          position: "Junior Web Developer",
-          date: "Dec '17 - Apr '18",
+          company: "Terms of Service & Conditions",
         },
       ],
     },
@@ -63,18 +54,18 @@ const FooterItems = [
   {
     socials: {
       link: [
-        // {
-        //   link: "Instagram",
-        //   url: "https://www.instagram.com/danielxshi/",
-        // },
+        {
+          link: "Instagram",
+          url: "https://www.instagram.com/danielxshi/",
+        },
         {
           link: "LinkedIN",
           url: "https://www.linkedin.com/in/daniel-xiang-shi/",
         },
-        // {
-        //   link: "Behance",
-        //   url: "https://"
-        // },
+        {
+          link: "Amazon",
+          url: "https://",
+        },
       ],
     },
   },

@@ -15,16 +15,15 @@ export const metadata = {
 export default function Home() {
   return (
     <main className="flex-1">
-      <section>
+      <section className="-mt-16">
         <div className="relative w-full h-screen overflow-hidden">
           {/* Background image */}
-          <Image
-            src="https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg?_gl=1*f3nfzs*_ga*NjU4MTIyMTMzLjE3NTIxMTIzMTk.*_ga_8JE65Q40S6*czE3NTIxMTIzMTkkbzEkZzEkdDE3NTIxMTIzMzckajQyJGwwJGgw" // replace with remote URL or static file
+          <FallbackImage
+            src="https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg"
             alt="Background"
-            layout="fill"
-            objectFit="cover"
+            fill
             priority
-            className="-z-10"
+            className="-z-10 object-cover"
           />
 
           {/* Overlay content */}
