@@ -1,0 +1,23 @@
+.footer {
+  text-align: center;
+}
+
+.bottomBar {
+  height: min-content;
+  display: flex;
+  align-items: center;
+  justify-content: cent er;
+}
+
+.scrollText {
+  font-weight: bold;
+  text-transform: uppercase;
+  line-height: 1;
+  transform-origin: center center;
+  transform: rotateX(90deg) translate3d(0, 0, -90px);
+  transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 1.5s ease;
+}
+
+.visible {
+  transform: rotateX(0deg) translate3d(0, 0, 0);
+}

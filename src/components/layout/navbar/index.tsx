@@ -10,7 +10,7 @@ import CartModal from "@/components/cart/modal";
 export async function Navbar() {
   const menu = await getMenu("next-js-frontend-menu");
   return (
-    <nav className="flex items-center justify-between p-4 lg:px-6 sticky top-0 backdrop-blur-sm z-[999]">
+    <nav className="flex items-center justify-between p-4 lg:px-6 fixed top-0 backdrop-blur-sm z-[999]">
       <div className="block flex-none md:hidden">
         <MobileMenu menu={menu} />
       </div>
