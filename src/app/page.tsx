@@ -3,6 +3,7 @@ import FallbackImage from "../components/fallback-image";
 import Image from "next/image";
 import SignupBanner from "@/components/signup-banner";
 import FeatureCarousel from "@/components/layout/carousel";
+import FullScreenBanner from "@/components/full-screen-banner";
 export const metadata = {
   description:
     "High-performance e-commerce store built with Next.js and Shopify.",
@@ -127,7 +128,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="w-full pt-12 md:pt-24 lg:pt-32 border-bottom-b">
+      <section className="w-full mt-12 md:mt-24 lg:mt-32 border-bottom-b">
         <div className="px-4 md:px-6 space-y-10 xl:space-y-16">
           <div className="grid max-w-[1300px] mx-auto gap-4 px-4 sm:px-6 md:px-10 md:grid-cols-2 md:gap-16">
             <div>
@@ -165,51 +166,19 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <FallbackImage
-            src="/banner.png"
-            width={1270}
-            height={300}
-            alt="Hero"
-            className="mx-auto rounded-t-xl object-cover"
-          />
-        </div>
-      </section>
-      <section className="w-full py-12 lg:py-7 bg-[url('/sale-backdrop.svg')] grid place-content-center">
-        <div className="container grid items-center justify-center gap-4 px-4 text-center md:px-6">
-          <FallbackImage
-            width={400}
-            height={500}
-            src="/sale-banner.svg"
-            alt="sale footer banner"
-          />
-          <div className="space-y-3 z-50">
-            <div className="bg-white dark:bg-black">
-              <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight p-2">
-                Explore Our Sale Collection
-              </h2>
-            </div>
-            <div className="bg-white">
-              <p className="mx-auto max-w-[600px] text-black md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed p-2">
-                Don&apos;t miss out on our amazing deals and discounts.
-              </p>
-            </div>
-          </div>
-          <div className="mx-auto w-full max-w-sm space-y-2 z-50">
-            <Link
-              href="#"
-              className="inline-flex h-10 items-center justify-center rounded-md bg-slate-200 dark:bg-black px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-              prefetch={false}
-            >
-              Shop Sale
-            </Link>
-          </div>
         </div>
       </section>
 
-      <section className="w-full py-12 lg:py-7 bg-[url('/sale-backdrop.svg')] grid place-content-center">
+      <FullScreenBanner
+        imageUrl="/your-image.jpg"
+        title="Explore Our Sale Collection"
+        description="Don't miss out on our amazing deals and discounts."
+      />
+
+      <section className="mt-12 md:mt-24 lg:mt-32 w-full bg-[url('/sale-backdrop.svg')] grid place-content-center">
         <FeatureCarousel />
       </section>
-      <section className="w-full py-12 md:py-24 lg:py-32 grid place-content-center">
+      <section className="w-full mt-12 md:mt-24 lg:mt-32 grid place-content-center">
         <div className="space-y-12 px-4 md:px-6">
           <div className="mx-auto grid items-start justify-center gap-8  sm:grid-cols-2 md:gap-12  lg:grid-cols-3 px-4">
             <div className="grid gap-1">
@@ -258,8 +227,14 @@ export default function Home() {
             </div>
           </div>
         </div>
+
+        <FullScreenBanner
+          imageUrl="/your-image.jpg"
+          title="Explore Our Sale Collection"
+          description="Don't miss out on our amazing deals and discounts."
+        />
       </section>
-      <section className="w-full py-12 lg:py-7 bg-[url('/sale-backdrop.svg')] grid place-content-center">
+      <section className="w-full mt-12 md:mt-24 lg:mt-32 bg-[url('/sale-backdrop.svg')] grid place-content-center">
         <SignupBanner />
       </section>
     </main>

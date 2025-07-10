@@ -71,9 +71,7 @@ const FeatureCarousel: React.FC = () => {
               className="max-w-xl"
             >
               <h2 className="text-3xl lg:text-4xl font-bold mb-4 uppercase">{features[index].title}</h2>
-              <p className="text-gray-600 mb-6">
-                {features[index].description}
-              </p>
+              <p className="text-gray-600 mb-6">{features[index].description}</p>
               <Link
                 href={features[index].linkHref}
                 className="underline font-medium hover:text-pink-600 transition"
@@ -83,6 +81,20 @@ const FeatureCarousel: React.FC = () => {
             </motion.div>
           </AnimatePresence>
         </div>
+      </div>
+
+      {/* Slide Indicators */}
+      <div className="mt-8 flex justify-center gap-3">
+        {features.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setIndex(i)}
+            className={`w-3 h-3 rounded-full transition-all duration-300 ${
+              i === index ? 'bg-pink-600 scale-110' : 'bg-gray-300 hover:bg-gray-400'
+            }`}
+            aria-label={`Go to slide ${i + 1}`}
+          />
+        ))}
       </div>
     </section>
   );

@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { getMenu } from "../../../lib/shopify";
 import { Menu } from "../../../lib/shopify/types";
-// import Link from "../../../components/link";
 import MobileMenu from "./mobile-menu";
 import Search from "./search";
 import LogoSquare from "../../../components/layout/logo-square";
@@ -9,47 +8,51 @@ import CartModal from "@/components/cart/modal";
 
 export async function Navbar() {
   const menu = await getMenu("next-js-frontend-menu");
+
   return (
-    <nav className="flex items-center justify-between p-4 lg:px-6 fixed top-0 backdrop-blur-sm z-[999]">
-      <div className="block flex-none md:hidden">
-        <MobileMenu menu={menu} />
-      </div>
-      <div className="flex w-full items-center">
-        <div className="flex w-full md:w-1/3">
+    <nav className="fixed top-0 left-0 w-full z-[999] bg-white/80 dark:bg-black/80 backdrop-blur-sm border-b border-neutral-200 dark:border-neutral-700">
+      <div className="flex items-center justify-between h-16 px-4 lg:px-6">
+        {/* Left: Mobile menu & logo */}
+        <div className="flex items-center space-x-4 w-full md:w-1/3">
+          <MobileMenu menu={menu} />
+
           <Link
-            href={"/"}
+            href="/"
+            className="flex items-center space-x-2"
             prefetch={true}
-            className="mr-2 flex w-full items-center justify-center md:w-auto lg:mr-6"
           >
             <LogoSquare />
-            <div className="ml-2 flex-none text-sm font-medium uppercase md:hidden lg:block">
-              {process.env.SITE_NAME}
-            </div>
+            <span className="text-sm font-medium uppercase hidden sm:inline">
+              {process.env.SITE_NAME || "Shop"}
+            </span>
           </Link>
 
-          {menu.length > 0 ? (
-            <ul className="hidden gap-6 text-sm md:flex md:items-center">
+          {/* Desktop Menu */}
+          {menu.length > 0 && (
+            <ul className="hidden md:flex gap-4 text-sm ml-6">
               {menu.map((item: Menu) => (
                 <li key={item.title}>
                   <Link
                     href={item.path}
-                    prefetch={true}
-                    className="text-gray-700 underline-offset-4 hover:text-black hover:underline dark:text-neutral-400 dark:hover:text-neutral-300"
+                    className="text-gray-700 dark:text-neutral-400 hover:text-black dark:hover:text-neutral-200 underline-offset-4 hover:underline transition"
                   >
                     {item.title}
                   </Link>
                 </li>
               ))}
             </ul>
-          ) : null}
+          )}
         </div>
-        <div className="hidden justify-center md:flex md:w-1/3">
+
+        {/* Center: Search (desktop only) */}
+        <div className="hidden md:flex justify-center w-1/3">
           <Search />
         </div>
-        <div className="flex justify-end md:w-1/3">
+
+        {/* Right: Cart */}
+        <div className="flex justify-end w-full md:w-1/3">
           <CartModal />
         </div>
-        <div className="flex justify-end md:w-1/3">{/* <CartModal /> */}</div>
       </div>
     </nav>
   );
