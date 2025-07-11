@@ -1,23 +1,45 @@
-import Link from "next/link";
-import FallbackImage from "../components/fallback-image";
-import Image from "next/image";
-import SignupBanner from "@/components/signup-banner";
-import FeatureCarousel from "@/components/layout/carousel";
-import FullScreenBanner from "@/components/full-screen-banner";
-export const metadata = {
-  description:
-    "High-performance e-commerce store built with Next.js and Shopify.",
-  openGraph: {
-    type: "website",
-  },
-};
+'use client';
+
+import { useEffect, useRef } from 'react';
+import Link from 'next/link';
+import FallbackImage from '../components/fallback-image';
+import SignupBanner from '@/components/signup-banner';
+import FeatureCarousel from '@/components/layout/carousel';
+import FullScreenBanner from '@/components/full-screen-banner';
+import { motion, useAnimation } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
+
+function FadeInWhenVisible({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+  const controls = useAnimation();
+  const [ref, inView] = useInView({ threshold: 0.2, triggerOnce: true });
+
+  useEffect(() => {
+    if (inView) {
+      controls.start('visible');
+    }
+  }, [controls, inView]);
+
+  return (
+    <motion.div
+      ref={ref}
+      initial="hidden"
+      animate={controls}
+      transition={{ duration: 0.7, delay }}
+      variants={{
+        hidden: { opacity: 0, y: 30 },
+        visible: { opacity: 1, y: 0 },
+      }}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
 export default function Home() {
   return (
     <main className="flex-1">
       <section className="-mt-16">
         <div className="relative w-full h-screen overflow-hidden">
-          {/* Background image */}
           <FallbackImage
             src="https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg"
             alt="Background"
@@ -26,147 +48,104 @@ export default function Home() {
             className="-z-10 object-cover"
           />
 
-          {/* Overlay content */}
           <div className="absolute inset-0 flex flex-col justify-center items-center text-white text-center px-4">
-            <h1 className="text-3xl md:text-5xl font-bold mb-4">
-              THE TROPICAL COLLECTION
-            </h1>
-            <p className="text-lg md:text-xl mb-6">
-              NEW SUMMER INSPIRED PRESS-ON NAILS
-            </p>
-            <Link
-              href="/shop"
-              className="bg-white text-black px-6 py-3 text-sm font-semibold rounded hover:bg-gray-200 transition"
-            >
-              SHOP NOW
-            </Link>
-          </div>
-        </div>
-      </section>
-      <section className="w-full py-12 md:py-24 lg:py-32 grid place-content-center">
-        <div className="container space-y-12 px-4 md:px-6">
-          <div className="flex flex-col items-center justify-center space-y-4 text-center">
-            <div className="space-y-2">
-              <div className="inline-block rounded-lg bg-muted px-3 py-1 text-sm">
-                New Arrivals
-              </div>
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
-                Trending Now
-              </h2>
-              <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                Check out our latest collection of stylish and comfortable
-                clothing.
-              </p>
-            </div>
-          </div>
-          <div className="mx-auto grid items-start justify-center gap-8 sm:max-w-4xl sm:grid-cols-2 md:gap-12 lg:max-w-5xl lg:grid-cols-4">
-            <div className="grid gap-1">
-              <Link
-                href="/search/womens-collection"
-                className="group"
-                prefetch={false}
-              >
-                <FallbackImage
-                  src="/womens-collection.png"
-                  width={400}
-                  height={500}
-                  alt="Women's Collection"
-                  className="aspect-[4/5] overflow-hidden rounded-lg object-cover group-hover:scale-105 transition-transform"
-                />
-                <h3 className="mt-4 text-lg font-bold group-hover:underline">
-                  Women\&apos;s Collection
-                </h3>
-              </Link>
-            </div>
-            <div className="grid gap-1">
-              <Link
-                href="/search/mens-collection"
-                className="group"
-                prefetch={false}
-              >
-                <FallbackImage
-                  src="/mens-collection.png"
-                  width={400}
-                  height={500}
-                  alt="Men's Collection"
-                  className="aspect-[4/5] overflow-hidden rounded-lg object-cover group-hover:scale-105 transition-transform"
-                />
-                <h3 className="mt-4 text-lg font-bold group-hover:underline">
-                  Men\&apos;s Collection
-                </h3>
-              </Link>
-            </div>
-            <div className="grid gap-1">
-              <Link href="/search/kids" className="group" prefetch={false}>
-                <FallbackImage
-                  src="/kids-collection.png"
-                  width={400}
-                  height={500}
-                  alt="Kids' Collection"
-                  className="aspect-[4/5] overflow-hidden rounded-lg object-cover group-hover:scale-105 transition-transform"
-                />
-                <h3 className="mt-4 text-lg font-bold group-hover:underline">
-                  Kids\&apos;s Collection
-                </h3>
-              </Link>
-            </div>
-            <div className="grid gap-1">
-              <Link href="/search/sales" className="group" prefetch={false}>
-                <FallbackImage
-                  src="/sales-collection.png"
-                  width={400}
-                  height={500}
-                  alt="Sale's Collection"
-                  className="aspect-[4/5] overflow-hidden rounded-lg object-cover group-hover:scale-105 transition-transform"
-                />
-                <h3 className="mt-4 text-lg font-bold group-hover:underline">
-                  Sale\&apos;s Collection
-                </h3>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section className="w-full mt-12 md:mt-24 lg:mt-32 border-bottom-b">
-        <div className="px-4 md:px-6 space-y-10 xl:space-y-16">
-          <div className="grid max-w-[1300px] mx-auto gap-4 px-4 sm:px-6 md:px-10 md:grid-cols-2 md:gap-16">
-            <div>
-              <h1 className="lg:leading-tighter text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl xl:text-[3.4rem] 2xl:text-[3.75rem]">
-                Discover the Latest Fashion Trends
+            <FadeInWhenVisible>
+              <h1 className="text-3xl md:text-5xl font-bold mb-4">
+                THE TROPICAL COLLECTION
               </h1>
-            </div>
-            <div className="flex flex-col items-start space-y-4">
-              <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-                Explore our curated collections of stylish apparel and
-                accessories for every occasion.
+            </FadeInWhenVisible>
+            <FadeInWhenVisible delay={0.2}>
+              <p className="text-lg md:text-xl mb-6">
+                NEW SUMMER INSPIRED PRESS-ON NAILS
               </p>
-              <div className="flex flex-col w-full md:flex-row gap-2 text-nowrap">
-                <Link
-                  href="/search/womens-collection"
-                  className="inline-flex h-9 items-center justify-center rounded-md border bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-                  prefetch={false}
-                >
-                  Shop Women
-                </Link>
-                <Link
-                  href="/search/mens-collection"
-                  className="inline-flex h-9 items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-                  prefetch={false}
-                >
-                  Shop Men
-                </Link>
-                <Link
-                  href="/search/sales"
-                  className="inline-flex h-9 items-center justify-center rounded-md border border-red-300 border-input bg-background px-4 py-2 text-sm font-medium shadow-sm transition-colors hover:bg-red-300 hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-                  prefetch={false}
-                >
-                  Shop Sales
-                </Link>
-              </div>
-            </div>
+            </FadeInWhenVisible>
+            <FadeInWhenVisible delay={0.4}>
+              <Link
+                href="/shop"
+                className="bg-white text-black px-6 py-3 text-sm font-semibold rounded hover:bg-gray-200 transition"
+              >
+                SHOP NOW
+              </Link>
+            </FadeInWhenVisible>
           </div>
         </div>
       </section>
+
+      <section className="w-full py-12 md:py-24 lg:py-32 grid place-content-center">
+        <FadeInWhenVisible>
+          <div className="container space-y-12 px-4 md:px-6">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+              <div className="space-y-2">
+                <div className="inline-block rounded-lg bg-muted px-3 py-1 text-sm">
+                  New Arrivals
+                </div>
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
+                  Trending Now
+                </h2>
+                <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                  Check out our latest collection of stylish and comfortable clothing.
+                </p>
+              </div>
+            </div>
+
+            <div className="mx-auto grid items-start justify-center gap-8 sm:max-w-4xl sm:grid-cols-2 md:gap-12 lg:max-w-5xl lg:grid-cols-4">
+              {[
+                { href: '/search/womens-collection', src: '/womens-collection.png', title: "Women's Collection" },
+                { href: '/search/mens-collection', src: '/mens-collection.png', title: "Men's Collection" },
+                { href: '/search/kids', src: '/kids-collection.png', title: "Kids' Collection" },
+                { href: '/search/sales', src: '/sales-collection.png', title: "Sale's Collection" },
+              ].map((item, i) => (
+                <FadeInWhenVisible key={item.href} delay={i * 0.15}>
+                  <div className="grid gap-1 card">
+                    <Link href={item.href} className="group" prefetch={false}>
+                      <FallbackImage
+                        src={item.src}
+                        width={400}
+                        height={500}
+                        alt={item.title}
+                        className="aspect-[4/5] overflow-hidden rounded-lg object-cover group-hover:scale-105 transition-transform"
+                      />
+                      <h3 className="mt-4 text-lg font-bold group-hover:underline">
+                        {item.title}
+                      </h3>
+                    </Link>
+                  </div>
+                </FadeInWhenVisible>
+              ))}
+            </div>
+          </div>
+        </FadeInWhenVisible>
+      </section>
+
+      <FadeInWhenVisible>
+        <section className="w-full mt-12 md:mt-24 lg:mt-32 border-bottom-b">
+          <div className="px-4 md:px-6 space-y-10 xl:space-y-16">
+            <div className="grid max-w-[1300px] mx-auto gap-4 px-4 sm:px-6 md:px-10 md:grid-cols-2 md:gap-16">
+              <div>
+                <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl xl:text-[3.4rem] 2xl:text-[3.75rem]">
+                  Discover the Latest Fashion Trends
+                </h1>
+              </div>
+              <div className="flex flex-col items-start space-y-4">
+                <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
+                  Explore our curated collections of stylish apparel and accessories for every occasion.
+                </p>
+                <div className="flex flex-col w-full md:flex-row gap-2 text-nowrap">
+                  <Link href="/search/womens-collection" className="btn">
+                    Shop Women
+                  </Link>
+                  <Link href="/search/mens-collection" className="btn-alt">
+                    Shop Men
+                  </Link>
+                  <Link href="/search/sales" className="btn-sale">
+                    Shop Sales
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </FadeInWhenVisible>
 
       <FullScreenBanner
         imageUrl="/your-image.jpg"
@@ -174,68 +153,23 @@ export default function Home() {
         description="Don't miss out on our amazing deals and discounts."
       />
 
-      <section className="mt-12 md:mt-24 lg:mt-32 w-full bg-[url('/sale-backdrop.svg')] grid place-content-center">
-        <FeatureCarousel />
-      </section>
-      <section className="w-full mt-12 md:mt-24 lg:mt-32 grid place-content-center">
-        <div className="space-y-12 px-4 md:px-6">
-          <div className="mx-auto grid items-start justify-center gap-8  sm:grid-cols-2 md:gap-12  lg:grid-cols-3 px-4">
-            <div className="grid gap-1">
-              <Link href="/search/short" className="group" prefetch={false}>
-                <FallbackImage
-                  src="/images/short-nails.png" // use correct paths
-                  width={400}
-                  height={500}
-                  alt="Short Press-On Nails"
-                  className="aspect-[4/5] h-[80vh] overflow-hidden rounded-lg object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <h3 className="mt-4 text-center text-sm font-semibold tracking-wider group-hover:underline uppercase">
-                  Shop Short Press-On Nails
-                </h3>
-              </Link>
-            </div>
+      <FadeInWhenVisible>
+        <section className="mt-12 md:mt-24 lg:mt-32 w-full bg-[url('/sale-backdrop.svg')] grid place-content-center">
+          <FeatureCarousel />
+        </section>
+      </FadeInWhenVisible>
 
-            <div className="grid gap-1">
-              <Link href="/search/medium" className="group" prefetch={false}>
-                <FallbackImage
-                  src="/images/medium-nails.png"
-                  width={400}
-                  height={500}
-                  alt="Medium Press-On Nails"
-                  className="aspect-[4/5] h-[80vh] overflow-hidden rounded-lg object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <h3 className="mt-4 text-center text-sm font-semibold tracking-wider group-hover:underline uppercase">
-                  Shop Medium Press-On Nails
-                </h3>
-              </Link>
-            </div>
+      <FullScreenBanner
+        imageUrl="/your-image.jpg"
+        title="Explore Our Sale Collection"
+        description="Don't miss out on our amazing deals and discounts."
+      />
 
-            <div className="grid gap-1">
-              <Link href="/search/long" className="group" prefetch={false}>
-                <FallbackImage
-                  src="/images/long-nails.png"
-                  width={400}
-                  height={500}
-                  alt="Long Press-On Nails"
-                  className="aspect-[4/5] h-[80vh] overflow-hidden rounded-lg object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <h3 className="mt-4 text-center text-sm font-semibold tracking-wider group-hover:underline uppercase">
-                  Shop Long Press-On Nails
-                </h3>
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        <FullScreenBanner
-          imageUrl="/your-image.jpg"
-          title="Explore Our Sale Collection"
-          description="Don't miss out on our amazing deals and discounts."
-        />
-      </section>
-      <section className="w-full mt-12 md:mt-24 lg:mt-32 bg-[url('/sale-backdrop.svg')] grid place-content-center">
-        <SignupBanner />
-      </section>
+      <FadeInWhenVisible>
+        <section className="w-full mt-12 md:mt-24 lg:mt-32 bg-[url('/sale-backdrop.svg')] grid place-content-center">
+          <SignupBanner />
+        </section>
+      </FadeInWhenVisible>
     </main>
   );
 }
