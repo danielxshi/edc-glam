@@ -84,7 +84,7 @@ export const renderSwitch = (params: FooterItem) => {
         <ul>
           {params.socials.link.map((item, index) => (
             <li className="underscore-cta" key={index}>
-              <Link href={item.url}>{item.link}</Link>
+              <a href={item.url}>{item.link}</a>
             </li>
           ))}
         </ul>
@@ -97,7 +97,7 @@ export const renderSwitch = (params: FooterItem) => {
 
 const Footer: React.FC = () => {
   return (
-    <footer className="px-8">
+    <footer className="px-8 pb-8">
       <div className="footer-container gap-x-8">
         {FooterMessages.FooterItems.map((item, index) => (
           <React.Fragment key={index}>{renderSwitch(item)}</React.Fragment>

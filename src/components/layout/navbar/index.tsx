@@ -13,23 +13,12 @@ export async function Navbar() {
     <nav className="sticky top-0 left-0 w-full z-[999] bg-white/80 dark:bg-black/80 backdrop-blur-sm border-b border-neutral-200 dark:border-neutral-700">
       <div className="flex items-center justify-between h-16 px-4 lg:px-6">
         {/* Left: Mobile menu & logo */}
-        <div className="flex items-center space-x-4 w-full md:w-1/3">
+        <div className="flex items-center space-x-4 w-1/3">
           <MobileMenu menu={menu} />
-
-          <Link
-            href="/"
-            className="flex items-center space-x-2"
-            prefetch={true}
-          >
-            <LogoSquare />
-            <span className="text-sm font-medium uppercase hidden sm:inline">
-              {process.env.SITE_NAME || "Shop"}
-            </span>
-          </Link>
 
           {/* Desktop Menu */}
           {menu.length > 0 && (
-            <ul className="hidden md:flex gap-4 text-sm ml-6">
+            <ul className="hidden lg:flex gap-4 text-sm ml-6">
               {menu.map((item: Menu) => (
                 <li key={item.title}>
                   <Link
@@ -45,13 +34,31 @@ export async function Navbar() {
         </div>
 
         {/* Center: Search (desktop only) */}
-        <div className="hidden md:flex justify-center w-1/3">
-          <Search />
+        <div className="flex justify-center w-1/3 right-0">
+          <Link
+            href="/"
+            className="flex items-center space-x-2"
+            prefetch={true}
+          >
+            <LogoSquare />
+            <span className="text-sm font-medium uppercase hidden sm:inline">
+              {process.env.SITE_NAME || "Shop"}
+            </span>
+          </Link>
         </div>
 
         {/* Right: Cart */}
-        <div className="flex justify-end w-full md:w-1/3">
-          <CartModal />
+        <div className="flex justify-center w-1/3 right-0">
+          <div className=" justify-center md:flex mr-0 ml-auto">
+            <div className="hidden lg:flex">
+              <Search />
+            </div>
+            <div className="ml-4 *:right-0 flex">
+              <CartModal />
+            </div>
+          </div>
+
+          {/* <CartModal /> */}
         </div>
       </div>
     </nav>
