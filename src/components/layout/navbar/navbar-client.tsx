@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Menu } from '../../../lib/shopify/types';
 import MobileMenu from './mobile-menu';
 import Search from './search';
 import LogoSquare from '../../../components/layout/logo-square';
 import CartModal from '@/components/cart/modal';
-import { motion } from 'framer-motion';
+// import AnimatedLink from '@/components/layout/animated-link';
+import Link from 'next/link';
 
 interface Props {
   menu: Menu[];
@@ -34,63 +34,36 @@ export default function NavbarClient({ menu, siteName }: Props) {
           : 'bg-transparent dark:bg-transparent'
       }`}
     >
-      <div className="flex items-center justify-between h-16 px-4 lg:px-6">
-        {/* Left: Mobile menu & desktop links */}
+      <div className="flex items-center justify-between h-24 px-4 lg:px-6">
         <div className="flex items-center space-x-4 w-1/3">
           <MobileMenu menu={menu} />
 
           {menu.length > 0 && (
-            <ul className="hidden lg:flex gap-4 text-sm ml-6">
+            <ul className="hidden lg:flex gap-4 text-sm font-medium">
               {menu.map((item: Menu) => (
                 <li key={item.title}>
-                  <motion.div
-                    whileHover="hover"
-                    initial="initial"
-                    className="relative inline-block"
-                  >
-                    <Link href={item.path}>
-                      <motion.span
-                        variants={{
-                          initial: { color: '#4b5563' }, // text-gray-700
-                          hover: { color: '#ffffff' },   // hover black
-                        }}
-                        transition={{ duration: 0.15, ease: 'easeInOut' }}
-                        className="dark:text-neutral-400 transition-colors"
-                      >
-                        {item.title}
-                      </motion.span>
-                    </Link>
-
-                    <motion.span
-                      variants={{
-                        initial: { scaleX: 0, opacity: 0 },
-                        hover: { scaleX: 1, opacity: 1 },
-                      }}
-                      transition={{ duration: 0.4, ease: 'easeInOut' }}
-                      className="absolute left-0 -bottom-0.5 w-full h-[1px] bg-black dark:bg-neutral-200 origin-left"
-                    />
-                  </motion.div>
+                  <Link href={item.path}>
+                    <span className="dark:text-neutral-400 transition-colors">
+                      {item.title}
+                    </span>
+                  </Link>
                 </li>
               ))}
             </ul>
           )}
         </div>
 
-        {/* Center: Logo */}
         <div className="flex justify-center w-1/3">
-          <Link
-            href="/"
-            className="flex items-center space-x-2"
-            prefetch={true}
-          >
-            <LogoSquare />
-            <span className="text-sm font-medium uppercase hidden sm:inline">
-              {siteName}
-            </span>
+          <Link href="/">
+            <div className="flex items-center space-x-2">
+              <LogoSquare />
+              <span className="text-sm font-medium uppercase hidden sm:inline text-white">
+                {siteName}
+              </span>
+            </div>
           </Link>
         </div>
 
-        {/* Right: Search & Cart */}
         <div className="flex justify-center w-1/3">
           <div className="justify-center md:flex mr-0 ml-auto">
             <div className="hidden lg:flex">

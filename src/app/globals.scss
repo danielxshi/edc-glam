@@ -2,9 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-
 :root {
-  --background: #ffffff;
+  --background: #f0f5fc;
   --foreground: #171717;
 }
 
@@ -220,7 +219,6 @@ $white: white;
   z-index: 1000;
 }
 
-
 .landing-container {
   position: fixed;
   width: 100vw;
@@ -287,4 +285,43 @@ $white: white;
   height: 100%;
 }
 
+.curve {
+  position: relative;
 
+  svg,
+  .background {
+    position: fixed;
+    z-index: 9999; // very high to cover all
+    height: calc(100vh + 600px);
+    width: 100vw;
+    pointer-events: none;
+    left: 0;
+    top: 0;
+  }
+
+  .background {
+    background-color: black;
+    transition: opacity 0s linear 0.1s;
+  }
+
+  .route {
+    position: fixed;
+    z-index: 10000;
+    left: 50%;
+    top: 40%;
+    color: white;
+    font-size: 46px;
+    transform: translateX(-50%);
+    text-align: center;
+  }
+
+  .content {
+    position: relative;
+    z-index: 0; // ensures it's under the overlay
+  }
+}
+
+body.transitioning {
+  overflow: hidden;
+
+}

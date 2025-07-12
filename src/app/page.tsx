@@ -38,10 +38,10 @@ function FadeInWhenVisible({ children, delay = 0 }: { children: React.ReactNode;
 export default function Home() {
   return (
     <main className="flex-1">
-      <section className="-mt-16">
+      <section className="-mt-24">
         <div className="relative w-full h-screen overflow-hidden">
           <FallbackImage
-            src="https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg"
+            src="https://nailcissist.com/cdn/shop/files/Untitled_design_b4accec6-a4b2-4f66-9d85-e4023ac11aa4.png?v=1751867630&width=900"
             alt="Background"
             fill
             priority
