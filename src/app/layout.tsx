@@ -14,7 +14,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "EDCGLAM",
-  description: "Salon quality press on nails, press on nail art, and more.",
+  description: "Salon quality press on nails, press on nail art.",
 };
 
 export default async function RootLayout({
