@@ -197,6 +197,7 @@ export async function getProducts({
 }): Promise<Product[]> {
   const res = await shopifyFetch<ShopifyProductsOperation>({
     query: getProductsQuery,
+    cache: "no-store",
     tags: [TAGS.products],
     variables: {
       query,
@@ -274,6 +275,7 @@ export async function getCollectionProducts({
 }): Promise<Product[]> {
   const res = await shopifyFetch<ShopifyCollectionProductsOperation>({
     query: getCollectionProductsQuery,
+    cache: "no-store",
     tags: [TAGS.collections, TAGS.products],
     variables: {
       handle: collection,
@@ -295,6 +297,7 @@ export async function getCollectionProducts({
 export async function getProduct(handle: string): Promise<Product | undefined> {
   const res = await shopifyFetch<ShopifyProductOperation>({
     query: getProductQuery,
+    cache: "no-store",
     tags: [TAGS.products],
     variables: {
       handle,
