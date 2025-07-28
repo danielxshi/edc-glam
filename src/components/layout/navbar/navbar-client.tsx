@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import { Menu } from '../../../lib/shopify/types';
-import MobileMenu from './mobile-menu';
-import Search from './search';
-import LogoSquare from '../../../components/layout/logo-square';
-import CartModal from '@/components/cart/modal';
+import { useEffect, useState } from "react";
+import { Menu } from "../../../lib/shopify/types";
+import MobileMenu from "./mobile-menu";
+import Search from "./search";
+import LogoSquare from "../../../components/layout/logo-square";
+import CartModal from "@/components/cart/modal";
 // import AnimatedLink from '@/components/layout/animated-link';
-import Link from 'next/link';
+import Link from "next/link";
 
 interface Props {
   menu: Menu[];
@@ -22,16 +22,16 @@ export default function NavbarClient({ menu, siteName }: Props) {
       setScrolled(window.scrollY > 100);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
     <nav
       className={`sticky top-0 left-0 w-full z-[999] backdrop-blur-sm border-b border-neutral-200 dark:border-neutral-700 transition-colors duration-300 ${
         scrolled
-          ? 'bg-white/80 dark:bg-black/80'
-          : 'bg-transparent dark:bg-transparent'
+          ? "bg-white/80 dark:bg-black/80"
+          : "bg-transparent dark:bg-transparent"
       }`}
     >
       <div className="flex items-center justify-between h-24 px-4 lg:px-6">
@@ -57,9 +57,6 @@ export default function NavbarClient({ menu, siteName }: Props) {
           <Link href="/">
             <div className="flex items-center space-x-2">
               <LogoSquare />
-              <span className="text-sm font-medium uppercase hidden sm:inline text-white">
-                {siteName}
-              </span>
             </div>
           </Link>
         </div>
