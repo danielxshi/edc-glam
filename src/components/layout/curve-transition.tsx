@@ -26,7 +26,7 @@ export default function CurveTransition({
   route,
 }: {
   children: React.ReactNode;
-  route: string;
+  route: keyof typeof routes;
 }) {
   const [dimensions, setDimensions] = useState<{ width: number; height: number } | null>(null);
 
@@ -47,7 +47,7 @@ export default function CurveTransition({
       <div style={{ opacity: dimensions ? 0 : 1 }} className="background" />
       <AnimatePresence mode="wait">
         <motion.p className="route" key={route} {...anim(text)}>
-          {routes[route] ?? ""}
+          {routes[route]}
         </motion.p>
       </AnimatePresence>
       {dimensions && <SVG {...dimensions} />}
