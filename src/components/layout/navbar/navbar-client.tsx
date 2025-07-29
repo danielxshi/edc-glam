@@ -35,7 +35,7 @@ export default function NavbarClient({ menu, siteName }: Props) {
       }`}
     >
       <div className="flex items-center justify-between h-24 px-4 lg:px-6">
-        <div className="flex items-center space-x-4 w-1/3">
+        <div className="flex items-center space-x-4 md:w-1/3">
           <MobileMenu menu={menu} />
 
           {menu.length > 0 && (
@@ -53,7 +53,7 @@ export default function NavbarClient({ menu, siteName }: Props) {
           )}
         </div>
 
-        <div className="flex justify-center w-1/3">
+        <div className="flex justify-center md:w-1/3">
           <Link href="/">
             <div className="flex items-center space-x-2">
               <LogoSquare />
@@ -61,12 +61,12 @@ export default function NavbarClient({ menu, siteName }: Props) {
           </Link>
         </div>
 
-        <div className="flex justify-center w-1/3">
+        <div className="flex justify-center md:w-1/3">
           <div className="justify-center md:flex mr-0 ml-auto">
             <div className="hidden lg:flex">
               <Search />
             </div>
-            <div className="ml-4 *:right-0 flex">
+            <div className="md:ml-4 *:right-0 flex">
               <CartModal />
             </div>
           </div>

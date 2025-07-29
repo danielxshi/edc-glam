@@ -20,7 +20,7 @@ export default function LogoSquare({ size }: { size?: "sm" | undefined }) {
         src={Logo.src}
         alt="EDCGLAM Logo"
         className={clsx({
-          "h-[128px]": !size,
+          "h-[150px]": !size,
         })}
       />
     </div>
