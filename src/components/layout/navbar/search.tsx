@@ -1,59 +1,98 @@
 "use client";
-import { createUrl } from "@/lib/utils";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { useRouter, useSearchParams } from "next/navigation";
 
-export default function Search() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+import { useEffect, useRef, useState } from "react";
+import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { useSearchParams } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
 
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+export default function SearchButton() {
+  const [open, setOpen] = useState(false);
 
-    const val = e.target as HTMLFormElement;
-    const search = val.search as HTMLInputElement;
-    const newParams = new URLSearchParams(searchParams.toString());
-
-    if (search.value) {
-      newParams.set("q", search.value);
-    } else {
-      newParams.delete("q");
-    }
-
-    router.push(createUrl("/search", newParams));
-  }
   return (
-    <form
-      onSubmit={onSubmit}
-      className="w-max-[550px] relative w-full lg:w-80 xl:w-full"
-    >
-      <input
-        key={searchParams?.get("q")}
-        type="text"
-        name="search"
-        placeholder="Search for products..."
-        autoComplete="off"
-        defaultValue={searchParams?.get("q") || ""}
-        className="text-md h-full w-full rounded-lg border bg-white px-4 py-2 text-black placeholder:text-neutral-500 md:text-sm dark:border-neutral-800 dark:bg-transparent dark:text-white dark:placeholder:text-neutral-400"
-      />
-      <div className="absolute right-0 top-0 mr-3 flex h-full items-center">
-        <MagnifyingGlassIcon className="h-4" />
-      </div>
-    </form>
+    <>
+      <button
+        type="button"
+        aria-label="Search"
+        onClick={() => setOpen(true)}
+        className="relative inline-flex h-9 w-9 items-center justify-center rounded-md border border-neutral-200 hover:bg-neutral-100 dark:border-neutral-800 dark:hover:bg-neutral-800"
+      >
+        <MagnifyingGlassIcon className="h-5 w-5" />
+      </button>
+
+      <AnimatePresence>
+        {open && <SearchOverlay onClose={() => setOpen(false)} />}
+      </AnimatePresence>
+    </>
   );
 }
 
-export function SearchSkeleton() {
+function SearchOverlay({ onClose }: { onClose: () => void }) {
+  const searchParams = useSearchParams();
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    document.addEventListener("keydown", onKey);
+    document.body.classList.add("overflow-hidden");
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.classList.remove("overflow-hidden");
+    };
+  }, [onClose]);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+    inputRef.current?.select();
+  }, []);
+
   return (
-    <form className="w-max-[550px] relative w-full lg:w-80 xl:w-full">
-      <input
-        type="text"
-        placeholder="Search for products..."
-        className="w-full rounded-lg border bg-white px-4 py-2 text-sm text-black placeholder:text-neutral-500 dark:border-neutral-800 dark:bg-transparent dark:text-white dark:placeholder:text-neutral-400"
+    <>
+      {/* Backdrop */}
+      <motion.div
+        className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm"
+        onClick={onClose}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
       />
-      <div className="absolute right-0 top-0 mr-3 flex h-full items-center">
-        <MagnifyingGlassIcon className="h-4" />
-      </div>
-    </form>
+
+      {/* Panel */}
+      <motion.div
+        className="fixed left-0 right-0 top-0 z-50 mx-auto w-full max-w-5xl"
+        role="dialog"
+        aria-modal="true"
+        initial={{ y: -40, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: -40, opacity: 0 }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      >
+        <div className="mx-4 mt-6 rounded-xl border border-neutral-200 bg-white shadow-lg dark:border-neutral-800 dark:bg-neutral-900">
+          <form
+            action="/search"
+            method="GET"
+            className="relative flex items-center gap-3 px-4 py-4"
+          >
+            <MagnifyingGlassIcon className="h-5 w-5 text-neutral-500" />
+            <input
+              ref={inputRef}
+              name="q"
+              type="text"
+              autoComplete="off"
+              defaultValue={searchParams?.get("q") ?? ""}
+              placeholder="Search for products…"
+              className="flex-1 bg-transparent text-base text-black outline-none placeholder:text-neutral-400 dark:text-white"
+            />
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close search"
+              className="rounded-md p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+            >
+              <XMarkIcon className="h-5 w-5" />
+            </button>
+          </form>
+        </div>
+      </motion.div>
+    </>
   );
 }

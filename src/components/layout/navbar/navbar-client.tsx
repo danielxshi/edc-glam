@@ -8,6 +8,7 @@ import LogoSquare from "../../../components/layout/logo-square";
 import CartModal from "@/components/cart/modal";
 // import AnimatedLink from '@/components/layout/animated-link';
 import Link from "next/link";
+import ShopMegaMenu from "./shop-mega-menu"; // Adjust the path as needed
 
 interface Props {
   menu: Menu[];
@@ -28,25 +29,25 @@ export default function NavbarClient({ menu, siteName }: Props) {
 
   return (
     <nav
-      className={`sticky top-0 left-0 w-full z-[999] backdrop-blur-sm border-b border-neutral-200 dark:border-neutral-700 transition-colors duration-300 ${
-        scrolled
-          ? "bg-white/80 dark:bg-black/80"
-          : "bg-transparent dark:bg-transparent"
+      className={`sticky top-0 left-0 w-full z-[999] backdrop-blur-sm border-b border-neutral-200 dark:border-neutral-700 transition-colors duration-300 navbar ${
+        scrolled ? "bg-white/80 " : "bg-transparent "
       }`}
     >
-      <div className="flex items-center justify-between h-24 px-4 lg:px-6">
+      <div className="flex items-center justify-between h-16 px-4 lg:px-6">
         <div className="flex items-center space-x-4 md:w-1/3">
           <MobileMenu menu={menu} />
 
           {menu.length > 0 && (
-            <ul className="hidden lg:flex gap-4 text-sm font-medium">
+            <ul className="hidden gap-4 text-sm font-medium lg:flex">
               {menu.map((item: Menu) => (
-                <li key={item.title}>
-                  <Link href={item.path}>
-                    <span className="dark:text-neutral-400 transition-colors">
+                <li className="whitespace-nowrap" key={item.title}>
+                  {item.title?.toLowerCase() === "shop" ? (
+                    <ShopMegaMenu label="Shop" />
+                  ) : (
+                    <Link href={item.path} className="transition-colors">
                       {item.title}
-                    </span>
-                  </Link>
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>

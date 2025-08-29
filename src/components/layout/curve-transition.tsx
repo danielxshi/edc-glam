@@ -8,7 +8,6 @@ const routes = {
   "/": "Home",
   "/about": "About",
   "/contact": "Contact",
-  "/search/womens-collection": "Beachside",
   "/search/mens-collection": "Pearl Tide",
   "/search/kids": "Song of Mermaids",
   "/search/sales": "Ocean Sire",

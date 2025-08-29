@@ -9,7 +9,7 @@ export default function ClientWrapper({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const allowedRoutes = ["/", "/about", "/contact", "/search/womens-collection", "/search/mens-collection", "/search/kids", "/search/sales"] as const;
+  const allowedRoutes = ["/", "/about", "/contact", "/search/mens-collection", "/search/kids", "/search/sales"] as const;
   const isAllowedRoute = (route: string): route is typeof allowedRoutes[number] => allowedRoutes.includes(route as typeof allowedRoutes[number]);
 
   return isAllowedRoute(pathname) ? (

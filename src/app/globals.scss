@@ -323,5 +323,18 @@ $white: white;
 
 body.transitioning {
   overflow: hidden;
+}
+.navbar {
+  * {
+    text-transform: uppercase;
+    color: #171717;
+    font-size: 0.7rem;
+    font-weight: 400;
+  }
+}
 
+.filter-nav{
+  * {
+    font-size: .7rem;
+  }
 }

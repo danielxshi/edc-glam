@@ -26,7 +26,7 @@ export default function Gallery({
       <div className="relative aspect-square h-full max-h-[550px] w-full overflow-hidden">
         {images[imageIndex] && (
           <Image
-            className="h-full w-full object-contain"
+            className="h-full w-full object-cover aspect-square"
             fill
             sizes="(min-width: 1024px) 66vw, 100vw"
             src={images[imageIndex]?.src as string}

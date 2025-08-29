@@ -38,7 +38,7 @@ function FadeInWhenVisible({ children, delay = 0 }: { children: React.ReactNode;
 export default function Home() {
   return (
     <main className="flex-1">
-      <section className="-mt-24">
+      <section className="-mt-16">
         <div className="relative w-full h-screen overflow-hidden">
           <FallbackImage
             src="https://nailcissist.com/cdn/shop/files/Untitled_design_b4accec6-a4b2-4f66-9d85-e4023ac11aa4.png?v=1751867630&width=900"
@@ -61,7 +61,7 @@ export default function Home() {
             </FadeInWhenVisible>
             <FadeInWhenVisible delay={0.4}>
               <Link
-                href="/shop"
+                href="/search"
                 className="bg-white text-black px-6 py-3 text-sm font-semibold rounded hover:bg-gray-200 transition"
               >
                 SHOP NOW
@@ -90,10 +90,10 @@ export default function Home() {
 
             <div className="mx-auto grid items-start justify-center gap-8 sm:max-w-4xl sm:grid-cols-2 md:gap-12 lg:max-w-5xl lg:grid-cols-4">
               {[
-                { href: '/search/womens-collection', src: '/womens-collection.png', title: "Women's Collection" },
-                { href: '/search/mens-collection', src: '/mens-collection.png', title: "Men's Collection" },
-                { href: '/search/kids', src: '/kids-collection.png', title: "Kids' Collection" },
-                { href: '/search/sales', src: '/sales-collection.png', title: "Sale's Collection" },
+                // { href: '/search/womens-collection', src: '/womens-collection.png', title: "Collection" },
+                { href: '/search/mens-collection', src: '/mens-collection.png', title: "Collection" },
+                { href: '/search/kids', src: '/kids-collection.png', title: "Collection" },
+                { href: '/search/sales', src: '/sales-collection.png', title: "Collection" },
               ].map((item, i) => (
                 <FadeInWhenVisible key={item.href} delay={i * 0.15}>
                   <div className="grid gap-1 card">
@@ -131,9 +131,9 @@ export default function Home() {
                   Explore our curated collections of stylish apparel and accessories for every occasion.
                 </p>
                 <div className="flex flex-col w-full md:flex-row gap-2 text-nowrap">
-                  <Link href="/search/womens-collection" className="btn">
+                  {/* <Link href="/search/womens-collection" className="btn">
                     Shop Women
-                  </Link>
+                  </Link> */}
                   <Link href="/search/mens-collection" className="btn-alt">
                     Shop Men
                   </Link>
