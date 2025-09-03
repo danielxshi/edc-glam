@@ -9,13 +9,14 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import SizingGuide from "./SizingGuide";
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ handle: string }>;
+  params: { handle: string };
 }): Promise<Metadata> {
-  const { handle } = await params;
+  const { handle } = params;
   const product = await getProduct(handle);
 
   if (!product) return notFound();
@@ -29,32 +30,18 @@ export async function generateMetadata({
     robots: {
       index: indexable,
       follow: indexable,
-      googleBot: {
-        index: indexable,
-        follow: indexable,
-      },
+      googleBot: { index: indexable, follow: indexable },
     },
-    openGraph: url
-      ? {
-          images: [
-            {
-              url,
-              width,
-              height,
-              alt,
-            },
-          ],
-        }
-      : null,
+    openGraph: url ? { images: [{ url, width, height, alt }] } : undefined,
   };
 }
 
 export default async function ProductPage({
   params,
 }: {
-  params: Promise<{ handle: string }>;
+  params: { handle: string };
 }) {
-  const { handle } = await params;
+  const { handle } = params;
   const product = await getProduct(handle);
 
   if (!product) return notFound();
@@ -70,18 +57,24 @@ export default async function ProductPage({
               }
             >
               <Gallery
-                images={product.images.slice(0, 5).map((image: Image) => ({
-                  src: image.url,
-                  altText: image.altText,
-                }))}
+                images={(product.images ?? [])
+                  .slice(0, 5)
+                  .map((image: Image) => ({
+                    src: image.url,
+                    altText: image.altText ?? "",
+                  }))}
               />
             </Suspense>
           </div>
 
           <div className="basis-full lg:basis-2/6">
             <Suspense fallback={null}>
-              <ProductDescription product={product} />
+              <ProductDescription product={product}>
+                <SizingGuide />
+              </ProductDescription>
             </Suspense>
+
+            {/* Sizing guide modal trigger */}
           </div>
         </div>
 
@@ -93,8 +86,7 @@ export default async function ProductPage({
 
 async function RelatedProducts({ id }: { id: string }) {
   const relatedProducts = await getProductRecommendations(id);
-
-  if (!relatedProducts) return null;
+  if (!relatedProducts?.length) return null;
 
   return (
     <div className="py-8">
@@ -107,8 +99,8 @@ async function RelatedProducts({ id }: { id: string }) {
           >
             <Link
               className="relative h-full w-full"
-              href={`/product/${product.handle}`}
-              prefetch={true}
+              href={`/product/${product.handle}`} // if your route is /products/, change to `/products/${product.handle}`
+              prefetch
             >
               <GridTileImage
                 alt={product.title}
