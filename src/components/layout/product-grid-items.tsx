@@ -15,7 +15,7 @@ export default function ProductGridItems({ products }: { products: Product[] }) 
           <Link
             href={`/product/${product.handle}`}
             className="relative block h-full w-full overflow-hidden rounded-md"
-            prefetch={true}
+            prefetch={false}
           >
             {/* image container with a subtle scale/opacity rise */}
             <motion.div
