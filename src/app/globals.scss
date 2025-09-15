@@ -4,7 +4,7 @@
 
 :root {
   --background: #f0f5fc;
-  --foreground: #171717;
+  --foreground: #33383CFF;
 }
 
 /* @theme inline {
@@ -13,13 +13,6 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 } */
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
 
 body {
   background: var(--background);
@@ -327,14 +320,24 @@ body.transitioning {
 .navbar {
   * {
     text-transform: uppercase;
-    color: #171717;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     font-weight: 400;
+    color: white;
   }
 }
 
-.filter-nav{
-  * {
-    font-size: .7rem;
+.mega-menu {
+  ul li a {
+    color: #33383CFF;
   }
+}
+
+.filter-nav {
+  * {
+    font-size: 0.75rem;
+  }
+}
+
+.footer-container li {
+  font-size: 0.75rem;
 }

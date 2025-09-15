@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -46,14 +46,8 @@ const DEFAULT_COLUMNS: Column[] = [
   {
     title: "Collaborations",
     items: [
-      {
-        label: "Nailcissist × Hello Kitty & Friends",
-        href: "/collections/collab-hello-kitty",
-      },
-      {
-        label: "Nailcissist × amysclients",
-        href: "/collections/collab-amysclients",
-      },
+      { label: "Nailcissist × Hello Kitty & Friends", href: "/collections/collab-hello-kitty" },
+      { label: "Nailcissist × amysclients", href: "/collections/collab-amysclients" },
     ],
   },
   {
@@ -71,31 +65,73 @@ const DEFAULT_COLUMNS: Column[] = [
 export default function ShopMegaMenu({
   label = "SHOP",
   columns = DEFAULT_COLUMNS,
-  headerHeightPx = 64, // your h-16
+  headerHeightPx = 64,
 }: {
   label?: string;
   columns?: Column[];
   headerHeightPx?: number;
 }) {
   const [open, setOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const panelRef = useRef<HTMLDivElement | null>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Close on Esc
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, []);
 
+  // Hover-intent tracking: keep open while over trigger OR panel, otherwise close after a short delay
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => {
+      const t = triggerRef.current;
+      const p = panelRef.current;
+      const x = e.clientX;
+      const y = e.clientY;
+
+      const within = (el: HTMLElement | null) => {
+        if (!el) return false;
+        const r = el.getBoundingClientRect();
+        return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+      };
+
+      const overTrigger = within(t);
+      const overPanel = within(p);
+
+      if (overTrigger || overPanel) {
+        if (closeTimer.current) {
+          clearTimeout(closeTimer.current);
+          closeTimer.current = null;
+        }
+        // Only open when pointer is actually on the trigger (prevents center-of-screen reopen)
+        if (overTrigger && !open) setOpen(true);
+      } else {
+        if (!closeTimer.current) {
+          closeTimer.current = setTimeout(() => {
+            setOpen(false);
+            closeTimer.current = null;
+          }, 120); // debounce close: tweak 80–180ms to taste
+        }
+      }
+    };
+
+    document.addEventListener("mousemove", onMove);
+    return () => {
+      document.removeEventListener("mousemove", onMove);
+      if (closeTimer.current) clearTimeout(closeTimer.current);
+    };
+  }, [open]);
+
   return (
-    <div
-      className="relative"
-      onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => setOpen(false)}
-    >
+    <div className="relative mega-menu">
+      {/* Trigger: ONLY opens on hover over this element */}
       <button
+        ref={triggerRef}
         type="button"
         aria-haspopup="menu"
         aria-expanded={open}
-        onClick={() => setOpen((s) => !s)} // enables tap on mobile
         className="text-sm tracking-wide hover:opacity-70"
       >
         {label}
@@ -104,13 +140,15 @@ export default function ShopMegaMenu({
       <AnimatePresence>
         {open && (
           <motion.div
+            ref={panelRef}
             key="mega"
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ type: "spring", stiffness: 300, damping: 26 }}
-            className="fixed left-0 right-0 z-[998] border-t border-neutral-200 bg-white shadow-sm "
+            className="fixed left-0 right-0 z-[998] border-t border-neutral-200 bg-white shadow-sm"
             style={{ top: headerHeightPx }}
+            // no hover handlers needed; mousemove handles intent
           >
             <div className="mx-auto max-w-7xl px-6 py-8">
               <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-5">

@@ -14,9 +14,9 @@ export default function SearchButton() {
         type="button"
         aria-label="Search"
         onClick={() => setOpen(true)}
-        className="relative inline-flex h-9 w-9 items-center justify-center rounded-md border border-neutral-200 hover:bg-neutral-100 dark:border-neutral-800 dark:hover:bg-neutral-800"
+        className="relative inline-flex h-9 w-fit items-center justify-center rounded-md border-neutral-200 hover:scale-105"
       >
-        <MagnifyingGlassIcon className="h-5 w-5" />
+        <MagnifyingGlassIcon className="h-5 w-5 text-white" />
       </button>
 
       <AnimatePresence>
@@ -58,7 +58,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
 
       {/* Panel */}
       <motion.div
-        className="fixed left-0 right-0 top-0 z-50 mx-auto w-full max-w-5xl"
+        className=" left-0 right-0 top-0 absolute z-50 mx-auto w-full max-w-5xl"
         role="dialog"
         aria-modal="true"
         initial={{ y: -40, opacity: 0 }}

@@ -6,9 +6,10 @@ import MobileMenu from "./mobile-menu";
 import Search from "./search";
 import LogoSquare from "../../../components/layout/logo-square";
 import CartModal from "@/components/cart/modal";
-// import AnimatedLink from '@/components/layout/animated-link';
 import Link from "next/link";
-import ShopMegaMenu from "./shop-mega-menu"; // Adjust the path as needed
+import ShopMegaMenu from "./shop-mega-menu";
+import { usePathname } from "next/navigation";
+import TwoBarHamburger from "@/components/navigation/two-bar-hamburger";
 
 interface Props {
   menu: Menu[];
@@ -17,6 +18,7 @@ interface Props {
 
 export default function NavbarClient({ menu, siteName }: Props) {
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,10 +29,15 @@ export default function NavbarClient({ menu, siteName }: Props) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Hide navbar on /password
+  if (pathname === "/password") {
+    return null;
+  }
+
   return (
     <nav
-      className={`sticky top-0 left-0 w-full z-[999] backdrop-blur-sm border-b border-neutral-200 dark:border-neutral-700 transition-colors duration-300 navbar ${
-        scrolled ? "bg-white/80 " : "bg-transparent "
+      className={`sticky left-0 mx-auto rounded-lg top-2 z-[999] backdrop-blur-sm max-w-[1200px] w-[90vw] shadow-inner transition-colors duration-300 navbar ${
+        scrolled ? "bg-[#574e6cc0]" : "bg-transparent "
       }`}
     >
       <div className="flex items-center justify-between h-16 px-4 lg:px-6">

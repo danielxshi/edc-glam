@@ -1,15 +1,5 @@
 const FooterItems = [
   {
-    contact: {
-      link: [
-        {
-          text: "resume",
-          link: "https://drive.google.com/file/d/1nzSKnD20O_kEEZGVcZvflJmIvm-PM8q0/view?usp=share_link",
-        },
-      ],
-    },
-  },
-  {
     education: {
       link: [
         {

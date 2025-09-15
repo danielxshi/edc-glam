@@ -1,20 +1,38 @@
 "use client";
+
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 export default function PasswordPage() {
   const [pwd, setPwd] = useState("");
+  const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
   const router = useRouter();
   const sp = useSearchParams();
-  const next = sp.get("next") || "/";
+  const next = sp?.get("next") || "/";
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (pwd === process.env.NEXT_PUBLIC_SITE_PASSWORD || "letmein" === pwd) {
-      document.cookie = "site_authed=1; path=/; max-age=2592000; samesite=lax";
-      router.push(next);
-    } else {
-      alert("Wrong password");
+    setError("");
+    setBusy(true);
+
+    try {
+      const res = await fetch("/api/password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: pwd.trim() }),
+      });
+
+      if (res.ok) {
+        router.push(next);
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setError(data?.reason || "Invalid password");
+      }
+    } catch {
+      setError("Network error");
+    } finally {
+      setBusy(false);
     }
   }
 
@@ -29,8 +47,11 @@ export default function PasswordPage() {
           className="w-full border rounded p-2"
           placeholder="Password"
         />
-        <button className="w-full border rounded p-2">Unlock</button>
+        <button disabled={busy} className="w-full border rounded p-2">
+          {busy ? "Unlocking..." : "Unlock"}
+        </button>
       </form>
+      {error && <p className="text-red-600 mt-2">{error}</p>}
     </div>
   );
 }

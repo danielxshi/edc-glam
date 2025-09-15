@@ -1,11 +1,17 @@
-const path = require('path');
+const path = require("path");
 
 const nextConfig = {
   images: {
-    domains: ['cdn.shopify.com', 'via.placeholder.com', 'images.pexels.com'],
+    domains: [
+      "cdn.shopify.com",
+      "via.placeholder.com",
+      "images.pexels.com",
+      "diorama.dam-broadcast.com",
+      "nailcissist.com",
+    ],
   },
   webpack(config) {
-    config.resolve.alias['@'] = path.resolve(__dirname);
+    config.resolve.alias["@"] = path.resolve(__dirname);
     return config;
   },
 };

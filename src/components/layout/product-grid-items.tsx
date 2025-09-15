@@ -45,7 +45,7 @@ export default function ProductGridItems({ products }: { products: Product[] }) 
             {/* mask reveal: a sliding block that uncovers the image */}
             <motion.span
               aria-hidden
-              className="absolute inset-0 z-10 block bg-neutral-200 dark:bg-neutral-800"
+              className="absolute inset-0 z-10 block bg-neutral-200 "
               initial={{ x: 0 }}
               whileInView={{ x: "100%" }}
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.05 }}
@@ -56,7 +56,7 @@ export default function ProductGridItems({ products }: { products: Product[] }) 
             {/* optional: a second, thinner mask to create a crisp trailing edge */}
             <motion.span
               aria-hidden
-              className="absolute inset-0 z-10 block bg-white dark:bg-black"
+              className="absolute inset-0 z-10 block bg-white "
               initial={{ x: 0 }}
               whileInView={{ x: "101%" }}
               transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1], delay: 0.05 }}

@@ -21,7 +21,7 @@ export default function Label({
         }
       )}
     >
-      <div className="flex flex-col mx-auto items-center rounded border p-1 text-xs font-semibold text-[#191919] backdrop-blur-md dark:border-neutral-800 dark:bg-black/70 dark:text-white">
+      <div className="flex flex-col mx-auto items-center rounded border p-1 text-xs font-semibold text-[#191919] backdrop-blur-md ">
         <h3 className="mr-4 line-clamp-2 flex-grow pl-2 leading-none uppercase tracking-wider text-[.7rem]">
           {title}
         </h3>
