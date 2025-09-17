@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -34,7 +33,7 @@ export default function FiltersDrawer({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="flex items-center px-3 py-3 text-sm uppercase tracking-wide border"
+        className="flex w-full items-center uppercase border sort-button border-l-stone-50"
       >
         <AdjustmentsHorizontalIcon className="h-5 w-5" />
         {buttonLabel}

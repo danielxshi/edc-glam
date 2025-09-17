@@ -14,8 +14,8 @@ export default function SortDropdown({
   title?: string;
 }) {
   return (
-    <Menu as="div" className="relative inline-block text-left">
-      <Menu.Button className="inline-flex items-center border px-3 py-2 text-sm">
+    <Menu as="div" className="relative inline-block text-left w-full">
+      <Menu.Button className="sort-button inline-flex items-center border text-sm">
         <span className="uppercase tracking-wide">{title}</span>
         <ChevronUpDownIcon className="h-4 w-4 opacity-60" />
       </Menu.Button>

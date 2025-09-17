@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <main className="flex-1">
       {/* HERO SECTION (client bits inside are fine) */}
-      <section className="-mt-16">
+      <section className="">
         <div className="relative w-full h-screen overflow-hidden">
           <picture>
             <source media="(max-width: 1025px)" srcSet="/images/fleur.jpg" />

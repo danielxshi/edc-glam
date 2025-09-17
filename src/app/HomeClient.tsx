@@ -44,7 +44,7 @@ export default function Home() {
   return (
     <main className="flex-1">
       {/* HERO SECTION */}
-      <section className="-mt-16">
+      <section className="">
         <div className="relative w-full h-screen overflow-hidden">
           {/* Pure CSS media switching: fleur.jpg on mobile, fleur-crop.jpg otherwise */}
           <picture>

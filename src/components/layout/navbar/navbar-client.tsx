@@ -9,7 +9,6 @@ import CartModal from "@/components/cart/modal";
 import Link from "next/link";
 import ShopMegaMenu from "./shop-mega-menu";
 import { usePathname } from "next/navigation";
-import TwoBarHamburger from "@/components/navigation/two-bar-hamburger";
 
 interface Props {
   menu: Menu[];
@@ -29,54 +28,52 @@ export default function NavbarClient({ menu, siteName }: Props) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Hide navbar on /password
-  if (pathname === "/password") {
-    return null;
-  }
+  if (pathname === "/password") return null;
+
+  const isHome = pathname === "/";
 
   return (
     <nav
-      className={`sticky left-0 mx-auto rounded-lg top-2 z-[999]  max-w-[1200px] w-[90vw] transition-colors duration-300 navbar  ${
-        scrolled ? "backdrop-blur-sm lg:bg-[#2f2f2f4a] bg-[#fff9f9c4]" : " "
-      }`}
+      className={[
+        "fixed top-2 left-1/2 -translate-x-1/2 z-[999]",
+        scrolled ? "w-[92vw] sm:w-[60vw]" : "w-[92vw] sm:w-[80vw]",
+        "max-w-[1200px] rounded-full transition-all duration-300 navbar",
+        scrolled
+          ? "backdrop-blur-sm lg:bg-[#2f2f2fed] bg-[#fff9f9f4] shadow-md scale-95"
+          : isHome
+          ? "scale-100"
+          : "backdrop-blur-sm bg-white/70 shadow-md scale-100",
+      ].join(" ")}
     >
-      <div className="flex items-center justify-between h-16 px-4 lg:px-6">
+      <div
+        className={`flex items-center justify-between transition-all duration-300
+        ${scrolled ? "h-12 px-4" : "h-16 px-6"}`}
+      >
         <MobileMenu menu={menu} />
 
         <Link href="/">
-          <div className="lg:flex hidden space-x-2">
+          <div
+            className={`lg:flex hidden space-x-2 transition-all duration-300 ${
+              scrolled ? "scale-90" : "scale-100"
+            }`}
+          >
             <LogoSquare />
           </div>
         </Link>
 
-        {/* <div className="flex items-center space-x-4 md:w-1/3">
-
-          {menu.length > 0 && (
-            <ul className="hidden gap-4 text-sm font-medium lg:flex">
-              {menu.map((item: Menu) => (
-                <li className="whitespace-nowrap" key={item.title}>
-                  {item.title?.toLowerCase() === "shop" ? (
-                    <ShopMegaMenu label="Shop" />
-                  ) : (
-                    <Link href={item.path} className="transition-colors">
-                      {item.title}
-                    </Link>
-                  )}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div> */}
-
-        <div className="flex lg:hidden justify-center ">
+        <div className="flex lg:hidden justify-center">
           <Link href="/">
-            <div className="flex items-center space-x-2">
+            <div
+              className={`flex items-center space-x-2 transition-all duration-300 ${
+                scrolled ? "scale-90" : "scale-100"
+              }`}
+            >
               <LogoSquare />
             </div>
           </Link>
         </div>
 
-        <div className="flex justify-center ">
+        <div className="flex justify-center">
           {menu.length > 0 && (
             <ul className="hidden gap-4 text-sm font-medium lg:flex">
               {menu.map((item: Menu) => (
@@ -94,7 +91,7 @@ export default function NavbarClient({ menu, siteName }: Props) {
           )}
         </div>
 
-        <div className="flex justify-center ">
+        <div className="flex justify-center">
           <div className="justify-center md:flex mr-0 ml-auto">
             <div className="hidden lg:flex">
               <Search />

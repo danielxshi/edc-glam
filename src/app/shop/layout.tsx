@@ -1,3 +1,4 @@
+// app/search/layout.tsx
 import Footer from "@/components/layout/footer/footer";
 import Collections from "../../components/layout/search/collections";
 import FilterList from "../../components/layout/search/filter";
@@ -7,27 +8,31 @@ import SortDropdown from "@/components/layout/search/filter/sort-dropdown";
 import ShortBanner from "@/components/banner/short-banner";
 import PathAwareBanner from "@/components/banner/path-aware-banner";
 
-export default function SearchLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function SearchLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <PathAwareBanner />
-      <div className="mx-auto mt-8 flex flex-col px-2 pb-4 text-black md:flex-row">
+
+      <div className="mx-auto mt-8 flex flex-col pb-4 text-black md:flex-row">
         <div className="order-last min-h-screen w-full md:order-none">
-          <div className="flex w-full">
-            <div className="order-first flex-none md:max-w-[125px] max-h-fit">
-              <FilterItemDropDown>
-                <Collections />
-              </FilterItemDropDown>
-            </div>
-            <div className="order-none flex-none md:order-last md:w-[125px] md:ml-auto">
-              {/* <FilterList list={sorting} title="Sort by" /> */}
-              <SortDropdown list={sorting} />
+
+          {/* --- Refine / Sort top bar --- */}
+          <div className="w-full border-y border-black/15 bg-white sticky top-0 z-20">
+            <div className="mx-auto max-w-[1400px]">
+              <div className="grid grid-cols-2">
+                <div className="col-span-1">
+                  <FilterItemDropDown>
+                    <Collections />
+                  </FilterItemDropDown>
+                </div>
+
+                <div className="col-span-1">
+                  <SortDropdown list={sorting} />
+                </div>
+              </div>
             </div>
           </div>
+          {/* --- /Refine / Sort --- */}
 
           {children}
         </div>

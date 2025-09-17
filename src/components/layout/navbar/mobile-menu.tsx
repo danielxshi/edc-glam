@@ -24,7 +24,7 @@ export default function MobileMenu({ menu }: { menu: Menu[] }) {
         <TwoBarHamburger
           open={isOpen}
           size={28}
-          thickness={2}
+          thickness={1.25}
           gap={8}
           // color inherits from currentColor; set via CSS if needed
         />
