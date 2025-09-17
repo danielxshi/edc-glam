@@ -6,12 +6,14 @@ type Row = { size: string; chest: string; waist: string };
 
 export default function SizingGuide({
   rows = [
-    { size: "S",  chest: "34–36", waist: "28–30" },
-    { size: "M",  chest: "38–40", waist: "32–34" },
-    { size: "L",  chest: "42–44", waist: "36–38" },
+    { size: "S", chest: "34–36", waist: "28–30" },
+    { size: "M", chest: "38–40", waist: "32–34" },
+    { size: "L", chest: "42–44", waist: "36–38" },
     { size: "XL", chest: "46–48", waist: "40–42" },
   ],
-}: { rows?: Row[] }) {
+}: {
+  rows?: Row[];
+}) {
   const [open, setOpen] = useState(false);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
 
@@ -20,11 +22,9 @@ export default function SizingGuide({
   }, [open]);
 
   return (
-    <div className="mt-8 border-t py-6">
-      <h3 className="text-lg font-semibold mb-3">Sizing Guide</h3>
-
+    <div>
       <button
-        className="text-sm text-blue-600 underline"
+        className="text-xs underline product-details-subcontent-header"
         onClick={() => setOpen(true)}
         aria-haspopup="dialog"
         aria-expanded={open}

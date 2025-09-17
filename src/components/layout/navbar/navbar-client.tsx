@@ -18,36 +18,36 @@ interface Props {
 export default function NavbarClient({ menu, siteName }: Props) {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const isHome = pathname === "/";
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 100);
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   if (pathname === "/password") return null;
 
-  const isHome = pathname === "/";
-
   return (
     <nav
       className={[
-        "fixed top-2 left-1/2 -translate-x-1/2 z-[999]",
-        scrolled ? "w-[92vw] sm:w-[60vw]" : "w-[92vw] sm:w-[80vw]",
-        "max-w-[1200px] rounded-full transition-all duration-300 navbar",
+        isHome
+          ? "fixed top-2 left-1/2 -translate-x-1/2 w-[92vw] sm:w-[80vw] max-w-[1200px] rounded-full"
+          : "fixed w-[100vw] rounded-none",
+        "z-[999] transition-all duration-300 navbar",
         scrolled
-          ? "backdrop-blur-sm lg:bg-[#2f2f2fed] bg-[#fff9f9f4] shadow-md scale-95"
-          : isHome
-          ? "scale-100"
-          : "backdrop-blur-sm bg-white/70 shadow-md scale-100",
+          ? "backdrop-blur-sm lg:bg-[#2f2f2fed] bg-[#fff9f9f4] shadow-md text-white"
+          : !isHome
+          ? "backdrop-blur-sm bg-white/70 shadow-md"
+          : "",
       ].join(" ")}
     >
       <div
-        className={`flex items-center justify-between transition-all duration-300
-        ${scrolled ? "h-12 px-4" : "h-16 px-6"}`}
+        className={`flex items-center justify-between transition-all duration-300 ${
+          scrolled ? "h-12 px-4" : "h-16 px-6"
+        }`}
       >
         <MobileMenu menu={menu} />
 
@@ -77,7 +77,7 @@ export default function NavbarClient({ menu, siteName }: Props) {
           {menu.length > 0 && (
             <ul className="hidden gap-4 text-sm font-medium lg:flex">
               {menu.map((item: Menu) => (
-                <li className="whitespace-nowrap" key={item.title}>
+                <li className={`whitespace-nowrap`} key={item.title}>
                   {item.title?.toLowerCase() === "shop" ? (
                     <ShopMegaMenu label="Shop" />
                   ) : (

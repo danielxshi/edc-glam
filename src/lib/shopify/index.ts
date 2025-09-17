@@ -22,7 +22,9 @@ import {
   getProductQuery,
   getProductRecommendationsQuery,
   getProductsQuery,
+  getProductWithCollectionsQuery,   // <-- ADD THIS
 } from "./queries/product";
+
 import {
   Cart,
   Collection,

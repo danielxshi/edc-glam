@@ -23,7 +23,11 @@ export async function generateMetadata({ params }: any): Promise<any> {
   return {
     title: product.seo.title || product.title,
     description: product.seo.description || product.description,
-    robots: { index: indexable, follow: indexable, googleBot: { index: indexable, follow: indexable } },
+    robots: {
+      index: indexable,
+      follow: indexable,
+      googleBot: { index: indexable, follow: indexable },
+    },
     openGraph: url ? { images: [{ url, width, height, alt }] } : undefined,
   };
 }
@@ -36,20 +40,26 @@ export default async function ProductPage({ params }: any) {
 
   return (
     <ProductProvider>
-      <div className="mx-auto max-w-screen-2xl px-4">
-        <div className="flex flex-col border p-8 md:p-12 lg:flex-row lg:gap-8 ">
-          <div className="h-full w-full basis-full lg:basis-4/6">
-            <Suspense fallback={<div className="relative aspect-square h-full max-h-[550px] w-full overflow-hidden" />}>
+      <div className="mx-auto max-w-screen-2xl px-4 pt-24">
+        <div className="grid grid-cols-7 gap-4">
+          <div className="h-full w-full basis-full lg:basis-4/6 col-start-1 col-end-5">
+            <Suspense
+              fallback={
+                <div className="relative aspect-square h-full max-h-[550px] w-full overflow-hidden" />
+              }
+            >
               <Gallery
-                images={(product.images ?? []).slice(0, 5).map((image: Image) => ({
-                  src: image.url,
-                  altText: image.altText ?? "",
-                }))}
+                images={(product.images ?? [])
+                  .slice(0, 5)
+                  .map((image: Image) => ({
+                    src: image.url,
+                    altText: image.altText ?? "",
+                  }))}
               />
             </Suspense>
           </div>
 
-          <div className="basis-full lg:basis-2/6">
+          <div className="basis-full lg:basis-2/6 col-start-5 col-end-8">
             <Suspense fallback={null}>
               <ProductDescription product={product}>
                 <SizingGuide />
@@ -73,8 +83,15 @@ async function RelatedProducts({ id }: { id: string }) {
       <h2 className="mb-4 text-2xl font-bold">Related Products</h2>
       <ul className="flex w-full gap-4 overflow-x-auto pt-1">
         {relatedProducts.map((product) => (
-          <li key={product.handle} className="aspect-square w-full flex-none min-[475px]:w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5">
-            <Link className="relative h-full w-full" href={`/product/${product.handle}`} prefetch={false}>
+          <li
+            key={product.handle}
+            className="aspect-square w-full flex-none min-[475px]:w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5"
+          >
+            <Link
+              className="relative h-full w-full"
+              href={`/product/${product.handle}`}
+              prefetch={false}
+            >
               <GridTileImage
                 alt={product.title}
                 label={{

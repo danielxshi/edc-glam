@@ -13,7 +13,7 @@ const Price = ({
 } & React.ComponentProps<"p">) => (
   <p suppressHydrationWarning={true} className={className}>
     {`${new Intl.NumberFormat(undefined, {
-      style: "currency",
+      // style: "currency",
       currency: currencyCode,
       currencyDisplay: "narrowSymbol",
     }).format(parseFloat(amount))}`}

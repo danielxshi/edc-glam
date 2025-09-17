@@ -364,13 +364,17 @@ body.transitioning {
   font-size: 0.75rem;
 }
 
+.product-details-subcontent-header{
+  margin-top: 1.5rem;
+}
+
 @media (min-width: 1024px) {
   .navbar {
     * {
       text-transform: uppercase;
       font-size: 0.75rem;
       font-weight: 400;
-      color: white;
+      // color: white;
     }
   }
 }
