@@ -16,7 +16,7 @@ export default function SearchButton() {
         onClick={() => setOpen(true)}
         className="relative inline-flex h-9 w-fit items-center justify-center rounded-md border-neutral-200 hover:scale-105"
       >
-        <MagnifyingGlassIcon className="h-5 w-5 text-white" />
+        <MagnifyingGlassIcon className="h-5 w-5 lg:text-white text-black" />
       </button>
 
       <AnimatePresence>

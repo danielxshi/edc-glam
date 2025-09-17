@@ -1,28 +1,16 @@
-import imageFragment from "./image";
-import seoFragment from "./seo";
-
-export const productFragment = /* GraphQl */ `
-    fragment product on Product {
+// ❌ do not inject image/seo fragments here either
+const productFragment = /* GraphQL */ `
+  fragment product on Product {
     id
     handle
     availableForSale
     title
     description
     descriptionHtml
-    options {
-      id
-      name
-      values
-    }
+    options { id name values }
     priceRange {
-      maxVariantPrice {
-        amount
-        currencyCode
-      }
-      minVariantPrice {
-        amount
-        currencyCode
-      }
+      maxVariantPrice { amount currencyCode }
+      minVariantPrice { amount currencyCode }
     }
     variants(first: 250) {
       edges {
@@ -30,33 +18,16 @@ export const productFragment = /* GraphQl */ `
           id
           title
           availableForSale
-          selectedOptions {
-            name
-            value
-          }
-          price {
-            amount
-            currencyCode
-          }
+          selectedOptions { name value }
+          price { amount currencyCode }
         }
       }
     }
-    featuredImage {
-      ...image
-    }
-    images(first: 20) {
-      edges {
-        node {
-          ...image
-        }
-      }
-    }
-    seo {
-      ...seo
-    }
+    featuredImage { ...image }
+    images(first: 20) { edges { node { ...image } } }
+    seo { ...seo }
     tags
     updatedAt
-    }
-    ${imageFragment}
-    ${seoFragment}
+  }
 `;
+export default productFragment;

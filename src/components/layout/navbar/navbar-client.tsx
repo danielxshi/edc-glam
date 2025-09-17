@@ -36,14 +36,47 @@ export default function NavbarClient({ menu, siteName }: Props) {
 
   return (
     <nav
-      className={`sticky left-0 mx-auto rounded-lg top-2 z-[999] backdrop-blur-sm max-w-[1200px] w-[90vw] shadow-inner transition-colors duration-300 navbar ${
-        scrolled ? "bg-[#574e6cc0]" : "bg-transparent "
+      className={`sticky left-0 mx-auto rounded-lg top-2 z-[999]  max-w-[1200px] w-[90vw] transition-colors duration-300 navbar  ${
+        scrolled ? "backdrop-blur-sm lg:bg-[#2f2f2f4a] bg-[#fff9f9c4]" : " "
       }`}
     >
       <div className="flex items-center justify-between h-16 px-4 lg:px-6">
-        <div className="flex items-center space-x-4 md:w-1/3">
-          <MobileMenu menu={menu} />
+        <MobileMenu menu={menu} />
 
+        <Link href="/">
+          <div className="lg:flex hidden space-x-2">
+            <LogoSquare />
+          </div>
+        </Link>
+
+        {/* <div className="flex items-center space-x-4 md:w-1/3">
+
+          {menu.length > 0 && (
+            <ul className="hidden gap-4 text-sm font-medium lg:flex">
+              {menu.map((item: Menu) => (
+                <li className="whitespace-nowrap" key={item.title}>
+                  {item.title?.toLowerCase() === "shop" ? (
+                    <ShopMegaMenu label="Shop" />
+                  ) : (
+                    <Link href={item.path} className="transition-colors">
+                      {item.title}
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div> */}
+
+        <div className="flex lg:hidden justify-center ">
+          <Link href="/">
+            <div className="flex items-center space-x-2">
+              <LogoSquare />
+            </div>
+          </Link>
+        </div>
+
+        <div className="flex justify-center ">
           {menu.length > 0 && (
             <ul className="hidden gap-4 text-sm font-medium lg:flex">
               {menu.map((item: Menu) => (
@@ -61,15 +94,7 @@ export default function NavbarClient({ menu, siteName }: Props) {
           )}
         </div>
 
-        <div className="flex justify-center md:w-1/3">
-          <Link href="/">
-            <div className="flex items-center space-x-2">
-              <LogoSquare />
-            </div>
-          </Link>
-        </div>
-
-        <div className="flex justify-center md:w-1/3">
+        <div className="flex justify-center ">
           <div className="justify-center md:flex mr-0 ml-auto">
             <div className="hidden lg:flex">
               <Search />

@@ -1,14 +1,11 @@
-import seoFragment from "./seo";
-
-export const collectionFragment = /* GraphQL */ `
+const collectionFragment = `
   fragment collection on Collection {
     handle
     title
     description
-    seo {
-      ...seo
-    }
     updatedAt
+    image { url altText width height }
+    seo { ...seo }
   }
-  ${seoFragment}
 `;
+export default collectionFragment;

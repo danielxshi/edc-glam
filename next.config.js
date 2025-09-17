@@ -2,12 +2,32 @@ const path = require("path");
 
 const nextConfig = {
   images: {
-    domains: [
-      "cdn.shopify.com",
-      "via.placeholder.com",
-      "images.pexels.com",
-      "diorama.dam-broadcast.com",
-      "nailcissist.com",
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "cdn.shopify.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "via.placeholder.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "images.pexels.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "diorama.dam-broadcast.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "nailcissist.com",
+        pathname: "/**",
+      },
     ],
   },
   webpack(config) {

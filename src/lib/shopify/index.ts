@@ -216,6 +216,7 @@ function reshapeCollection(
 
   return {
     ...collection,
+    image: collection.image ?? null, // ✅ keep image
     path: `/search/${collection.handle}`,
   };
 }
@@ -235,7 +236,6 @@ function reshapeCollections(collections: ShopifyCollection[]) {
 
   return reshapedCollections;
 }
-
 export async function getCollections(): Promise<Collection[]> {
   const res = await shopifyFetch<ShopifyCollectionsOperation>({
     query: getCollectionsQuery,
@@ -243,19 +243,17 @@ export async function getCollections(): Promise<Collection[]> {
   });
 
   const shopifyCollections = removeEdgesAndNodes(res?.body?.data?.collections);
+
   const collections = [
     {
       handle: "",
       title: "All",
       description: "All products",
-      seo: {
-        title: "All",
-        description: "All products",
-      },
+      seo: { title: "All", description: "All products" },
       path: "/search",
       updatedAt: new Date().toISOString(),
+      image: null, // ✅ explicit null for the synthetic "All" collection
     },
-    // Filter out the hidden products
     ...reshapeCollections(shopifyCollections).filter(
       (collection) => !collection.handle.startsWith("hidden")
     ),
@@ -468,4 +466,38 @@ export async function getPages(): Promise<Page[]> {
   });
 
   return removeEdgesAndNodes(res.body.data.pages);
+}
+
+// testing
+// lib/shopify.ts (add near your other exports)
+export async function getCollectionWithProducts({
+  handle,
+  reverse,
+  sortKey,
+  first = 24,
+}: {
+  handle: string;
+  reverse?: boolean;
+  sortKey?: string;
+  first?: number;
+}): Promise<{ collection: Collection | null; products: Product[] }> {
+  const res = await shopifyFetch<ShopifyCollectionProductsOperation>({
+    query: getCollectionProductsQuery,
+    cache: "no-store",
+    tags: [TAGS.collections, TAGS.products],
+    variables: {
+      handle,
+      reverse,
+      sortKey: sortKey === "CREATED_AT" ? "CREATED" : sortKey,
+      first, // ✅ add this
+    },
+  });
+
+  const col = res.body.data.collection;
+  if (!col) return { collection: null, products: [] };
+
+  const products = reshapeProducts(removeEdgesAndNodes(col.products));
+  const collection = reshapeCollection(col) ?? null;
+
+  return { collection, products };
 }

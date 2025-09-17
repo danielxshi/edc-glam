@@ -4,7 +4,7 @@
 
 :root {
   --background: #f0f5fc;
-  --foreground: #33383CFF;
+  --foreground: #33383cff;
 }
 
 /* @theme inline {
@@ -322,13 +322,13 @@ body.transitioning {
     text-transform: uppercase;
     font-size: 0.75rem;
     font-weight: 400;
-    color: white;
+    // color: white;
   }
 }
 
 .mega-menu {
   ul li a {
-    color: #33383CFF;
+    color: #33383cff;
   }
 }
 
@@ -340,4 +340,15 @@ body.transitioning {
 
 .footer-container li {
   font-size: 0.75rem;
+}
+
+@media (min-width: 1024px) {
+  .navbar {
+    * {
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      font-weight: 400;
+      color: white;
+    }
+  }
 }

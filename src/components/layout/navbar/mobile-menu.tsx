@@ -14,7 +14,7 @@ export default function MobileMenu({ menu }: { menu: Menu[] }) {
   const closeMobileMenu = () => setIsOpen(false);
 
   return (
-    <div className="mobile-menu flex gap-x-4 align-middle">
+    <div className="mobile-menu flex gap-x-4 align-middle lg:hidden">
       <button
         onClick={openMobileMenu}
         aria-label="Open mobile menu"
@@ -26,7 +26,6 @@ export default function MobileMenu({ menu }: { menu: Menu[] }) {
           size={28}
           thickness={2}
           gap={8}
-          className="text-white"
           // color inherits from currentColor; set via CSS if needed
         />
       </button>

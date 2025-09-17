@@ -93,13 +93,18 @@ export type ShopifyProductsOperation = {
     sortKey?: string;
   };
 };
-
 export type ShopifyCollection = {
   handle: string;
   title: string;
   description: string;
   seo: SEO;
   updatedAt: string;
+  image?: {
+    url: string;
+    altText?: string;
+    width?: number;
+    height?: number;
+  } | null;
 };
 
 export type Collection = ShopifyCollection & {
@@ -122,6 +127,7 @@ export type ShopifyCollectionProductsOperation = {
     handle: string;
     reverse?: boolean;
     sortKey?: string;
+    first?: number; // <-- add this
   };
 };
 

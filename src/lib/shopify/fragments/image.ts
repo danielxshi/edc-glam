@@ -6,5 +6,4 @@ const imageFragment = /* GraphQL */ `
     height
   }
 `;
-
 export default imageFragment;

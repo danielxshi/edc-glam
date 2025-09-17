@@ -26,7 +26,7 @@ const FullScreenBanner: React.FC<FullScreenBannerProps> = ({
       />
 
       {/* Overlay */}
-      <div className="absolute inset-0 bg-black/60 z-10 flex items-center justify-center">
+      <div className="absolute inset-0  z-10 flex items-center justify-center">
         <div className="p-6 rounded-lg max-w-2xl space-y-4">
           <h2 className="text-3xl md:text-5xl font-bold tracking-tight">
             {title}

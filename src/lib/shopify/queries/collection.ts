@@ -1,34 +1,35 @@
-import { collectionFragment } from "../fragments/collection";
-import { productFragment } from "../fragments/product";
+// src/lib/shopify/queries/collection.ts
+import imageFragment from "../fragments/image";
+import seoFragment from "../fragments/seo";
+import productFragment from "../fragments/product";
+import collectionFragment from "../fragments/collection";
 
 export const getCollectionsQuery = /* GraphQL */ `
+  ${seoFragment}
+  ${collectionFragment}
   query getCollections {
     collections(first: 100, sortKey: TITLE) {
-      edges {
-        node {
-          ...collection
-        }
-      }
+      edges { node { ...collection } }
     }
   }
-  ${collectionFragment}
 `;
 
 export const getCollectionProductsQuery = /* GraphQL */ `
+  ${imageFragment}
+  ${seoFragment}
+  ${productFragment}
+  ${collectionFragment}
   query getCollectionProducts(
     $handle: String!
     $sortKey: ProductCollectionSortKeys
     $reverse: Boolean
+    $first: Int = 100
   ) {
     collection(handle: $handle) {
-      products(sortKey: $sortKey, reverse: $reverse, first: 100) {
-        edges {
-          node {
-            ...product
-          }
-        }
+      ...collection
+      products(first: $first, sortKey: $sortKey, reverse: $reverse) {
+        edges { node { ...product } }
       }
     }
   }
-  ${productFragment}
 `;
