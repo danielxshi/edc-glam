@@ -1,39 +1,50 @@
-// src/app/api/account/activate/route.ts
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import { activateCustomer } from "@/lib/shopify";
-
 
 export async function POST(req: Request) {
   try {
     const { id, token, password } = await req.json();
+
     if (!id || !token || !password) {
       return NextResponse.json({ ok: false, error: "Missing fields" }, { status: 400 });
     }
 
-    const { customerAccessToken, userErrors } = await activateCustomer({ id, token, password });
+    // Convert numeric id -> GraphQL GID
+    const gid = id.startsWith("gid://")
+      ? id
+      : `gid://shopify/Customer/${id}`;
 
-    if (userErrors?.length) {
-      return NextResponse.json({ ok: false, result: { userErrors } }, { status: 400 });
+    // Decode the token from the URL
+    const decodedToken = decodeURIComponent(token);
+
+    const result = await activateCustomer({
+      id: gid,
+      token: decodedToken,
+      password,
+    });
+
+    // If Shopify returns userErrors, surface them so we can see the cause
+    const errs = result?.userErrors ?? [];
+    if (errs.length) {
+      return NextResponse.json(
+        {
+          ok: false,
+          error: errs.map(e => e.message).join("; "),
+          userErrors: errs,
+        },
+        { status: 400 }
+      );
     }
 
-    if (customerAccessToken?.accessToken) {
-      const ttl =
-        Math.max(1, Math.floor((+new Date(customerAccessToken.expiresAt) - Date.now()) / 1000)) ||
-        60 * 60 * 24 * 14;
+    // If you also set a cookie here, keep it — but not required for success:
+    // const { accessToken, expiresAt } = result.customerAccessToken ?? {};
+    // ...
 
-      // Next 14+ cookies() is sync; remove await
-      (await cookies()).set("sf_customer_token", customerAccessToken.accessToken, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "lax",
-        maxAge: ttl,
-        path: "/",
-      });
-    }
-
-    return NextResponse.json({ ok: true, result: { customerAccessToken } });
+    return NextResponse.json({ ok: true });
   } catch (err: any) {
-    return NextResponse.json({ ok: false, error: err?.message || "Activation error" }, { status: 400 });
+    return NextResponse.json(
+      { ok: false, error: err?.message || "Activation error" },
+      { status: 400 }
+    );
   }
 }
