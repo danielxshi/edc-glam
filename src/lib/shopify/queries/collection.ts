@@ -1,21 +1,16 @@
+// src/lib/shopify/queries/collection.ts
 import { productFragment } from "../fragments/product";
 import { collectionFragment } from "../fragments/collection";
 
-// ✅ List all collections
 export const getCollectionsQuery = /* GraphQL */ `
   ${collectionFragment}
   query getCollections {
     collections(first: 100, sortKey: TITLE) {
-      edges {
-        node {
-          ...collection
-        }
-      }
+      edges { node { ...collection } }
     }
   }
 `;
 
-// ✅ Get products inside a single collection
 export const getCollectionProductsQuery = /* GraphQL */ `
   ${productFragment}
   ${collectionFragment}
@@ -28,11 +23,7 @@ export const getCollectionProductsQuery = /* GraphQL */ `
     collection(handle: $handle) {
       ...collection
       products(first: $first, sortKey: $sortKey, reverse: $reverse) {
-        edges {
-          node {
-            ...product
-          }
-        }
+        edges { node { ...product } }
       }
     }
   }

@@ -1,3 +1,4 @@
+// src/lib/shopify/fragments/product.ts
 import { imageFragment } from "./image";
 import { seoFragment } from "./seo";
 
