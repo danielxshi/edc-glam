@@ -1,9 +1,8 @@
-// src/app/api/account/activate/route.ts
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
-const ADMIN_URL = `https://${process.env.SHOPIFY_STORE_DOMAIN}/admin/api/2024-10/graphql.json`;
-const ADMIN_TOKEN = process.env.SHOPIFY_ADMIN_API_ACCESS_TOKEN;
+const STOREFRONT_URL = `https://${process.env.SHOPIFY_STORE_DOMAIN}/api/2024-10/graphql.json`;
+const STOREFRONT_TOKEN = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
 
 export async function POST(req: Request) {
   try {
@@ -16,14 +15,14 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
-    if (!ADMIN_TOKEN || !process.env.SHOPIFY_STORE_DOMAIN) {
+    if (!STOREFRONT_TOKEN || !process.env.SHOPIFY_STORE_DOMAIN) {
       return NextResponse.json(
-        { ok: false, error: "Server is missing Admin API env vars" },
+        { ok: false, error: "Server is missing Storefront API env vars" },
         { status: 500 }
       );
     }
 
-    // Ensure we send a Shopify GID, not the plain numeric id.
+    // Shopify requires a GID format for the ID
     const gid =
       typeof id === "string" && id.startsWith("gid://shopify/Customer/")
         ? id
@@ -48,33 +47,29 @@ export async function POST(req: Request) {
       },
     };
 
-    const res = await fetch(ADMIN_URL, {
+    const res = await fetch(STOREFRONT_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-Shopify-Access-Token": ADMIN_TOKEN!,
+        "X-Shopify-Storefront-Access-Token": STOREFRONT_TOKEN!,
       },
       body: JSON.stringify(body),
-      // Optional, but helps avoid edge caching proxies
       cache: "no-store",
     });
 
     const json = await res.json();
 
-    // --- Deep debug logging (visible in Vercel "Functions" logs) ---
     console.log("Activate request vars:", JSON.stringify(body.variables));
     console.log("Shopify activate response:", JSON.stringify(json, null, 2));
-    // ----------------------------------------------------------------
 
     if (!res.ok) {
       return NextResponse.json(
-        { ok: false, error: "Admin API request failed" },
+        { ok: false, error: "Storefront API request failed" },
         { status: 502 }
       );
     }
 
     if (json.errors?.length) {
-      // Top-level GraphQL errors
       return NextResponse.json(
         { ok: false, error: json.errors[0]?.message || "GraphQL error" },
         { status: 400 }
@@ -84,7 +79,7 @@ export async function POST(req: Request) {
     const payload = json?.data?.customerActivate;
     if (!payload) {
       return NextResponse.json(
-        { ok: false, error: "Unexpected Admin API response" },
+        { ok: false, error: "Unexpected Storefront API response" },
         { status: 500 }
       );
     }
@@ -92,7 +87,6 @@ export async function POST(req: Request) {
     const { userErrors, customerAccessToken } = payload;
 
     if (userErrors?.length) {
-      // Return the first user error so the UI can show it
       const msg =
         userErrors[0]?.message ||
         (Array.isArray(userErrors[0]?.field)
@@ -108,14 +102,13 @@ export async function POST(req: Request) {
       );
     }
 
-    // Set a session cookie so the client is logged in right away
     const maxAge =
       Math.max(
         1,
         Math.floor(
           (new Date(customerAccessToken.expiresAt).getTime() - Date.now()) / 1000
         )
-      ) || 60 * 60 * 24 * 14; // fallback: 14 days
+      ) || 60 * 60 * 24 * 14;
 
     const c = await cookies();
     c.set("sf_customer_token", customerAccessToken.accessToken, {
@@ -133,5 +126,5 @@ export async function POST(req: Request) {
       { ok: false, error: err?.message || "Unknown server error" },
       { status: 500 }
     );
-    }
+  }
 }
