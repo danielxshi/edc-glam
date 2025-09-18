@@ -58,7 +58,7 @@ import { customerActivateMutation } from "./mutations/customer";
 import { ShopifyCustomerActivateOperation } from "./types";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-
+// src/lib/shopify/customer.ts (or wherever you put it)
 export async function activateCustomer({
   id,
   token,
@@ -68,24 +68,38 @@ export async function activateCustomer({
   token: string;
   password: string;
 }) {
-  const res = await shopifyFetch<ShopifyCustomerActivateOperation>({
-    query: customerActivateMutation,
-    cache: "no-store",
-    variables: {
-      id,
-      input: {
-        activationToken: token,
-        password,
+  const res = await fetch(
+    `https://${process.env.SHOPIFY_STORE_DOMAIN}/admin/api/2024-10/graphql.json`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shopify-Access-Token": process.env.SHOPIFY_ADMIN_API_ACCESS_TOKEN!,
       },
-    },
-  });
+      body: JSON.stringify({
+        query: `
+          mutation customerActivate($id: ID!, $input: CustomerActivateInput!) {
+            customerActivate(id: $id, input: $input) {
+              customer { id email }
+              customerAccessToken { accessToken expiresAt }
+              userErrors { field message }
+            }
+          }
+        `,
+        variables: { id, input: { activationToken: token, password } },
+      }),
+    }
+  );
 
-  const payload = res.body.data.customerActivate;
-  if (payload.userErrors?.length) {
-    const msg = payload.userErrors.map((e) => e.message).join(", ");
-    throw new Error(msg || "Activation failed");
-  }
-  return payload;
+  const json = await res.json();
+  if (!res.ok) throw new Error("Admin API request failed");
+
+  // Return the whole payload section so the route can decide what to do
+  return (
+    json.data?.customerActivate ?? {
+      userErrors: [{ message: "Unknown error" }],
+    }
+  );
 }
 
 const domain = process.env.SHOPIFY_STORE_DOMAIN
