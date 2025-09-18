@@ -5,13 +5,14 @@ import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 
 export default function ActivationForm({ id, token }: { id: string; token: string }) {
-  const [password, setPassword] = useState("");
-  const [error, setError]       = useState<string | null>(null);
-  const [loading, setLoading]   = useState(false);
   const router = useRouter();
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
+    if (loading) return;              // prevent double-submit
     setError(null);
 
     if (password.length < 8) {
@@ -28,16 +29,17 @@ export default function ActivationForm({ id, token }: { id: string; token: strin
       });
       const json = await r.json();
 
-      if (!r.ok || !json.ok) {
+      if (!r.ok || !json?.ok) {
         const msg =
           json?.result?.userErrors?.[0]?.message ||
           json?.error ||
           "Activation failed";
         setError(msg);
-      } else {
-        // API sets the customer token cookie on success
-        router.replace("/account");
+        return;                       // ⬅️ stop here on failure
       }
+
+      // success — cookie set by API, go to account
+      router.replace("/account");
     } catch (err: any) {
       setError(err?.message || "Network error");
     } finally {
@@ -46,7 +48,7 @@ export default function ActivationForm({ id, token }: { id: string; token: strin
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-3 max-w-sm">
+    <form onSubmit={onSubmit} className="space-y-3 max-w-sm" aria-live="polite">
       <label className="block">
         <span className="text-sm">Create a password</span>
         <input
