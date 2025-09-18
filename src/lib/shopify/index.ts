@@ -53,14 +53,47 @@ import { headers } from "next/headers";
 import { revalidateTag } from "next/cache";
 import { getPageQuery, getPagesQuery } from "./queries/page";
 
+// testing
+import { customerActivateMutation } from "./mutations/customer";
+import { ShopifyCustomerActivateOperation } from "./types";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+
+export async function activateCustomer({
+  id,
+  token,
+  password,
+}: {
+  id: string;
+  token: string;
+  password: string;
+}) {
+  const res = await shopifyFetch<ShopifyCustomerActivateOperation>({
+    query: customerActivateMutation,
+    cache: "no-store",
+    variables: {
+      id,
+      input: {
+        activationToken: token,
+        password,
+      },
+    },
+  });
+
+  const payload = res.body.data.customerActivate;
+  if (payload.userErrors?.length) {
+    const msg = payload.userErrors.map((e) => e.message).join(", ");
+    throw new Error(msg || "Activation failed");
+  }
+  return payload;
+}
+
 const domain = process.env.SHOPIFY_STORE_DOMAIN
   ? ensureStartWith(process.env.SHOPIFY_STORE_DOMAIN, "https://")
   : "";
 const endpoint = `${domain}${SHOPIFY_GRAPHQL_API_ENDPOINT}`;
 const key = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
-type ExtractVariables<T> = T extends { variables: object }
-  ? T["variables"]
-  : never;
+type ExtractVariables<T> = T extends { variables: infer V } ? V : undefined;
 export async function shopifyFetch<T>({
   cache = "force-cache",
   headers,
@@ -468,7 +501,6 @@ export async function getPages(): Promise<Page[]> {
 
   return removeEdgesAndNodes(res.body.data.pages);
 }
-
 
 export async function getCollectionWithProducts({
   handle,

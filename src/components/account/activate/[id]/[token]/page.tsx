@@ -1,27 +1,20 @@
 // src/app/account/activate/[id]/[token]/page.tsx
-import { notFound, redirect } from 'next/navigation'
+import ActivateForm from "./form";
 
-export default async function ActivatePage({
+export default function ActivatePage({
   params,
 }: {
-  params: { id: string; token: string }
+  params: { id: string; token: string };
 }) {
-  const { id, token } = params
-
-  // Call Shopify's activation endpoint
-  const res = await fetch(
-    `https://your-shopify-shop.myshopify.com/account/activate/${id}/${token}`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      // Might need credentials/cookies if activating automatically
-    }
-  )
-
-  if (!res.ok) {
-    return notFound()
-  }
-
-  // On success, redirect to login or account page
-  redirect('/account/login')
+  const { id, token } = params;
+  // render a password set form; do NOT call notFound here
+  return (
+    <div className="mx-auto max-w-md p-6">
+      <h1 className="text-2xl font-semibold mb-4">Activate your account</h1>
+      <p className="text-sm text-gray-600 mb-6">
+        Choose a password to finish activating your account.
+      </p>
+      <ActivateForm id={id} token={token} />
+    </div>
+  );
 }

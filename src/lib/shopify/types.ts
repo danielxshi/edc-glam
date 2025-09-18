@@ -267,3 +267,19 @@ export type ShopifyPagesOperation = {
     pages: Connection<Page>;
   };
 };
+export type ShopifyCustomerActivateOperation = {
+  data: {
+    customerActivate: {
+      customer: { id: string } | null;
+      customerAccessToken: { accessToken: string; expiresAt: string } | null;
+      userErrors: { field: string[] | null; message: string; code?: string }[];
+    };
+  };
+  variables: {
+    id: string;
+    input: {
+      activationToken: string;
+      password: string;
+    };
+  };
+};
