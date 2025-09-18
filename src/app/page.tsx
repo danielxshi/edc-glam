@@ -112,7 +112,7 @@ export default function Home() {
       </section>
 
       {/* 👇 INSERT THE SERVER COLLECTION SECTION EXACTLY WHERE YOU WANT */}
-      <CollectionShelf handle="fleur-damour" title="Shop the Fleur d'Amour Collection" first={12} />
+      <CollectionShelf />
 
       {/* TRENDING SECTION (unchanged, uses client FadeInWhenVisible inside) */}
       <section className="w-full py-12 md:py-24 lg:py-32 grid">

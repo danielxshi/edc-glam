@@ -1,5 +1,9 @@
-// ❌ do not inject image/seo fragments here either
-const productFragment = /* GraphQL */ `
+import { imageFragment } from "./image";
+import { seoFragment } from "./seo";
+
+export const productFragment = /* GraphQL */ `
+  ${imageFragment}
+  ${seoFragment}
   fragment product on Product {
     id
     handle
@@ -30,4 +34,3 @@ const productFragment = /* GraphQL */ `
     updatedAt
   }
 `;
-export default productFragment;

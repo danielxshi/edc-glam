@@ -1,5 +1,4 @@
-// No imports here
-const cartFragment = /* GraphQL */ `
+export const cartFragment = /* GraphQL */ `
   fragment cart on Cart {
     id
     checkoutUrl
@@ -19,8 +18,7 @@ const cartFragment = /* GraphQL */ `
               id
               title
               selectedOptions { name value }
-              price { amount currencyCode }
-              product { ...product }  # references product fragment by name
+              product { ...product }
             }
           }
         }
@@ -29,4 +27,3 @@ const cartFragment = /* GraphQL */ `
     totalQuantity
   }
 `;
-export default cartFragment;

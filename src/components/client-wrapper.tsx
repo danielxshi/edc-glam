@@ -12,7 +12,7 @@ export default function ClientWrapper({
   const allowedRoutes = ["/", "/about", "/contact", "/search/mens-collection", "/search/kids", "/search/sales"] as const;
   const isAllowedRoute = (route: string): route is typeof allowedRoutes[number] => allowedRoutes.includes(route as typeof allowedRoutes[number]);
 
-  return isAllowedRoute(pathname) ? (
+  return pathname && isAllowedRoute(pathname) ? (
     <CurveTransition route={pathname}>{children}</CurveTransition>
   ) : null;
 }

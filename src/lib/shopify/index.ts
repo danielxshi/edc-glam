@@ -22,7 +22,6 @@ import {
   getProductQuery,
   getProductRecommendationsQuery,
   getProductsQuery,
-  getProductWithCollectionsQuery,   // <-- ADD THIS
 } from "./queries/product";
 
 import {
@@ -470,8 +469,7 @@ export async function getPages(): Promise<Page[]> {
   return removeEdgesAndNodes(res.body.data.pages);
 }
 
-// testing
-// lib/shopify.ts (add near your other exports)
+
 export async function getCollectionWithProducts({
   handle,
   reverse,
@@ -482,7 +480,7 @@ export async function getCollectionWithProducts({
   reverse?: boolean;
   sortKey?: string;
   first?: number;
-}): Promise<{ collection: Collection | null; products: Product[] }> {
+}) {
   const res = await shopifyFetch<ShopifyCollectionProductsOperation>({
     query: getCollectionProductsQuery,
     cache: "no-store",
@@ -491,7 +489,7 @@ export async function getCollectionWithProducts({
       handle,
       reverse,
       sortKey: sortKey === "CREATED_AT" ? "CREATED" : sortKey,
-      first, // ✅ add this
+      first,
     },
   });
 

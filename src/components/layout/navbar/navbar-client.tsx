@@ -9,7 +9,7 @@ import CartModal from "@/components/cart/modal";
 import Link from "next/link";
 import ShopMegaMenu from "./shop-mega-menu";
 import { usePathname } from "next/navigation";
-
+import AccountMenu from "@/components/layout/navbar/account-menu";
 interface Props {
   menu: Menu[];
   siteName: string;
@@ -34,14 +34,14 @@ export default function NavbarClient({ menu, siteName }: Props) {
     <nav
       className={[
         isHome
-          ? "fixed top-2 left-1/2 -translate-x-1/2 w-[92vw] sm:w-[80vw] max-w-[1200px] rounded-full"
-          : "fixed w-[100vw] rounded-none",
-        "z-[999] transition-all duration-300 navbar",
+          ? "fixed top-2 left-1/2 -translate-x-1/2 w-[92vw] sm:w-[80vw] max-w-[1200px] rounded-full *:align-middle items-center *:items-center *:my-auto my-auto"
+          : "fixed inset-x-0 rounded-none",
+        "z-[999] transition-all duration-300",
         scrolled
-          ? "backdrop-blur-sm lg:bg-[#2f2f2fed] bg-[#fff9f9f4] shadow-md text-white"
+          ? "backdrop-blur-sm lg:bg-[#2f2f2fed] bg-[#fff9f9f4] shadow-md "
           : !isHome
-          ? "backdrop-blur-sm bg-white/70 shadow-md"
-          : "",
+            ? "backdrop-blur-sm bg-white/70 shadow-md"
+            : "",
       ].join(" ")}
     >
       <div
@@ -91,15 +91,13 @@ export default function NavbarClient({ menu, siteName }: Props) {
           )}
         </div>
 
+        {/* Right: search + cart + account */}
         <div className="flex justify-center">
-          <div className="justify-center md:flex mr-0 ml-auto">
-            <div className="hidden lg:flex">
-              <Search />
-            </div>
-            <div className="md:ml-4 *:right-0 flex">
-              <CartModal />
-            </div>
+          <div className="hidden lg:block">
+            <Search />
           </div>
+          <CartModal />
+          <AccountMenu />
         </div>
       </div>
     </nav>

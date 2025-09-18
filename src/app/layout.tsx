@@ -1,5 +1,5 @@
 // File: app/layout.tsx
-import type { Metadata } from "next";
+// Removed Metadata import as it is not exported from "next"
 import { Inter } from "next/font/google";
 import "./globals.scss";
 import Navbar from "@/components/layout/navbar";
@@ -12,7 +12,7 @@ import { TransitionProvider } from "@/components/layout/transition/transition-pr
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
+export const metadata = {
   title: "EDCGLAM",
   description: "Salon quality press on nails, press on nail art, and more.",
 };

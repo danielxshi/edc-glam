@@ -116,18 +116,21 @@ export type ShopifyCollectionsOperation = {
     collections: Connection<ShopifyCollection>;
   };
 };
-
 export type ShopifyCollectionProductsOperation = {
   data: {
-    collection: {
-      products: Connection<ShopifyProduct>;
-    };
+    // the query returns the full collection (via ...collection)
+    // PLUS a products connection
+    collection:
+      | (ShopifyCollection & {
+          products: Connection<ShopifyProduct>;
+        })
+      | null;
   };
   variables: {
     handle: string;
     reverse?: boolean;
-    sortKey?: string;
-    first?: number; // <-- add this
+    sortKey?: string; // or a tighter union if you want
+    first?: number;
   };
 };
 
