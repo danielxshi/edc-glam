@@ -48,15 +48,15 @@ export default function AccountMenu() {
 
   if (!me) {
     return (
-      <div className="ml-4 flex items-center space-x-3 text-sm">
+      <div className="ml-4 flex items-center space-x-3 text-xs">
         <a href="/account/login" className="hover:underline">LOGIN</a>
       </div>
     );
   }
 
   return (
-    <div className="ml-4 flex items-center space-x-3 text-sm">
-      <a href="/account" className="hover:underline">ACCOUNT</a>
+    <div className="ml-4 flex items-center space-x-3 text-xs">
+      <a href="/account/order-history" className="hover:underline">ACCOUNT</a>
       {/* <button onClick={logout} className="hover:underline">Sign out</button> */}
     </div>
   );
