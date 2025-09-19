@@ -27,24 +27,15 @@ export default async function AddressesPage() {
   const token = (await cookies()).get("sf_customer_token")?.value;
   if (!token) redirect("/account/login?next=/account/addresses");
 
-  const res = await shopifyFetch<{
-    body: {
-      data: {
-        customer: {
-          defaultAddress: { id: string } | null;
-          addresses: { edges: { node: Address }[] };
-        } | null;
-      };
-    };
-  }>({
+  const res = await shopifyFetch<any>({
     query: QUERY_CUSTOMER_ADDRESSES,
-    variables: { accessToken: token, first: 50 },
+    variables: { accessToken: token as string, first: 50 } as any, // <-- TS-safe cast
     cache: "no-store",
   });
 
   const customer = res?.body?.data?.customer;
   const defaultId = customer?.defaultAddress?.id;
-  const addresses = (customer?.addresses?.edges ?? []).map(e => e.node);
+  const addresses = (customer?.addresses?.edges ?? []).map((e: { node: Address }) => e.node);
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-10 min-h-[84vh] pt-24">
@@ -66,14 +57,14 @@ export default async function AddressesPage() {
 
           <div className="mb-8 rounded-xl border bg-white/60 p-5">
             <h3 className="mb-3 text-sm font-medium">Add a new address</h3>
-            <AddressForm id="new" token={token} />
+            <AddressForm id="new" />
           </div>
 
           <div className="divide-y rounded-xl border bg-white/60">
             {addresses.length === 0 ? (
               <div className="p-6 text-sm text-gray-600">No addresses yet.</div>
             ) : (
-              addresses.map(addr => (
+              addresses.map((addr: Address) => (
                 <AddressRow
                   key={addr.id}
                   addr={addr}

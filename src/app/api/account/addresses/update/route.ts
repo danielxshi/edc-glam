@@ -1,12 +1,13 @@
+// app/api/account/addresses/update/route.ts
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { shopifyFetch } from "@/lib/shopify";
 import { MUT_CUSTOMER_ADDRESS_UPDATE } from "@/lib/customer-queries";
 
-const ALLOWED: (keyof any)[] = [
-  "firstName","lastName","company","address1","address2",
-  "city","province","zip","country","phone"
-];
+const ALLOWED = [
+  "firstName", "lastName", "company", "address1", "address2",
+  "city", "province", "zip", "country", "phone",
+] as const;
 
 function sanitize(addr: any) {
   const out: any = {};
@@ -18,12 +19,12 @@ export async function POST(req: Request) {
   const token = (await cookies()).get("sf_customer_token")?.value;
   if (!token) return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
 
-  const { id, address } = await req.json();         // { id, address }
-  const addressInput = sanitize(address);           // drop id/unknown keys
+  const { id, address } = await req.json(); // { id, address }
+  const addressInput = sanitize(address);    // drop id/unknown keys
 
-  const r = await shopifyFetch({
+  const r = await shopifyFetch<any>({
     query: MUT_CUSTOMER_ADDRESS_UPDATE,
-    variables: { accessToken: token, id, address: addressInput },
+    variables: { accessToken: token, id, address: addressInput } as any, // TS-safe cast
     cache: "no-store",
   });
 

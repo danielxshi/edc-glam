@@ -19,7 +19,13 @@ type OrderNode = {
   totalPriceV2: Money;
   lineItems: {
     pageInfo: { hasNextPage: boolean };
-    edges: { node: { title: string; quantity: number; variant?: { image?: { url: string; altText: string | null } | null } | null } }[];
+    edges: {
+      node: {
+        title: string;
+        quantity: number;
+        variant?: { image?: { url: string; altText: string | null } | null } | null;
+      };
+    }[];
   };
 };
 
@@ -32,24 +38,19 @@ export default async function OrderHistoryPage({
   const sp = await searchParams;
   const after = typeof sp?.after === "string" ? sp.after : undefined;
 
-  const res = await shopifyFetch<{
-    body: {
-      data: {
-        customer: {
-          orders: {
-            pageInfo: { hasNextPage: boolean; endCursor: string | null };
-            edges: { cursor: string; node: OrderNode }[];
-          };
-        } | null;
-      };
-    };
-  }>({
+  const res = await shopifyFetch<any>({
     query: QUERY_CUSTOMER_ORDERS,
-    variables: { accessToken: token, first: 20, after },
+    variables: { accessToken: token as string, first: 20, after } as any, // <-- TS-safe cast
     cache: "no-store",
   });
 
-  const ordersConn = res?.body?.data?.customer?.orders;
+  const ordersConn = res?.body?.data?.customer?.orders as
+    | {
+        pageInfo: { hasNextPage: boolean; endCursor: string | null };
+        edges: { cursor: string; node: OrderNode }[];
+      }
+    | undefined;
+
   const edges = ordersConn?.edges ?? [];
   const hasNext = ordersConn?.pageInfo?.hasNextPage ?? false;
   const endCursor = ordersConn?.pageInfo?.endCursor ?? undefined;
@@ -101,7 +102,10 @@ export default async function OrderHistoryPage({
 function OrderRow({ order }: { order: OrderNode }) {
   const dateLabel = formatDateUpper(order.processedAt);
   const total = formatMoney(order.totalPriceV2);
-  const thumbs = order.lineItems.edges.slice(0, 4).map(({ node }) => node.variant?.image?.url).filter(Boolean) as string[];
+  const thumbs = order.lineItems.edges
+    .slice(0, 4)
+    .map(({ node }) => node.variant?.image?.url)
+    .filter(Boolean) as string[];
   const hasMoreItems = order.lineItems.pageInfo.hasNextPage;
 
   return (
@@ -161,7 +165,9 @@ function formatMoney(m: Money) {
 
 function formatDateUpper(iso: string) {
   const d = new Date(iso);
-  return new Intl.DateTimeFormat(undefined, { year: "numeric", month: "long", day: "2-digit" }).format(d).toUpperCase();
+  return new Intl.DateTimeFormat(undefined, { year: "numeric", month: "long", day: "2-digit" })
+    .format(d)
+    .toUpperCase();
 }
 
 function pretty(s: string | null) {

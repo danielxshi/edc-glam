@@ -1,3 +1,4 @@
+// app/account/page.tsx
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -12,21 +13,22 @@ export default async function AccountDetailsPage() {
   const token = (await cookies()).get("sf_customer_token")?.value;
   if (!token) redirect("/account/login?next=/account");
 
-  const res = await shopifyFetch<{
-    body: { data: { customer: {
-      email: string | null;
-      firstName: string | null;
-      lastName: string | null;
-      phone: string | null;
-      acceptsMarketing: boolean | null;
-    } | null } }
-  }>({
+  const res = await shopifyFetch<any>({
     query: QUERY_ACCOUNT_DETAILS,
-    variables: { accessToken: token },
+    variables: { accessToken: token as string } as any, // <-- TS-safe cast
     cache: "no-store",
   });
 
-  const c = res?.body?.data?.customer;
+  const c = res?.body?.data?.customer as
+    | {
+        email: string | null;
+        firstName: string | null;
+        lastName: string | null;
+        phone: string | null;
+        acceptsMarketing: boolean | null;
+      }
+    | null
+    | undefined;
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-10 min-h-[84vh] pt-24">
@@ -49,7 +51,6 @@ export default async function AccountDetailsPage() {
           <h1 className="mb-6 text-xl font-semibold">Account Details</h1>
 
           <div className="rounded-xl border bg-white/60 p-6">
-            {/* Client form renders with initial values */}
             <AccountDetailsForm
               firstName={c?.firstName}
               lastName={c?.lastName}

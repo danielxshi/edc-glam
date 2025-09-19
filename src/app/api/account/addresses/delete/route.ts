@@ -1,3 +1,4 @@
+// app/api/account/addresses/delete/route.ts
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { shopifyFetch } from "@/lib/shopify";
@@ -8,9 +9,10 @@ export async function POST(req: Request) {
   if (!token) return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
 
   const { id } = await req.json();
-  const r = await shopifyFetch({
+
+  const r = await shopifyFetch<any>({
     query: MUT_CUSTOMER_ADDRESS_DELETE,
-    variables: { accessToken: token, id },
+    variables: { accessToken: token, id } as any, // <-- fix: cast variables
     cache: "no-store",
   });
 
