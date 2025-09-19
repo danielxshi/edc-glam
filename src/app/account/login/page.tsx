@@ -24,7 +24,7 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="max-w-md mx-auto p-6 space-y-4">
+    <main className="max-w-md mx-auto p-6 space-y-4 mt-24">
       <h1 className="text-2xl font-semibold">Sign in</h1>
       <form onSubmit={onSubmit} className="space-y-3">
         <input className="w-full border rounded p-2" placeholder="Email"
