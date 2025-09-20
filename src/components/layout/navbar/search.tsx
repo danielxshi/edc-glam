@@ -1,3 +1,4 @@
+// app/components/.../search.tsx (or wherever "./search" points)
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -5,7 +6,7 @@ import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useSearchParams } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 
-export default function SearchButton() {
+export default function Search({ linkClassName }: { linkClassName?: string }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -14,9 +15,13 @@ export default function SearchButton() {
         type="button"
         aria-label="Search"
         onClick={() => setOpen(true)}
-        className="relative inline-flex h-9 w-fit items-center justify-center rounded-md border-neutral-200 hover:scale-105"
+        className={[
+          linkClassName || "text-sm transition-colors duration-300 hover:opacity-70",
+          "relative inline-flex h-9 w-fit items-center justify-center rounded-md"
+        ].join(" ")}
       >
-        <MagnifyingGlassIcon className="h-5 w-5 lg:text-white text-black" />
+        {/* Inherit color from parent (no text-black/white here) */}
+        <MagnifyingGlassIcon className="h-5 w-5" />
       </button>
 
       <AnimatePresence>
@@ -58,7 +63,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
 
       {/* Panel */}
       <motion.div
-        className=" left-0 right-0 top-0 absolute z-50 mx-auto w-full max-w-5xl"
+        className="absolute left-0 right-0 top-0 z-50 mx-auto w-full max-w-5xl"
         role="dialog"
         aria-modal="true"
         initial={{ y: -40, opacity: 0 }}
@@ -67,11 +72,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
       >
         <div className="mx-4 mt-6 rounded-xl border border-neutral-200 bg-white shadow-lg dark:border-neutral-800 dark:bg-neutral-900">
-          <form
-            action="/search"
-            method="GET"
-            className="relative flex items-center gap-3 px-4 py-4"
-          >
+          <form action="/search" method="GET" className="relative flex items-center gap-3 px-4 py-4">
             <MagnifyingGlassIcon className="h-5 w-5 text-neutral-500" />
             <input
               ref={inputRef}

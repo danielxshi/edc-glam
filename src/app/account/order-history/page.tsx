@@ -121,7 +121,7 @@ function OrderRow({ order }: { order: OrderNode }) {
 
       <div className="flex items-center justify-between gap-6">
         <div className="space-y-1 text-sm">
-          <div className="uppercase text-gray-700">{pretty(order.fulfillmentStatus) || "—"}</div>
+          {/* <div className="uppercase text-gray-700">{pretty(order.fulfillmentStatus) || "—"}</div> */}
           <div className="text-gray-800">Order <span className="font-medium">{order.orderNumber}</span></div>
           <div className="text-gray-800">{total}</div>
           {order.statusUrl && (
@@ -134,7 +134,7 @@ function OrderRow({ order }: { order: OrderNode }) {
         <div className="flex items-center gap-3">
           {thumbs.map((src, i) => (
             // eslint-disable-next-line @next/next/no-img-element
-            <img key={i} src={src} alt="" className="h-16 w-16 rounded object-cover" />
+            <img key={i} src={src} alt="" className="h-32 w-32 rounded object-cover" />
           ))}
           {hasMoreItems && <span className="text-sm text-gray-500">…</span>}
         </div>

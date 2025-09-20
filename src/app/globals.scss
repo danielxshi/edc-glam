@@ -14,7 +14,7 @@
   --font-mono: var(--font-geist-mono);
 } */
 .sort-button {
-  padding: .75rem 1rem;
+  padding: 0.75rem 1rem;
   border: #6060605a 1px solid;
   border-right: none;
 }
@@ -23,16 +23,21 @@
 .sort-button {
   @apply w-full justify-center gap-2 px-4 text-[13px] tracking-[.08em] uppercase;
 }
-
+.nav-text {
+  letter-spacing: 0.08rem !important;
+  * {
+    letter-spacing: 0.08rem !important;
+  }
+}
 button {
-  color: #2a2a2a;
+  // color: #2a2a2a;
   font-size: 0.7rem;
-  letter-spacing: 0.05rem;
+  letter-spacing: 0.08rem;
 
   * {
-    color: #2a2a2a;
+    // color: #2a2a2a;
     font-size: 0.7rem;
-    letter-spacing: 0.05rem;
+    letter-spacing: 0.08rem;
   }
 }
 
@@ -364,7 +369,7 @@ body.transitioning {
   font-size: 0.75rem;
 }
 
-.product-details-subcontent-header{
+.product-details-subcontent-header {
   margin-top: 1.5rem;
 }
 

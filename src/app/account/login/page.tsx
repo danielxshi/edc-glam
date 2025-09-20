@@ -35,7 +35,7 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="mx-auto w-full max-w-3xl px-4 pt-[9.4rem] min-h-[84vh]">
+    <main className="mx-auto w-full max-w-3xl px-4 pt-[9rem] min-h-[84vh]">
       <h2 className="mb-4 text-xs font-semibold tracking-wide text-black/80">
         LOGIN
       </h2>

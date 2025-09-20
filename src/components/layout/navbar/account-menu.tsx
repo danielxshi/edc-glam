@@ -1,11 +1,20 @@
-// app/components/layout/navbar/AccountMenu.tsx
 "use client";
 import { useCallback, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
-type Me = { customer: null | { firstName: string | null; lastName: string | null; email: string } };
+type Me = {
+  customer: null | {
+    firstName: string | null;
+    lastName: string | null;
+    email: string;
+  };
+};
 
-export default function AccountMenu() {
+export default function AccountMenu({
+  linkClassName,
+}: {
+  linkClassName?: string;
+}) {
   const [me, setMe] = useState<Me["customer"]>(null);
   const pathname = usePathname();
 
@@ -22,13 +31,12 @@ export default function AccountMenu() {
     }
   }, []);
 
-  // initial load
-  useEffect(() => { loadMe(); }, [loadMe]);
-
-  // re-fetch when the route changes (layout doesn't unmount)
-  useEffect(() => { loadMe(); }, [pathname, loadMe]);
-
-  // re-fetch when tab regains focus or when we broadcast an auth change
+  useEffect(() => {
+    loadMe();
+  }, [loadMe]); // initial
+  useEffect(() => {
+    loadMe();
+  }, [pathname, loadMe]); // on route change
   useEffect(() => {
     const onFocus = () => loadMe();
     const onAuthChanged = () => loadMe();
@@ -42,22 +50,39 @@ export default function AccountMenu() {
 
   async function logout() {
     await fetch("/api/auth/logout", { method: "POST" });
-    // tell listeners (including this component) to re-fetch
     window.dispatchEvent(new Event("auth:changed"));
   }
 
   if (!me) {
     return (
-      <div className="ml-4 flex items-center space-x-3 text-xs">
-        <a href="/account/login" className="hover:underline">LOGIN</a>
+      <div className="ml-4 flex items-center space-x-3 nav-text">
+        <a
+          href="/account/login"
+          className={`nav-text ${linkClassName ||
+            "text-xs font-normal nav-text transition-colors duration-300 hover:opacity-70"}`
+
+          }
+        >
+          LOGIN
+        </a>
       </div>
     );
   }
 
   return (
-    <div className="ml-4 flex items-center space-x-3 text-xs">
-      <a href="/account/order-history" className="hover:underline">ACCOUNT</a>
-      {/* <button onClick={logout} className="hover:underline">Sign out</button> */}
+    <div className="ml-4 flex items-center space-x-3 nav-text">
+      <a
+        href="/account/order-history"
+        className={
+          linkClassName ||
+          "text-xs font-normal nav-text transition-colors duration-300 hover:opacity-70"
+        }
+      >
+        ACCOUNT
+      </a>
+      {/* <button onClick={logout} className={linkClassName || "text-sm tracking-wide transition-colors duration-300 hover:opacity-70"}>
+        Sign out
+      </button> */}
     </div>
   );
 }

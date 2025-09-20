@@ -8,9 +8,9 @@ export default function AccountLink() {
   const logoutUrl = `https://${SHOP_DOMAIN}/account/logout`;
 
   return (
-    <div className="ml-4 flex items-center space-x-3">
-      <a href={accountUrl} className="text-sm hover:underline">Account</a>
-      <a href={logoutUrl} className="text-sm hover:underline">Sign out</a>
+    <div className="ml-4 flex items-center space-x-3 nav-text">
+      <a href={accountUrl} className="text-sm hover:underline nav-text">Account</a>
+      <a href={logoutUrl} className="text-sm hover:underline nav-text">Sign out</a>
     </div>
   );
 }

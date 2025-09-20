@@ -1,42 +1,41 @@
-'use client'
+// app/components/cart/modal.tsx
+"use client";
 
-import React from 'react'
-import { useFormStatus } from 'react-dom'
-import { Dialog, Transition } from '@headlessui/react'
-import { ShoppingCartIcon } from '@heroicons/react/24/outline'
-import { Fragment, useEffect, useRef, useState } from 'react'
-import { useCart } from './cart-context'
-import { createUrl } from '../../lib/utils'
-import Image from 'next/image'
-import Link from 'next/link'
-import Price from '../price'
-import OpenCart from './open-cart'
-import CloseCart from './close-cart'
-import { DEFAULT_OPTION } from '../../lib/constants'
-import { DeleteItemButton } from './delete-item-button'
-import { EditItemQuantityButton } from './edit-item-quantity-button'
-import LoadingDots from '../loading-dots'
-import {
-  createCartAndSetCookie,
-  redirectToCheckout,
-} from './actions'
+import React, { Fragment, useEffect, useRef, useState } from "react";
+import { useFormStatus } from "react-dom";
+import { Dialog, Transition } from "@headlessui/react";
+import { ShoppingCartIcon } from "@heroicons/react/24/outline";
+import { useCart } from "./cart-context";
+import { createUrl } from "../../lib/utils";
+import Image from "next/image";
+import Link from "next/link";
+import Price from "../price";
+import OpenCart from "./open-cart";
+import CloseCart from "./close-cart";
+import { DEFAULT_OPTION } from "../../lib/constants";
+import { DeleteItemButton } from "./delete-item-button";
+import { EditItemQuantityButton } from "./edit-item-quantity-button";
+import LoadingDots from "../loading-dots";
+import { createCartAndSetCookie, redirectToCheckout } from "./actions";
 
-type MerchandiseSearchParams = { [key: string]: string }
+type MerchandiseSearchParams = { [key: string]: string };
 
-export default function CartModal() {
-  const { cart, updateCartItem } = useCart()
-  const [isOpen, setIsOpen] = useState(false)
-  const quantityRef = useRef(cart?.totalQuantity)
+export default function CartModal({
+  linkClassName,
+}: {
+  linkClassName?: string;
+}) {
+  const { cart, updateCartItem } = useCart();
+  const [isOpen, setIsOpen] = useState(false);
+  const quantityRef = useRef(cart?.totalQuantity);
+  const [status, formAction] = React.useActionState(redirectToCheckout, null);
 
-  /* ---------- NEW: wrap server action ---------- */
-  const [status, formAction] = React.useActionState(redirectToCheckout, null)
-
-  const openCart = () => setIsOpen(true)
-  const closeCart = () => setIsOpen(false)
+  const openCart = () => setIsOpen(true);
+  const closeCart = () => setIsOpen(false);
 
   useEffect(() => {
-    if (!cart) createCartAndSetCookie()
-  }, [cart])
+    if (!cart) createCartAndSetCookie();
+  }, [cart]);
 
   useEffect(() => {
     if (
@@ -44,15 +43,24 @@ export default function CartModal() {
       cart.totalQuantity !== quantityRef.current &&
       cart.totalQuantity > 0
     ) {
-      if (!isOpen) setIsOpen(true)
-      quantityRef.current = cart.totalQuantity
+      if (!isOpen) setIsOpen(true);
+      quantityRef.current = cart.totalQuantity;
     }
-  }, [isOpen, cart?.totalQuantity])
+  }, [isOpen, cart?.totalQuantity]);
 
   return (
     <>
-      <button aria-label="Open cart" onClick={openCart}>
-        <OpenCart quantity={cart?.totalQuantity} />
+      <button
+        aria-label="Open cart"
+        onClick={openCart}
+        className={
+          (linkClassName ||
+            "text-sm transition-colors duration-300 hover:opacity-70") +
+          " inline-flex items-center group"
+        }
+      >
+        {/* Icon inherits button color; only pass size */}
+        <OpenCart quantity={cart?.totalQuantity} className="h-5 w-5" />
       </button>
 
       <Transition show={isOpen}>
@@ -70,7 +78,7 @@ export default function CartModal() {
             <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
           </Transition.Child>
 
-          {/* Sliding panel */}
+          {/* Panel */}
           <Transition.Child
             as={Fragment}
             enter="transition-all ease-in-out duration-300"
@@ -89,44 +97,42 @@ export default function CartModal() {
                 </button>
               </div>
 
-              {/* Empty state */}
-              {!cart?.lines?.length ? (                <div>
+              {/* Empty */}
+              {!cart?.lines?.length ? (
+                <div>
                   <ShoppingCartIcon className="h-16" />
                   <p className="mt-6 text-center text-2xl font-bold">
                     Your Cart is Empty.
                   </p>
                 </div>
               ) : (
-                /* Cart contents */
+                /* Contents */
                 <div className="flex h-full flex-col justify-between overflow-hidden p-1">
                   {/* Items */}
                   <ul className="flex-grow overflow-auto py-4">
                     {cart.lines
                       .sort((a, b) =>
                         a.merchandise.product.title.localeCompare(
-                          b.merchandise.product.title,
-                        ),
+                          b.merchandise.product.title
+                        )
                       )
                       .map((item, i) => {
-                        const params: MerchandiseSearchParams = {}
+                        const params: MerchandiseSearchParams = {};
                         item.merchandise.selectedOptions.forEach(
                           ({ name, value }) => {
                             if (value !== DEFAULT_OPTION)
-                              params[name.toLowerCase()] = value
-                          },
-                        )
-
+                              params[name.toLowerCase()] = value;
+                          }
+                        );
                         const url = createUrl(
                           `/product/${item.merchandise.product.handle}`,
-                          new URLSearchParams(params),
-                        )
-
+                          new URLSearchParams(params)
+                        );
                         return (
                           <li
                             key={i}
                             className="flex w-full flex-col border-b border-neutral-300 "
                           >
-                            {/* Delete btn */}
                             <div className="relative flex w-full justify-between px-1 py-4">
                               <DeleteItemButton
                                 item={item}
@@ -134,7 +140,6 @@ export default function CartModal() {
                               />
                             </div>
 
-                            {/* Image + link */}
                             <div className="flex flex-row">
                               <div className="relative h-16 w-16 overflow-hidden rounded-md border border-neutral-300 bg-neutral-300 ">
                                 <Image
@@ -142,8 +147,7 @@ export default function CartModal() {
                                   className="object-cover"
                                   alt={
                                     item.merchandise.product.featuredImage
-                                      .altText ||
-                                    item.merchandise.product.title
+                                      .altText || item.merchandise.product.title
                                   }
                                   src={
                                     item.merchandise.product.featuredImage.url
@@ -167,7 +171,6 @@ export default function CartModal() {
                               </Link>
                             </div>
 
-                            {/* Price & qty controls */}
                             <div className="flex h-16 flex-col justify-between">
                               <Price
                                 className="flex justify-end text-right text-sm"
@@ -193,7 +196,7 @@ export default function CartModal() {
                               </div>
                             </div>
                           </li>
-                        )
+                        );
                       })}
                   </ul>
 
@@ -223,11 +226,7 @@ export default function CartModal() {
 
                   {/* Checkout */}
                   <form action={formAction}>
-                    <input
-                      type="hidden"
-                      name="cartId"
-                      value={cart?.id ?? ''}
-                    />
+                    <input type="hidden" name="cartId" value={cart?.id ?? ""} />
                     <CheckoutButton />
                   </form>
 
@@ -243,19 +242,18 @@ export default function CartModal() {
         </Dialog>
       </Transition>
     </>
-  )
+  );
 }
 
 function CheckoutButton() {
-  const { pending } = useFormStatus()
-
+  const { pending } = useFormStatus();
   return (
     <button
       className="block w-full rounded-full bg-blue-600 p-3 text-center text-sm font-medium text-white opacity-90 hover:opacity-100"
       type="submit"
       disabled={pending}
     >
-      {pending ? <LoadingDots className="bg-white" /> : 'Proceed to Checkout'}
+      {pending ? <LoadingDots className="bg-white" /> : "Proceed to Checkout"}
     </button>
-  )
+  );
 }

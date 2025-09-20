@@ -1,6 +1,7 @@
+// NavbarClient.tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Menu } from "../../../lib/shopify/types";
 import MobileMenu from "./mobile-menu";
 import Search from "./search";
@@ -10,6 +11,7 @@ import Link from "next/link";
 import ShopMegaMenu from "./shop-mega-menu";
 import { usePathname } from "next/navigation";
 import AccountMenu from "@/components/layout/navbar/account-menu";
+
 interface Props {
   menu: Menu[];
   siteName: string;
@@ -20,42 +22,66 @@ export default function NavbarClient({ menu, siteName }: Props) {
   const pathname = usePathname();
   const isHome = pathname === "/";
 
+  const styleThis = useRef<HTMLButtonElement>(null);
+
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 100);
+    const thresholdDown = 120,
+      thresholdUp = 80;
+    let ticking = false;
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        setScrolled((prev) => (prev ? y > thresholdUp : y > thresholdDown));
+        ticking = false;
+      });
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   if (pathname === "/password") return null;
+
+  const onHero = isHome && !scrolled;
+
+  const baseLink =
+    "text-xs transition-colors duration-300 hover:opacity-70";
+  // ⬇️ Add shadow on hero (home + not scrolled)
+  const navLinkClassHome = `${baseLink} ${scrolled ? "text-black" : "text-white"} ${onHero ? "text-shadow-hero" : ""}`;
+  const navLinkClassNotHome = `${baseLink} text-black`;
+  const triggerClass = isHome ? navLinkClassHome : navLinkClassNotHome;
 
   return (
     <nav
       className={[
         isHome
-          ? "fixed top-2 left-1/2 -translate-x-1/2 w-[92vw] sm:w-[80vw] max-w-[1200px] rounded-full *:align-middle items-center *:items-center *:my-auto my-auto"
+          ? "fixed top-2 left-1/2 -translate-x-1/2 w-[92vw] sm:w-[80vw] max-w-[1200px] rounded-full border"
           : "fixed inset-x-0 rounded-none",
-        "z-[999] transition-all duration-300",
+        "z-[999]",
+        "backdrop-blur-sm",
         scrolled
-          ? "backdrop-blur-sm lg:bg-[#2f2f2fed] bg-[#fff9f9f4] shadow-md "
+          ? "bg-[#fff9f9f4] shadow-md"
           : !isHome
-            ? "backdrop-blur-sm bg-white/70 shadow-md"
-            : "",
+            ? "bg-white/70 shadow-md"
+            : "bg-transparent",
+        "transition-colors duration-300",
+        onHero ? "text-shadow-hero" : "", // harmless here, real effect is on links
       ].join(" ")}
     >
       <div
-        className={`flex items-center justify-between transition-all duration-300 ${
-          scrolled ? "h-12 px-4" : "h-16 px-6"
-        }`}
+        className={[
+          "flex items-center justify-between",
+          scrolled ? "h-12 px-4" : "h-[3.5rem] px-6",
+          "transition-[height,padding] duration-300",
+        ].join(" ")}
       >
         <MobileMenu menu={menu} />
 
         <Link href="/">
           <div
-            className={`lg:flex hidden space-x-2 transition-all duration-300 ${
-              scrolled ? "scale-90" : "scale-100"
-            }`}
+            className={`lg:flex hidden space-x-2 transition-transform duration-300 ${scrolled ? "scale-90" : "scale-100"}`}
           >
             <LogoSquare />
           </div>
@@ -64,24 +90,40 @@ export default function NavbarClient({ menu, siteName }: Props) {
         <div className="flex lg:hidden justify-center">
           <Link href="/">
             <div
-              className={`flex items-center space-x-2 transition-all duration-300 ${
-                scrolled ? "scale-90" : "scale-100"
-              }`}
+              className={`flex items-center space-x-2 transition-transform duration-300 ${scrolled ? "scale-90" : "scale-100"}`}
             >
               <LogoSquare />
             </div>
           </Link>
         </div>
 
-        <div className="flex justify-center">
+        <div className="flex justify-center uppercase font-normal ">
           {menu.length > 0 && (
-            <ul className="hidden gap-4 text-sm font-medium lg:flex">
+            <ul className="*:mx-1 hidden gap-4 text-xs font-normal nav-text lg:flex">
               {menu.map((item: Menu) => (
-                <li className={`whitespace-nowrap`} key={item.title}>
+                <li className="whitespace-nowrap" key={item.title}>
                   {item.title?.toLowerCase() === "shop" ? (
-                    <ShopMegaMenu label="Shop" />
+                    isHome ? (
+                      <ShopMegaMenu
+                        label="Shop"
+                        scrolled={scrolled}
+                        styleThis={styleThis}
+                        linkClassName={navLinkClassHome} // includes text-shadow on hero
+                      />
+                    ) : (
+                      <ShopMegaMenu
+                        label="Shop"
+                        scrolled={true}
+                        styleThis={styleThis}
+                        linkClassName={navLinkClassNotHome}
+                      />
+                    )
+                  ) : isHome ? (
+                    <Link href={item.path} className={navLinkClassHome}>
+                      {item.title}
+                    </Link>
                   ) : (
-                    <Link href={item.path} className="transition-colors">
+                    <Link href={item.path} className={navLinkClassNotHome}>
                       {item.title}
                     </Link>
                   )}
@@ -94,10 +136,10 @@ export default function NavbarClient({ menu, siteName }: Props) {
         {/* Right: search + cart + account */}
         <div className="flex justify-center">
           <div className="hidden lg:block">
-            <Search />
+            <Search linkClassName={triggerClass} />
           </div>
-          <CartModal />
-          <AccountMenu />
+          <CartModal linkClassName={triggerClass} />
+          <AccountMenu linkClassName={triggerClass} />
         </div>
       </div>
     </nav>

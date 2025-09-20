@@ -34,13 +34,13 @@ const SignupBanner: React.FC = () => {
               onChange={handleChange}
               required
               placeholder="* E-mail"
-              className="px-4 border rounded-md border-gray-400 bg-transparent outline-none py-2 font-light text-sm"
+              className="px-4 border rounded-sm border-gray-400 bg-transparent outline-none py-2 font-light text-sm"
             />
           </div>
 
           <button
             type="submit"
-            className="w-[120px] text-sm rounded-md bg-[#5D676CFF] text-white py-2 hover:bg-gray-800 transition normal-case"
+            className="w-[120px] uppercase text-sm rounded-sm bg-black text-white py-2 hover:bg-gray-800 transition "
           >
             Confirm
           </button>

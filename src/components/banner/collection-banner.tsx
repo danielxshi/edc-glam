@@ -56,7 +56,7 @@ export default function CollectionBanner({
 
   return (
     <section className={`relative w-full overflow-hidden  ${className}`}>
-      <div className="relative h-64 md:h-96 mt-[9.4rem]">
+      <div className="relative h-64 md:h-96 mt-[9rem]">
         <FallbackImage
           src={
             collection.image?.url ||
