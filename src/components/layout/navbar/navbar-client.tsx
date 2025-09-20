@@ -8,20 +8,21 @@ import Search from "./search";
 import LogoSquare from "../../../components/layout/logo-square";
 import CartModal from "@/components/cart/modal";
 import Link from "next/link";
-import ShopMegaMenu from "./shop-mega-menu";
+import ShopMegaMenu from "./mega-menu";
 import { usePathname } from "next/navigation";
 import AccountMenu from "@/components/layout/navbar/account-menu";
 
 interface Props {
   menu: Menu[];
+  megaMenu: Menu[]; // optional prop for mega menu
   siteName: string;
 }
 
-export default function NavbarClient({ menu, siteName }: Props) {
+export default function NavbarClient({ menu, siteName, megaMenu }: Props) {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === "/";
-
+  const headerHeightPx = isHome ? (scrolled ? 48 : 56) : 48;
   const styleThis = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -46,8 +47,7 @@ export default function NavbarClient({ menu, siteName }: Props) {
 
   const onHero = isHome && !scrolled;
 
-  const baseLink =
-    "text-xs transition-colors duration-300 hover:opacity-70";
+  const baseLink = "text-xs transition-colors duration-300 hover:opacity-70";
   // ⬇️ Add shadow on hero (home + not scrolled)
   const navLinkClassHome = `${baseLink} ${scrolled ? "text-black" : "text-white"} ${onHero ? "text-shadow-hero" : ""}`;
   const navLinkClassNotHome = `${baseLink} text-black`;
@@ -103,21 +103,16 @@ export default function NavbarClient({ menu, siteName }: Props) {
               {menu.map((item: Menu) => (
                 <li className="whitespace-nowrap" key={item.title}>
                   {item.title?.toLowerCase() === "shop" ? (
-                    isHome ? (
-                      <ShopMegaMenu
-                        label="Shop"
-                        scrolled={scrolled}
-                        styleThis={styleThis}
-                        linkClassName={navLinkClassHome} // includes text-shadow on hero
-                      />
-                    ) : (
-                      <ShopMegaMenu
-                        label="Shop"
-                        scrolled={true}
-                        styleThis={styleThis}
-                        linkClassName={navLinkClassNotHome}
-                      />
-                    )
+                    <ShopMegaMenu
+                      menu={megaMenu}
+                      label="Shop"
+                      scrolled={isHome ? scrolled : true}
+                      styleThis={styleThis}
+                      linkClassName={
+                        isHome ? navLinkClassHome : navLinkClassNotHome
+                      }
+                      headerHeightPx={headerHeightPx}
+                    />
                   ) : isHome ? (
                     <Link href={item.path} className={navLinkClassHome}>
                       {item.title}
