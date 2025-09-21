@@ -1,3 +1,4 @@
+// app/components/layout/navbar/mega-menu/index.tsx
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -5,19 +6,25 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import type { Menu as SfMenuItem } from "@/lib/shopify/types";
 
+/** A single rendered column in the mega menu */
 type Item = { label: string; href: string };
 type Column = { title: string; items: Item[] };
 
-// allow either `items` or `children`
+/**
+ * Shopify menu types vary slightly project-to-project.
+ * We tolerate `items` or `children`, and either `path` or `url`.
+ */
 type MenuWithChildren = SfMenuItem & {
   items?: SfMenuItem[];
   children?: SfMenuItem[];
-  url?: string;   // just in case your type omits it
+  url?: string;
   path?: string;
 };
 
-function childrenOf(m: MenuWithChildren) {
-  return (m.items ?? m.children ?? []) as MenuWithChildren[];
+type AnyMenu = MenuWithChildren[] | { items?: MenuWithChildren[] } | undefined;
+
+function toChildrenArray(m?: MenuWithChildren) {
+  return (m?.items ?? m?.children ?? []) as MenuWithChildren[];
 }
 
 function toPath(i: MenuWithChildren): string | undefined {
@@ -33,47 +40,88 @@ function toPath(i: MenuWithChildren): string | undefined {
   return undefined;
 }
 
-// Build columns from Shopify menu (2-level: parent -> child[])
-function toColumnsFromShopify(items?: MenuWithChildren[]): Column[] {
-  if (!items?.length) return [];
-  return items
-    .map((parent) => ({
-      title: parent.title,
-      items: childrenOf(parent).map((child: MenuWithChildren) => ({
-        label: child.title,
-        href: toPath(child) || "#",
-      })),
-    }))
-    .filter((c) => c.items.length > 0);
-}
+/**
+ * Build a single column from a Shopify menu.
+ * Logic:
+ * - If any top-level item has children, we render those children as the column rows.
+ * - Otherwise we render the top-level items as the rows.
+ */
+function columnFromMenu(menu: AnyMenu, title: string): Column | null {
+  const arr: MenuWithChildren[] = Array.isArray(menu)
+    ? (menu as MenuWithChildren[])
+    : ((menu as any)?.items ?? []);
 
-// Normalize any input (array or wrapper) and ensure we at least render a flat list
-function normalizeColumns(input: unknown, label: string): Column[] {
-  const arr: MenuWithChildren[] = Array.isArray(input)
-    ? (input as MenuWithChildren[])
-    : ((input as any)?.items ?? []);
+  if (!arr?.length) return null;
 
-  const cols = toColumnsFromShopify(arr);
-  if (cols.length) return cols;
+  const hasChildren = arr.some((p) => toChildrenArray(p).length > 0);
 
-  // fallback: flat column of whatever we got
-  const flat = (arr as MenuWithChildren[])
-    .map((i) => ({ label: i.title, href: toPath(i) || "#" }))
-    .filter((i) => !!i.href);
+  const rows: Item[] = hasChildren
+    ? arr
+        .flatMap((p) => toChildrenArray(p))
+        .map((child) => ({
+          label: child.title,
+          href: toPath(child) || "#",
+        }))
+        .filter((r) => !!r.href)
+    : arr
+        .map((p) => ({
+          label: p.title,
+          href: toPath(p) || "#",
+        }))
+        .filter((r) => !!r.href);
 
-  return flat.length ? [{ title: label, items: flat }] : [];
+  if (!rows.length) return null;
+  return { title, items: rows };
 }
 
 export default function ShopMegaMenu({
+  /** The visible trigger label (e.g., "SHOP") */
   label = "SHOP",
-  menu,
+
+  /**
+   * ✅ This is the menu you're already pulling today.
+   * Use it for your "Collections" column in the mega menu.
+   * Example: a menu that lists “New Arrivals”, “Best Sellers”, etc.
+   */
+  collectionsMenu,
+  collectionsTitle = "Collections",
+
+  /**
+   * ➕ Add another Shopify menu as a second column.
+   * For testing now, pass just this one. Later you can pass menu3/menu4 as well.
+   * Example: a menu for “Shop by Length” or “Shop by Shape”.
+   */
+  nailShapeMenu,
+  nailShapeMenuTitle = "More",
+
+  /** Reserved for future: third and fourth columns */
+  menu3,
+  menu3Title = "Menu 3",
+  menu4,
+  menu4Title = "Menu 4",
+
+  /** UI behavior/styling props */
   headerHeightPx = 64,
   scrolled = false,
   styleThis,
   linkClassName,
 }: {
   label?: string;
-  menu?: MenuWithChildren[] | { items?: MenuWithChildren[] }; // accept array or wrapper
+
+  // Columns (1–4): pass separate Shopify menus and the desired column headers
+  collectionsMenu?: AnyMenu;
+  collectionsTitle?: string;
+
+  nailShapeMenu?: AnyMenu;
+  nailShapeMenuTitle?: string;
+
+  menu3?: AnyMenu;
+  menu3Title?: string;
+
+  menu4?: AnyMenu;
+  menu4Title?: string;
+
+  // UI
   headerHeightPx?: number;
   scrolled?: boolean;
   styleThis?: React.RefObject<HTMLButtonElement>;
@@ -85,7 +133,14 @@ export default function ShopMegaMenu({
   const panelRef = useRef<HTMLDivElement | null>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const columns = normalizeColumns(menu, label);
+  // Build columns (each *separate* Shopify menu becomes one column)
+  const columns: Column[] = [
+    columnFromMenu(collectionsMenu, collectionsTitle),
+    columnFromMenu(nailShapeMenu, nailShapeMenuTitle),
+    columnFromMenu(menu3, menu3Title),
+    columnFromMenu(menu4, menu4Title),
+  ].filter((c): c is Column => !!c);
+
   const fallbackClass =
     `text-sm transition-colors duration-300 hover:opacity-70 ` +
     (scrolled ? "text-black" : "text-white");
@@ -98,10 +153,11 @@ export default function ShopMegaMenu({
   };
   const scheduleClose = () => {
     clearClose();
-    closeTimer.current = setTimeout(() => setOpen(false), 260);
+    // small delay so pointer can move from trigger to panel
+    closeTimer.current = setTimeout(() => setOpen(false), 240);
   };
 
-  // close on Esc
+  // Close on Esc
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
     document.addEventListener("keydown", onKey);
@@ -116,7 +172,10 @@ export default function ShopMegaMenu({
         type="button"
         aria-haspopup="menu"
         aria-expanded={open}
-        onPointerEnter={() => { clearClose(); setOpen(true); }}
+        onPointerEnter={() => {
+          clearClose();
+          setOpen(true);
+        }}
         onPointerLeave={scheduleClose}
         onFocus={() => setOpen(true)}
         className={`${linkClassName || fallbackClass} font-normal uppercase nav-text`}
@@ -140,7 +199,7 @@ export default function ShopMegaMenu({
             onPointerLeave={scheduleClose}
           >
             <div className="mx-auto max-w-7xl px-6 py-8">
-              <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-5">
+              <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
                 {columns.map((col) => (
                   <div key={col.title}>
                     <div className="mb-4 text-sm font-semibold uppercase tracking-wide">

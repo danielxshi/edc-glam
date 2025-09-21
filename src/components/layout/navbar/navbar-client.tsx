@@ -21,7 +21,12 @@ interface Props {
   siteName: string;
 }
 
-export default function NavbarClient({ menu, siteName, collectionsMenu, nailShapeMenu }: Props) {
+export default function NavbarClient({
+  menu,
+  siteName,
+  collectionsMenu,
+  nailShapeMenu,
+}: Props) {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === "/";
@@ -107,7 +112,8 @@ export default function NavbarClient({ menu, siteName, collectionsMenu, nailShap
                 <li className="whitespace-nowrap" key={item.title}>
                   {item.title?.toLowerCase() === "shop" ? (
                     <ShopMegaMenu
-                      menu={collectionsMenu}
+                      collectionsMenu={collectionsMenu}
+                      nailShapeMenu={nailShapeMenu}
                       label="Shop"
                       scrolled={isHome ? scrolled : true}
                       styleThis={styleThis}
