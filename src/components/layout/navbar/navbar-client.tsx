@@ -14,11 +14,14 @@ import AccountMenu from "@/components/layout/navbar/account-menu";
 
 interface Props {
   menu: Menu[];
-  megaMenu: Menu[]; // optional prop for mega menu
+  collectionsMenu: Menu[];
+  nailShapeMenu: Menu[];
+  nailLengthMenu?: Menu[];
+  generalMenu?: Menu[];
   siteName: string;
 }
 
-export default function NavbarClient({ menu, siteName, megaMenu }: Props) {
+export default function NavbarClient({ menu, siteName, collectionsMenu, nailShapeMenu }: Props) {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === "/";
@@ -104,7 +107,7 @@ export default function NavbarClient({ menu, siteName, megaMenu }: Props) {
                 <li className="whitespace-nowrap" key={item.title}>
                   {item.title?.toLowerCase() === "shop" ? (
                     <ShopMegaMenu
-                      menu={megaMenu}
+                      menu={collectionsMenu}
                       label="Shop"
                       scrolled={isHome ? scrolled : true}
                       styleThis={styleThis}
