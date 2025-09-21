@@ -16,8 +16,8 @@ interface Props {
   menu: Menu[];
   collectionsMenu: Menu[];
   nailShapeMenu: Menu[];
-  nailLengthMenu?: Menu[];
-  generalMenu?: Menu[];
+  nailLengthMenu: Menu[];
+  generalMenu: Menu[];
   siteName: string;
 }
 
@@ -26,6 +26,8 @@ export default function NavbarClient({
   siteName,
   collectionsMenu,
   nailShapeMenu,
+  nailLengthMenu,
+  generalMenu,
 }: Props) {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
@@ -105,21 +107,19 @@ export default function NavbarClient({
           </Link>
         </div>
 
-        <div className="flex justify-center uppercase font-normal ">
+        <div className="flex justify-center uppercase font-normal h-full align-middle items-center">
           {menu.length > 0 && (
-            <ul className="*:mx-1 hidden gap-4 text-xs font-normal nav-text lg:flex">
+            <ul className="*:mx-1 hidden gap-4 text-xs font-normal nav-text lg:flex h-full align-middle items-center">
               {menu.map((item: Menu) => (
-                <li className="whitespace-nowrap" key={item.title}>
+                <li className="whitespace-nowrap h-full align-middle items-center self-center my-auto flex" key={item.title}>
                   {item.title?.toLowerCase() === "shop" ? (
                     <ShopMegaMenu
                       collectionsMenu={collectionsMenu}
                       nailShapeMenu={nailShapeMenu}
+                      nailLengthMenu={nailLengthMenu}
+                      generalMenu={generalMenu}
                       label="Shop"
                       scrolled={isHome ? scrolled : true}
-                      styleThis={styleThis}
-                      linkClassName={
-                        isHome ? navLinkClassHome : navLinkClassNotHome
-                      }
                       headerHeightPx={headerHeightPx}
                     />
                   ) : isHome ? (

@@ -74,31 +74,36 @@ function columnFromMenu(menu: AnyMenu, title: string): Column | null {
   return { title, items: rows };
 }
 
+/** Localhost detection for dev freeze */
+const isLocalHost = () =>
+  typeof window !== "undefined" &&
+  (/^(localhost|127\.0\.0\.1|::1)$/.test(window.location.hostname) ||
+    window.location.hostname.endsWith(".local"));
+
 export default function ShopMegaMenu({
   /** The visible trigger label (e.g., "SHOP") */
   label = "SHOP",
 
   /**
-   * ✅ This is the menu you're already pulling today.
-   * Use it for your "Collections" column in the mega menu.
-   * Example: a menu that lists “New Arrivals”, “Best Sellers”, etc.
+   * ✅ collectionsMenu: current menu you're pulling today — this becomes the "Collections" column.
+   * Typically contains items like “New Arrivals”, “Best Sellers”, etc.
    */
   collectionsMenu,
   collectionsTitle = "Collections",
 
   /**
-   * ➕ Add another Shopify menu as a second column.
-   * For testing now, pass just this one. Later you can pass menu3/menu4 as well.
-   * Example: a menu for “Shop by Length” or “Shop by Shape”.
+   * ➕ nailShapeMenu: second column fed by a separate Shopify menu (e.g., “Shop by Shape”).
+   * You can add two more later (nailLengthMenu, generalMenu) for a total of four columns.
    */
   nailShapeMenu,
   nailShapeMenuTitle = "More",
 
   /** Reserved for future: third and fourth columns */
-  menu3,
-  menu3Title = "Menu 3",
-  menu4,
-  menu4Title = "Menu 4",
+  nailLengthMenu,
+  nailLengthMenuTitle = "Menu 3",
+
+  generalMenu,
+  generalMenuTitle = "Menu 4",
 
   /** UI behavior/styling props */
   headerHeightPx = 64,
@@ -115,11 +120,11 @@ export default function ShopMegaMenu({
   nailShapeMenu?: AnyMenu;
   nailShapeMenuTitle?: string;
 
-  menu3?: AnyMenu;
-  menu3Title?: string;
+  nailLengthMenu?: AnyMenu;
+  nailLengthMenuTitle?: string;
 
-  menu4?: AnyMenu;
-  menu4Title?: string;
+  generalMenu?: AnyMenu;
+  generalMenuTitle?: string;
 
   // UI
   headerHeightPx?: number;
@@ -133,12 +138,49 @@ export default function ShopMegaMenu({
   const panelRef = useRef<HTMLDivElement | null>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // 🔧 DEV FREEZE: keep menu open on localhost for easier hover/animation inspection
+  const [debugFreeze, setDebugFreeze] = useState(false);
+
+  useEffect(() => {
+    if (!isLocalHost()) return;
+
+    const params = new URLSearchParams(window.location.search);
+    const fromQuery = params.get("megaFreeze") === "1";
+    const fromLS = localStorage.getItem("megaFreeze") === "1";
+    const fromBody = document.body.classList.contains("mega-freeze");
+    const initial = fromQuery || fromLS || fromBody;
+
+    setDebugFreeze(initial);
+    document.body.classList.toggle("mega-freeze", initial);
+
+    // Toggle with Cmd/Ctrl + Shift + M
+    const onKey = (e: KeyboardEvent) => {
+      const pressed =
+        (e.metaKey || e.ctrlKey) && e.shiftKey && e.key.toLowerCase() === "m";
+      if (!pressed) return;
+      setDebugFreeze((v) => {
+        const nv = !v;
+        document.body.classList.toggle("mega-freeze", nv);
+        localStorage.setItem("megaFreeze", nv ? "1" : "0");
+        return nv;
+      });
+    };
+
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, []);
+
+  // If frozen on localhost, force it open
+  useEffect(() => {
+    if (debugFreeze && isLocalHost()) setOpen(true);
+  }, [debugFreeze]);
+
   // Build columns (each *separate* Shopify menu becomes one column)
   const columns: Column[] = [
     columnFromMenu(collectionsMenu, collectionsTitle),
     columnFromMenu(nailShapeMenu, nailShapeMenuTitle),
-    columnFromMenu(menu3, menu3Title),
-    columnFromMenu(menu4, menu4Title),
+    columnFromMenu(nailLengthMenu, nailLengthMenuTitle),
+    columnFromMenu(generalMenu, generalMenuTitle),
   ].filter((c): c is Column => !!c);
 
   const fallbackClass =
@@ -152,9 +194,11 @@ export default function ShopMegaMenu({
     }
   };
   const scheduleClose = () => {
+    // 🚫 Don’t close when frozen on localhost
+    if (debugFreeze && isLocalHost()) return;
     clearClose();
     // small delay so pointer can move from trigger to panel
-    closeTimer.current = setTimeout(() => setOpen(false), 240);
+    closeTimer.current = setTimeout(() => setOpen(false), 40);
   };
 
   // Close on Esc
@@ -164,8 +208,10 @@ export default function ShopMegaMenu({
     return () => document.removeEventListener("keydown", onKey);
   }, []);
 
+  const leaveHandler = debugFreeze && isLocalHost() ? undefined : scheduleClose;
+
   return (
-    <div className="relative">
+    <div className="relative h-full align-middle items-center flex">
       {/* Trigger */}
       <button
         ref={triggerRef}
@@ -176,11 +222,16 @@ export default function ShopMegaMenu({
           clearClose();
           setOpen(true);
         }}
-        onPointerLeave={scheduleClose}
+        onPointerLeave={leaveHandler}
         onFocus={() => setOpen(true)}
-        className={`${linkClassName || fallbackClass} font-normal uppercase nav-text`}
+        className={`${linkClassName || fallbackClass} h-full font-normal uppercase nav-text text-xs`}
       >
         {label}
+        {isLocalHost() && debugFreeze && (
+          <span className="ml-2 rounded bg-yellow-200 px-1.5 py-0.5 text-[10px] font-medium text-yellow-900">
+            FROZEN
+          </span>
+        )}
       </button>
 
       {/* Panel */}
@@ -193,24 +244,30 @@ export default function ShopMegaMenu({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ type: "spring", stiffness: 300, damping: 26 }}
-            className="fixed left-0 right-0 z-[1000] border-t border-neutral-200 bg-white shadow-sm"
+            className="fixed left-0 right-0 z-[1000] border-t border-neutral-200 bg-white "
             style={{ top: headerHeightPx }}
             onPointerEnter={clearClose}
-            onPointerLeave={scheduleClose}
+            onPointerLeave={leaveHandler}
           >
             <div className="mx-auto max-w-7xl px-6 py-8">
-              <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="grid grid-cols-1 gap-x-10 gap-y-8 sm:grid-cols-2 lg:[grid-template-columns:repeat(4,minmax(0,1fr))]">
                 {columns.map((col) => (
-                  <div key={col.title}>
-                    <div className="mb-4 text-sm font-semibold uppercase tracking-wide">
+                  /* ⬇️ allow child to shrink within track */
+                  <div
+                    key={col.title}
+                    className="min-w-0 max-w-full overflow-hidden"
+                  >
+                    <div className="mb-4 text-sm font-semibold uppercase tracking-wide break-words text-shadow-none">
                       {col.title}
                     </div>
+
                     <ul className="space-y-3">
                       {col.items.map((item) => (
-                        <li key={item.href}>
+                        <li key={item.href} className="min-w-0 max-w-full">
                           <Link
                             href={item.href}
-                            className="block text-sm leading-6 hover:underline"
+                            /* ⬇️ wrap long labels instead of overflowing */
+                            className="block max-w-full text-xs leading-6 hover:underline whitespace-normal break-words text-shadow-none"
                             onClick={() => setOpen(false)}
                           >
                             {item.label}

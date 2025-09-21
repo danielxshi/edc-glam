@@ -25,8 +25,8 @@ export const renderSwitch = (params: FooterItem) => {
     // Collections can be long → split into 4 sub-columns on lg
     return (
       <div className="education-container footer-subobject-container">
-        <h3 className="mb-4">Collections</h3>
-        <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-2">
+        <h3 className="mb-3 text-xxs tracking-wider">Collections</h3>
+        <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-0">
           {params.education.link.map((item, index) => (
             <li className="mb-1" key={index}>
               <p>{item.school}</p>
@@ -45,8 +45,8 @@ export const renderSwitch = (params: FooterItem) => {
     // Legal might also be long → split into 4 sub-columns on lg
     return (
       <div className="experience-container footer-subobject-container">
-        <h3 className="mb-4">Legal Notices</h3>
-        <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-2">
+        <h3 className="mb-3 text-xxs tracking-wider">Legal Notices</h3>
+        <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-0">
           {params.experience.link.map((item, index) => (
             <li className="mb-1" key={index}>
               <p>{item.company}</p>
@@ -62,8 +62,8 @@ export const renderSwitch = (params: FooterItem) => {
   if ("socials" in params && params.socials) {
     return (
       <div className="social-container footer-subobject-container">
-        <h3 className="mb-4">Social</h3>
-        <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-2">
+        <h3 className="mb-3 text-xxs tracking-wider">Social</h3>
+        <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-0">
           {params.socials.link.map((item, index) => (
             <li className="mb-1" key={index}>
               <p>{item.link}</p>
@@ -88,13 +88,15 @@ const Footer: React.FC = () => {
   // Ensure four columns at lg and nice stacking below
   return (
     <footer className="px-4 py-4 bg-[#eeeeee] text-[#33383CFF]">
-      <div className="footer-container uppercase bg-white px-6 py-8 rounded-sm grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="footer-container uppercase bg-white px-6 py-1 rounded-sm grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 *:col-span-full">
         <SignupBanner />
         {FooterMessages.FooterItems.map((item, index) => (
           <React.Fragment key={index}>{renderSwitch(item)}</React.Fragment>
         ))}
-        <div className="w-full items-center justify-center text-center pt-8 mt-8 border-t border-neutral-200">
-          <small>Copyright EDC&GLAM</small>
+        <div className="w-full items-center justify-center text-center pt-1 border-t border-neutral-200 h-min">
+          <small className="text-xxs opacity-70 uppercase">
+            © 2025 EDCGLAM.COM
+          </small>
         </div>
       </div>
     </footer>

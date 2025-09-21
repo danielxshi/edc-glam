@@ -18,7 +18,7 @@ const SignupBanner: React.FC = () => {
   };
 
   return (
-    <section className="w-full py-8">
+    <section className="w-full py-6">
       <div className="w-full lg:w-1/2 max-w-md">
         <h2 className="text-xl normal-case mb-4 text-[#33383CFF]">
           Keep updated with the new EDC&GLAM
@@ -40,7 +40,7 @@ const SignupBanner: React.FC = () => {
 
           <button
             type="submit"
-            className="w-[120px] uppercase text-sm rounded-sm bg-black text-white py-2 hover:bg-gray-800 transition "
+            className="w-[120px] uppercase text-xs rounded-sm bg-black text-white py-2 hover:bg-gray-800 transition "
           >
             Confirm
           </button>

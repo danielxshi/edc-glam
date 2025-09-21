@@ -112,15 +112,12 @@ export default function ShopMegaMenu({
               <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-5">
                 {columns.map((col) => (
                   <div key={col.title}>
-                    <div className="mb-4 text-sm font-semibold uppercase tracking-wide">
-                      {col.title}
-                    </div>
                     <ul className="space-y-3">
                       {col.items.map((item) => (
                         <li key={item.href}>
                           <Link
                             href={item.href}
-                            className="block text-sm leading-6 hover:underline"
+                            className="block *:text-shadow-none text-sm leading-6 hover:underline"
                             onClick={() => setOpen(false)}
                           >
                             {item.label}

@@ -63,6 +63,10 @@ module.exports = {
           textShadow:
             "0 1px 1px rgba(0,0,0,.35), 0 3px 6px rgba(0,0,0,.18)",
         },
+        ".text-shadow-none": {
+          textShadow:
+            "none",
+        },
       });
     }),
   ],
