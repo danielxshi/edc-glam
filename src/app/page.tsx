@@ -114,15 +114,6 @@ export default function Home() {
       {/* 👇 INSERT THE SERVER COLLECTION SECTION EXACTLY WHERE YOU WANT */}
       <CollectionShelf />
 
-      {/* TRENDING SECTION (unchanged, uses client FadeInWhenVisible inside) */}
-      <section className="w-full py-12 md:py-24 lg:py-32 grid">
-        <FadeInWhenVisible>
-          <div className="space-y-12 px-4 md:px-6 w-full">
-            {/* ... your existing content ... */}
-          </div>
-        </FadeInWhenVisible>
-      </section>
-
       {/* BANNERS / CAROUSEL */}
       <FullScreenBanner
         imageUrl="/images/emerald-tide.jpg"

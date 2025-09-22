@@ -38,28 +38,28 @@ export default async function SearchPage({
 
   return (
     <>
-      <div className="mb-4 flex items-center justify-between">
-        <p>
-          Showing {products.length}{" "}
-          {products.length === 1 ? "product" : "products"} in “
-          {collection.title}”
-        </p>
-
+      <div className="mb-4 flex items-center justify-between md:mx-6 mx-4">
+        <h3 className="text-base tracking-wider uppercase font-bold">
+          {/* Showing {products.length}{" "} */}
+          {/* {products.length === 1 ? "product" : "products"} in */}
+          {collection.title} Collection
+        </h3>
+      </div>
+      {products.length > 0 && (
+        <Grid className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 md:mx-6 mx-4">
+          <ProductGridItems products={products} />
+        </Grid>
+      )}
+      <div className="mb-4 flex items-center justify-between md:mx-6 mx-4">
         {/* Navigation button to the collection page */}
         <Link
           href={collectionHref}
           prefetch={false}
-          className="inline-flex items-center rounded-md border border-black px-4 py-2 text-sm font-medium hover:bg-black hover:text-white transition"
+          className="inline-flex items-center rounded-[3px] px-6 py-2 text-sm font-sm hover:opacity-70 bg-black text-white transition mx-auto mt-3 uppercase tracking-wider"
         >
           View full collection
         </Link>
       </div>
-
-      {products.length > 0 && (
-        <Grid className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-          <ProductGridItems products={products} />
-        </Grid>
-      )}
     </>
   );
 }
