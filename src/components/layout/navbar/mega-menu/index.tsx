@@ -96,14 +96,14 @@ export default function ShopMegaMenu({
    * You can add two more later (nailLengthMenu, generalMenu) for a total of four columns.
    */
   nailShapeMenu,
-  nailShapeMenuTitle = "More",
+  nailShapeMenuTitle = "Shop By Shape",
 
   /** Reserved for future: third and fourth columns */
   nailLengthMenu,
-  nailLengthMenuTitle = "Menu 3",
+  nailLengthMenuTitle = "Shop By Length",
 
   generalMenu,
-  generalMenuTitle = "Menu 4",
+  generalMenuTitle = "Shop Press-On Nails",
 
   /** UI behavior/styling props */
   headerHeightPx = 64,
@@ -177,10 +177,10 @@ export default function ShopMegaMenu({
 
   // Build columns (each *separate* Shopify menu becomes one column)
   const columns: Column[] = [
+    columnFromMenu(generalMenu, generalMenuTitle),
     columnFromMenu(collectionsMenu, collectionsTitle),
     columnFromMenu(nailShapeMenu, nailShapeMenuTitle),
     columnFromMenu(nailLengthMenu, nailLengthMenuTitle),
-    columnFromMenu(generalMenu, generalMenuTitle),
   ].filter((c): c is Column => !!c);
 
   const fallbackClass =
