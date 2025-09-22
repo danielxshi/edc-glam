@@ -55,7 +55,7 @@ export default async function SearchPage({
         <Link
           href={collectionHref}
           prefetch={false}
-          className="inline-flex items-center rounded-[3px] px-6 py-2 text-sm font-sm hover:opacity-70 bg-black text-white transition mx-auto mt-3 uppercase tracking-wider"
+          className="inline-flex items-center rounded-[3px] px-6 py-2 text-xs hover:opacity-70 bg-black text-white transition mx-auto mt-3 uppercase tracking-wider"
         >
           View full collection
         </Link>
