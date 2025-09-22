@@ -7,7 +7,7 @@ import { getCollectionWithProducts } from "../../lib/shopify";
 
 export const metadata = {
   title: "Search",
-  description: "Browse a specific collection.",
+  description: "Browse a specific EDC&GLAM collection.",
 };
 
 const DEFAULT_COLLECTION_HANDLE = "midnight-mist-collection"; // <-- your handle
