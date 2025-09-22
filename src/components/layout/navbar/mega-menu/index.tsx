@@ -224,7 +224,7 @@ export default function ShopMegaMenu({
         }}
         onPointerLeave={leaveHandler}
         onFocus={() => setOpen(true)}
-        className={`${linkClassName || fallbackClass} h-full font-normal uppercase nav-text text-xs`}
+        className={`${linkClassName || fallbackClass} h-full font-normal uppercase nav-text text-xxs`}
       >
         {label}
         {isLocalHost() && debugFreeze && (
@@ -244,39 +244,41 @@ export default function ShopMegaMenu({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ type: "spring", stiffness: 300, damping: 26 }}
-            className="fixed left-0 right-0 z-[1000] border-t border-neutral-200 bg-white "
             style={{ top: headerHeightPx }}
             onPointerEnter={clearClose}
             onPointerLeave={leaveHandler}
+            className="bg-transparent pt-3 fixed left-0 right-0 z-[1000]"
           >
-            <div className="mx-auto max-w-7xl px-6 py-8">
-              <div className="grid grid-cols-1 gap-x-10 gap-y-8 sm:grid-cols-2 lg:[grid-template-columns:repeat(4,minmax(0,1fr))]">
-                {columns.map((col) => (
-                  /* ⬇️ allow child to shrink within track */
-                  <div
-                    key={col.title}
-                    className="min-w-0 max-w-full overflow-hidden"
-                  >
-                    <div className="mb-4 text-sm font-semibold uppercase tracking-wide break-words text-shadow-none">
-                      {col.title}
-                    </div>
+            <div className=" border-t border-neutral-200 bg-white  rounded-[3px]">
+              <div className="mx-auto max-w-7xl px-6 py-8">
+                <div className="grid grid-cols-1 gap-x-10 gap-y-8 sm:grid-cols-2 lg:[grid-template-columns:repeat(4,minmax(0,1fr))]">
+                  {columns.map((col) => (
+                    /* ⬇️ allow child to shrink within track */
+                    <div
+                      key={col.title}
+                      className="min-w-0 max-w-full overflow-hidden"
+                    >
+                      <div className="mb-4 text-xxs font-semibold uppercase tracking-wide break-words text-shadow-none">
+                        {col.title}
+                      </div>
 
-                    <ul className="space-y-3">
-                      {col.items.map((item) => (
-                        <li key={item.href} className="min-w-0 max-w-full">
-                          <Link
-                            href={item.href}
-                            /* ⬇️ wrap long labels instead of overflowing */
-                            className="block max-w-full text-xs leading-6 hover:underline whitespace-normal break-words text-shadow-none"
-                            onClick={() => setOpen(false)}
-                          >
-                            {item.label}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
+                      <ul className="space-y-3">
+                        {col.items.map((item) => (
+                          <li key={item.href} className="min-w-0 max-w-full">
+                            <Link
+                              href={item.href}
+                              /* ⬇️ wrap long labels instead of overflowing */
+                              className="block max-w-full text-xs leading-6 hover:underline whitespace-normal break-words text-shadow-none"
+                              onClick={() => setOpen(false)}
+                            >
+                              {item.label}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </motion.div>

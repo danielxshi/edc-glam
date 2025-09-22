@@ -55,13 +55,13 @@ export default function AccountMenu({
 
   if (!me) {
     return (
-      <div className="ml-4 flex items-center space-x-3 nav-text">
+      <div className="flex items-center nav-text">
         <a
           href="/account/login"
-          className={`nav-text ${linkClassName ||
-            "text-xs font-normal nav-text transition-colors duration-300 hover:opacity-70"}`
-
-          }
+          className={`nav-text ${
+            linkClassName ||
+            "text-xs font-normal nav-text transition-colors duration-300 hover:opacity-70"
+          }`}
         >
           LOGIN
         </a>
@@ -70,7 +70,7 @@ export default function AccountMenu({
   }
 
   return (
-    <div className="ml-4 flex items-center space-x-3 nav-text">
+    <div className="flex items-center nav-text">
       <a
         href="/account/order-history"
         className={

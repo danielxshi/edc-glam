@@ -57,7 +57,7 @@ export default function NavbarClient({
 
   const onHero = isHome && !scrolled;
 
-  const baseLink = "text-xs transition-colors duration-300 hover:opacity-70";
+  const baseLink = "text-xxs transition-colors duration-300 hover:opacity-70";
   // ⬇️ Add shadow on hero (home + not scrolled)
   const navLinkClassHome = `${baseLink} ${scrolled ? "text-black" : "text-white"} ${onHero ? "text-shadow-hero" : ""}`;
   const navLinkClassNotHome = `${baseLink} text-black`;
@@ -67,7 +67,7 @@ export default function NavbarClient({
     <nav
       className={[
         isHome
-          ? "fixed top-2 left-1/2 -translate-x-1/2 w-[92vw] sm:w-[80vw] max-w-[1200px] rounded-full border"
+          ? "fixed mt-8 top-2 left-1/2 -translate-x-1/2 w-[92vw] sm:w-[80vw] max-w-[1200px] rounded-full border"
           : "fixed inset-x-0 rounded-none",
         "z-[999]",
         "backdrop-blur-sm",
@@ -76,7 +76,7 @@ export default function NavbarClient({
           : !isHome
             ? "bg-white/70 shadow-md"
             : "bg-transparent",
-        "transition-colors duration-300",
+        "transition-colors duration-300 mt-7",
         onHero ? "text-shadow-hero" : "", // harmless here, real effect is on links
       ].join(" ")}
     >
@@ -109,7 +109,7 @@ export default function NavbarClient({
 
         <div className="flex justify-center uppercase font-normal h-full align-middle items-center">
           {menu.length > 0 && (
-            <ul className="*:mx-1 hidden gap-4 text-xs font-normal nav-text lg:flex h-full align-middle items-center">
+            <ul className="*:mx-1 hidden gap-3 text-xxs font-normal nav-text lg:flex h-full align-middle items-center">
               {menu.map((item: Menu) => (
                 <li className="whitespace-nowrap h-full align-middle items-center self-center my-auto flex" key={item.title}>
                   {item.title?.toLowerCase() === "shop" ? (
@@ -138,7 +138,7 @@ export default function NavbarClient({
         </div>
 
         {/* Right: search + cart + account */}
-        <div className="flex justify-center">
+        <div className="flex justify-center gap-x-3">
           <div className="hidden lg:block">
             <Search linkClassName={triggerClass} />
           </div>

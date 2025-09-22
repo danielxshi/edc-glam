@@ -9,6 +9,7 @@ import { cookies } from "next/headers";
 import { getCart } from "../lib/shopify";
 import PageWrapper from "@/components/layout/page-wrapper";
 import { TransitionProvider } from "@/components/layout/transition/transition-provider";
+import AnnouncementBar from "@/components/announcements/index";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,9 +31,10 @@ export default async function RootLayout({
       <body className={inter.className}>
         <CartProvider cartPromise={cart}>
           {/* <TransitionProvider> */}
-            <Navbar />
-            <PageWrapper>{children}</PageWrapper>
-            <Footer />
+          <AnnouncementBar />
+          <Navbar />
+          <PageWrapper>{children}</PageWrapper>
+          <Footer />
           {/* </TransitionProvider> */}
         </CartProvider>
       </body>

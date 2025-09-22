@@ -10,7 +10,7 @@ export const metadata = {
   description: "Browse a specific collection.",
 };
 
-const DEFAULT_COLLECTION_HANDLE = "test"; // <-- your handle
+const DEFAULT_COLLECTION_HANDLE = "midnight-mist-collection"; // <-- your handle
 
 export default async function SearchPage({
   searchParams,

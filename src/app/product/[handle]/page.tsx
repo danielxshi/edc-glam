@@ -40,7 +40,7 @@ export default async function ProductPage({ params }: any) {
 
   return (
     <ProductProvider>
-      <div className="mx-auto max-w-screen-2xl px-4 pt-24">
+      <div className="mx-auto max-w-screen-2xl px-4 pt-36">
         <div className="grid grid-cols-7 gap-4">
           <div className="h-full w-full basis-full lg:basis-4/6 col-start-1 col-end-5">
             <Suspense

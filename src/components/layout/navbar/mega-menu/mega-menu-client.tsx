@@ -1,36 +1,42 @@
-// app/components/layout/mega-menu/mega-menu-client.tsx
+// src/components/layout/navbar/mega-menu/mega-menu-client.tsx
 "use client";
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import type { Menu as SfMenuItem } from "@/lib/shopify/types";
+import type { ShopifyMenuOperation } from "@/lib/shopify/types";
 
 type Item = { label: string; href: string };
 type Column = { title: string; items: Item[] };
 
-function toColumns(items?: SfMenuItem[]): Column[] {
+// The items we get from Shopify: { title, url }
+type ShopifyMenuItem =
+  NonNullable<ShopifyMenuOperation["data"]["menu"]>["items"][number];
+
+function toColumns(items?: ShopifyMenuItem[]): Column[] {
   if (!items?.length) return [];
-  return items
-    .map((parent) => ({
-      title: parent.title,
-      items: (parent.items ?? []).map((child) => ({
-        label: child.title,
-        href: child.path,
+  // Your data is flat, so we’ll render a single column.
+  return [
+    {
+      title: "Shop",
+      items: items.map((link) => ({
+        label: link.title,
+        href: link.url,
       })),
-    }))
-    .filter((c) => c.items.length > 0);
+    },
+  ];
 }
 
 export default function ShopMegaMenu({
   label = "SHOP",
-  menu,
+  // Pass in the flat array: data.menu?.items from your fetch
+  menuItems,
   headerHeightPx = 64,
   scrolled = false,
   linkClassName,
 }: {
   label?: string;
-  menu?: SfMenuItem[];
+  menuItems?: ShopifyMenuItem[];
   headerHeightPx?: number;
   scrolled?: boolean;
   linkClassName?: string;
@@ -40,7 +46,7 @@ export default function ShopMegaMenu({
   const panelRef = useRef<HTMLDivElement | null>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const columns = toColumns(menu);
+  const columns = toColumns(menuItems);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
@@ -53,13 +59,16 @@ export default function ShopMegaMenu({
       const t = triggerRef.current;
       const p = panelRef.current;
       const { clientX: x, clientY: y } = e;
+
       const within = (el: HTMLElement | null) => {
         if (!el) return false;
         const r = el.getBoundingClientRect();
         return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
       };
+
       const overTrigger = within(t);
       const overPanel = within(p);
+
       if (overTrigger || overPanel) {
         if (closeTimer.current) {
           clearTimeout(closeTimer.current);
@@ -73,6 +82,7 @@ export default function ShopMegaMenu({
         }, 120);
       }
     };
+
     document.addEventListener("mousemove", onMove);
     return () => {
       document.removeEventListener("mousemove", onMove);

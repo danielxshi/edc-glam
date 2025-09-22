@@ -88,8 +88,8 @@ const Footer: React.FC = () => {
   // Ensure four columns at lg and nice stacking below
   return (
     <footer className="px-4 py-4 bg-[#eeeeee] text-[#33383CFF]">
-      <div className="footer-container uppercase bg-white px-6 py-1 rounded-sm grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 *:col-span-full">
-        <SignupBanner />
+      <div className="footer-container uppercase bg-white px-6 py-1 rounded-sm grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 *:col-span-full pt-6">
+        {/* <SignupBanner /> */}
         {FooterMessages.FooterItems.map((item, index) => (
           <React.Fragment key={index}>{renderSwitch(item)}</React.Fragment>
         ))}

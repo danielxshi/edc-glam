@@ -56,10 +56,10 @@ export default async function OrderHistoryPage({
   const endCursor = ordersConn?.pageInfo?.endCursor ?? undefined;
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-10 min-h-[84vh] pt-24">
+    <main className="mx-auto max-w-6xl px-4 py-10 min-h-[84vh] pt-36">
       <div className="grid grid-cols-12 gap-8">
         <aside className="col-span-12 md:col-span-3">
-          <div className="sticky top-6">
+          <div className="sticky top-24">
             <h2 className="mb-4 text-lg font-medium">Account</h2>
             <nav className="space-y-3 text-sm flex flex-col">
               <Link href="/account/order-history" className="underline">Order History</Link>

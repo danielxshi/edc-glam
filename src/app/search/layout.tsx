@@ -17,7 +17,7 @@ export default function SearchLayout({ children }: { children: React.ReactNode }
         <div className="order-last min-h-screen w-full md:order-none">
 
           {/* --- Refine / Sort top bar --- */}
-          <div className="w-full border-y border-black/15 bg-white sticky top-[3rem] z-20">
+          <div className="w-full border-y border-black/15 bg-white sticky top-[4.75rem] z-20">
             <div className="mx-auto max-w-[1400px]">
               <div className="grid grid-cols-2">
                 <div className="col-span-1">
