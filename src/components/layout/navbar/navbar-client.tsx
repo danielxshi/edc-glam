@@ -69,7 +69,7 @@ export default function NavbarClient({
         isHome
           ? "fixed mt-8 top-2 left-1/2 -translate-x-1/2 w-[92vw] sm:w-[80vw] max-w-[1200px] rounded-full border"
           : "fixed inset-x-0 rounded-none",
-        "z-[999]",
+        "z-[20]",
         "backdrop-blur-sm",
         scrolled
           ? "bg-[#fff9f9f4] shadow-md"

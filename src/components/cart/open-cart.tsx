@@ -18,7 +18,7 @@ export default function OpenCart({
         aria-hidden="true"
       />
       {quantity ? (
-        <span className="absolute -right-2 -top-2 min-w-4 rounded-full bg-blue-600 px-1 text-[10px] leading-4 text-white text-center">
+        <span className="absolute -right-2 -top-2 min-w-4 rounded-full bg-black px-1 text-xxs leading-4 text-white text-center">
           {quantity}
         </span>
       ) : null}

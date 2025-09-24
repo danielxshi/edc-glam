@@ -31,12 +31,12 @@ const FeatureCarousel: React.FC = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % features.length);
-    }, 6000);
+    }, 18000);
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <section className="w-full overflow-hidden py-16">
+    <section className="w-full overflow-hidden pb-24">
       <div className="w-full flex flex-col lg:flex-row items-center justify-center max-w-screen-2xl mx-auto px-6">
         {/* Fixed height wrapper to prevent flickering */}
         <div className="relative w-full lg:w-1/2 h-[400px]">
@@ -54,14 +54,14 @@ const FeatureCarousel: React.FC = () => {
                 alt={features[index].title}
                 layout="fill"
                 objectFit="cover"
-                className="rounded-md"
+                className="rounded-sm"
                 priority
               />
             </motion.div>
           </AnimatePresence>
         </div>
 
-        <div className="w-full lg:w-1/2 mt-8 lg:mt-0 lg:pl-16 text-center lg:text-left min-h-[400px] flex items-center justify-center relative">
+        <div className="w-full lg:w-1/2 mt-8 lg:mt-0 lg:pl-8 text-center lg:text-left min-h-[400px] flex items-center justify-center relative">
           <AnimatePresence mode="wait">
             <motion.div
               key={features[index].title}
@@ -71,11 +71,11 @@ const FeatureCarousel: React.FC = () => {
               transition={{ duration: 0.5 }}
               className="max-w-xl"
             >
-              <h2 className="text-3xl lg:text-4xl font-bold mb-4 uppercase">{features[index].title}</h2>
-              <p className="text-gray-600 mb-6">{features[index].description}</p>
+              <h3 className="text-xl font-bold mb-3 uppercase">{features[index].title}</h3>
+              <p className="text-gray-600 mb-3 text-sm">{features[index].description}</p>
               <Link
                 href={features[index].linkHref}
-                className="underline font-medium hover:text-pink-600 transition"
+                className="underline text-xs tracking-wider hover:opacity-70 transition"
               >
                 {features[index].linkText}
               </Link>
@@ -85,13 +85,13 @@ const FeatureCarousel: React.FC = () => {
       </div>
 
       {/* Slide Indicators */}
-      <div className="mt-8 flex justify-center gap-3">
+      <div className="mt-8 flex justify-center gap-1">
         {features.map((_, i) => (
           <button
             key={i}
             onClick={() => setIndex(i)}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              i === index ? 'bg-pink-600 scale-110' : 'bg-gray-300 hover:bg-gray-400'
+            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+              i === index ? 'bg-black scale-110' : 'bg-gray-300 hover:bg-gray-400'
             }`}
             aria-label={`Go to slide ${i + 1}`}
           />

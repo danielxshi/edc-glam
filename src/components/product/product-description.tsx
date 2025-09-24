@@ -29,7 +29,7 @@ export function ProductDescription({
       </div>
       {product.descriptionHtml ? (
         <Prose
-          className="product-details-subcontent-header mb-6 text-xxs leading-relaxed dark:text-white/[60%] w-4/5 ml-0 mr-auto"
+          className="product-details-subcontent-header mb-6 text-xxs leading-relaxed  w-4/5 ml-0 mr-auto"
           html={product.descriptionHtml}
         />
       ) : null}

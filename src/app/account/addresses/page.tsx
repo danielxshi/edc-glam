@@ -3,10 +3,10 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { shopifyFetch } from "@/lib/shopify";
 import { QUERY_CUSTOMER_ADDRESSES } from "@/lib/customer-queries";
-import AddressForm from "@/components/account/AddressForm";          // client
-import AddressButtons from "@/components/account/AddressButtons";   // client
-import ClientEdit from "@/components/account/ClientEdit";           // client
-
+import AddressForm from "@/components/account/AddressForm"; // client
+import AddressButtons from "@/components/account/AddressButtons"; // client
+import ClientEdit from "@/components/account/ClientEdit"; // client
+import AccountNav from "@/components/account/AccountNav";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
@@ -35,21 +35,15 @@ export default async function AddressesPage() {
 
   const customer = res?.body?.data?.customer;
   const defaultId = customer?.defaultAddress?.id;
-  const addresses = (customer?.addresses?.edges ?? []).map((e: { node: Address }) => e.node);
+  const addresses = (customer?.addresses?.edges ?? []).map(
+    (e: { node: Address }) => e.node
+  );
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-10 min-h-[84vh] pt-36">
       <div className="grid grid-cols-12 gap-8">
         <aside className="col-span-12 md:col-span-3">
-          <div className="sticky top-24">
-            <h2 className="mb-4 text-lg font-medium">Account</h2>
-            <nav className="space-y-3 text-sm flex flex-col">
-              <Link href="/account/order-history" className="hover:underline">Order History</Link>
-              <Link href="/account/addresses" className="underline">Addresses</Link>
-              <Link href="/account" className="hover:underline">Account Details</Link>
-              <Link href="/account/logout" className="hover:underline">Logout</Link>
-            </nav>
-          </div>
+          <AccountNav />
         </aside>
 
         <section className="col-span-12 md:col-span-9">
@@ -79,7 +73,13 @@ export default async function AddressesPage() {
   );
 }
 
-function AddressRow({ addr, isDefault }: { addr: Address; isDefault: boolean }) {
+function AddressRow({
+  addr,
+  isDefault,
+}: {
+  addr: Address;
+  isDefault: boolean;
+}) {
   const lines = [
     [addr.firstName, addr.lastName].filter(Boolean).join(" "),
     addr.address1,
@@ -96,7 +96,9 @@ function AddressRow({ addr, isDefault }: { addr: Address; isDefault: boolean }) 
           {isDefault ? "Default address" : "Address"}
         </div>
         <div className="mt-1 text-sm">
-          {lines.map((l, i) => <div key={i}>{l}</div>)}
+          {lines.map((l, i) => (
+            <div key={i}>{l}</div>
+          ))}
         </div>
       </div>
 

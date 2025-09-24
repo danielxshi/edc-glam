@@ -29,7 +29,7 @@ export default function SortDropdown({
         leaveFrom="opacity-100 scale-100"
         leaveTo="opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 z-20 mt-2 w-56 origin-top-right rounded-md border border-neutral-200 bg-white p-1 shadow-lg focus:outline-none dark:border-neutral-800 dark:bg-neutral-900">
+        <Menu.Items className="absolute right-0 z-20 mt-2 w-56 origin-top-right rounded-md border border-neutral-200 bg-white p-1 shadow-lg focus:outline-none ">
           {/* hide FilterList's own title by passing empty string */}
           <div className="max-h-72 overflow-auto p-4">
             <FilterList list={list} title="" />

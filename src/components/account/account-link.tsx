@@ -5,7 +5,7 @@ const SHOP_DOMAIN = process.env.NEXT_PUBLIC_SHOPIFY_DOMAIN!;
 
 export default function AccountLink() {
   const accountUrl = `https://${SHOP_DOMAIN}/account`;
-  const logoutUrl = `https://${SHOP_DOMAIN}/account/logout`;
+  const logoutUrl = `https://${SHOP_DOMAIN}/`;
 
   return (
     <div className="ml-4 flex items-center nav-text">

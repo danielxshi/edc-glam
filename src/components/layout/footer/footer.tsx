@@ -11,12 +11,12 @@ type EducationItem = {
   certification?: string;
   reward?: string;
 };
-type ExperienceItem = { company: string; position?: string; date?: string };
-type SocialItem = { url: string; link: string };
 
+type SocialItem = { url: string; link: string };
+type LegalItem = { title: string; link: string };
 type FooterItem = {
   education?: { link: EducationItem[] };
-  experience?: { link: ExperienceItem[] };
+  legal?: { link: LegalItem[] }; // <-- add legal
   socials?: { link: SocialItem[] };
 };
 
@@ -41,17 +41,15 @@ export const renderSwitch = (params: FooterItem) => {
     );
   }
 
-  if ("experience" in params && params.experience) {
+  if ("legal" in params && params.legal) {
     // Legal might also be long → split into 4 sub-columns on lg
     return (
       <div className="experience-container footer-subobject-container">
         <h3 className="mb-3 text-xxs tracking-wider">Legal Notices</h3>
         <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-0">
-          {params.experience.link.map((item, index) => (
+          {params.legal.link.map((item, index) => (
             <li className="mb-1" key={index}>
-              <p>{item.company}</p>
-              {item.position && <p className="opacity-50">{item.position}</p>}
-              {item.date && <p className="opacity-50">{item.date}</p>}
+              <Link href={item.link}> {item.title}</Link>
             </li>
           ))}
         </ul>

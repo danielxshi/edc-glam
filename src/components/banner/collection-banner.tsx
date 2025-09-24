@@ -56,7 +56,7 @@ export default function CollectionBanner({
 
   return (
     <section className={`relative w-full overflow-hidden  ${className}`}>
-      <div className="relative h-64 md:h-96 mt-[10.75rem]">
+      <div className="relative h-64 md:h-80 mt-[8rem]">
         <FallbackImage
           src={
             collection.image?.url ||
@@ -65,14 +65,17 @@ export default function CollectionBanner({
           alt={collection.image?.altText ?? collection.title}
           width={collection.image?.width || 1600}
           height={collection.image?.height || 900}
-          className="absolute inset-0 h-full w-full object-cover scale-[1.3] -translate-y-[35px]"
+          className="absolute inset-0 h-full w-full object-cover scale-[1.1] -translate-y-[30px]"
           priority
         />
         <div className="absolute inset-0 " />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <h1 className="px-3 text-center text-white text-xl md:text-3xl font-bold tracking-wide">
-            {collection.title}
-          </h1>
+        <div className="absolute inset-0 flex align-middle items-center justify-center">
+          <div className="px-3 text-white bottom-8 absolute left-6">
+            <p>Current Collection</p>
+            <h1 className="text-center text-white text-3xl font-bold uppercase text-shadow-hero tracking-tight">
+              VIEWING OUR <span className="">{collection.title}</span>
+            </h1>
+          </div>
         </div>
       </div>
     </section>

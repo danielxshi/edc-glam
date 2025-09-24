@@ -47,7 +47,7 @@ export default function AnnouncementBarClient({
   return (
     <div
       ref={ref}
-      className="fixed inset-x-0 top-0 z-[100] w-screen px-3 py-1 text-center"
+      className="fixed inset-x-0 top-0 z-[20] w-screen px-3 py-[.35rem] text-center"
       style={{
         background: announcement.bg || "#000",
         color: announcement.fg || "#fff",

@@ -25,12 +25,8 @@ export function DeleteItemButton({
   return (
     <form action={formAction}>
       <input type="hidden" name="merchandiseId" value={item.merchandise.id} />
-      <button
-        type="submit"
-        aria-label="Remove cart item"
-        className="flex h-[24px] w-[24px] items-center justify-center rounded-full bg-neutral-500"
-      >
-        <XMarkIcon className="mx-[1px] h-4 w-4 text-white " />
+      <button type="submit" aria-label="Remove cart item" className="text-xxs uppercase text-neutral-500 hover:text-neutral-900 transition">
+        remove
       </button>
       <p aria-live="polite" className="sr-only" role="status">
         {message}

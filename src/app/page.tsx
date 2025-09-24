@@ -71,14 +71,14 @@ export default function Home() {
             <div className="mx-auto grid items-start justify-center grid-cols-2 gap-2 w-full">
               {[
                 {
-                  href: "/search/mens-collection",
-                  src: "/images/goal-digger.jpg",
-                  title: "Collection",
+                  href: "/product/gold-digger",
+                  src: "/images/goal-digger-modelled.jpg",
+                  title: "Goal Digger",
                 },
                 {
-                  href: "/search/kids",
-                  src: "/images/test.jpg",
-                  title: "test",
+                  href: "/product/midnight-mist",
+                  src: "/images/midnight-mist-modelled.jpg",
+                  title: "Midnight Mist",
                 },
               ].map((item, i) => (
                 <FadeInWhenVisible key={item.href} delay={i * 0.15}>
@@ -117,8 +117,8 @@ export default function Home() {
       {/* BANNERS / CAROUSEL */}
       <FullScreenBanner
         imageUrl="/images/emerald-tide.jpg"
-        title="Explore Our Sale Collection"
-        description="Don't miss out on our amazing deals and discounts."
+        title="Explore Our Midnight Mist Collection"
+        // description="Don't miss out on our amazing deals and discounts."
       />
 
       <FadeInWhenVisible>
@@ -126,12 +126,6 @@ export default function Home() {
           <FeatureCarousel />
         </section>
       </FadeInWhenVisible>
-
-      <FullScreenBanner
-        imageUrl="/your-image.jpg"
-        title="Explore Our Sale Collection"
-        description="Don't miss out on our amazing deals and discounts."
-      />
 
       <ZoomParallaxSection />
     </main>

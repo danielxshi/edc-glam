@@ -18,25 +18,31 @@ const FooterItems = [
     },
   },
   {
-    experience: {
+    legal: {
       link: [
         {
-          company: "Sizing",
+          title: "Sizing",
+          link: "/size-guide"
         },
         {
-          company: "FAQ",
+          title: "FAQ",
+          link: "/faq"
         },
         {
-          company: "Shipping",
+          title: "Shipping",
+          link: "/shipping"
         },
         {
-          company: "Return & Exchange Policy",
+          title: "Return & Exchange Policy",
+          link: "/return-policy"
         },
         {
-          company: "Privacy Policy",
+          title: "Privacy Policy",
+          link: "/privacy-policy"
         },
         {
-          company: "Terms of Service & Conditions",
+          title: "Terms of Service & Conditions",
+          link: "/terms-of-service"
         },
       ],
     },
@@ -46,15 +52,7 @@ const FooterItems = [
       link: [
         {
           link: "Instagram",
-          url: "https://www.instagram.com/danielxshi/",
-        },
-        {
-          link: "LinkedIN",
-          url: "https://www.linkedin.com/in/daniel-xiang-shi/",
-        },
-        {
-          link: "Amazon",
-          url: "https://",
+          url: "https://www.instagram.com/edcglam/",
         },
       ],
     },

@@ -44,7 +44,7 @@ export default function FiltersDrawer({
           <>
             {/* backdrop */}
             <motion.div
-              className="fixed inset-0 z-[999] bg-black/40 backdrop-blur-sm"
+              className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
               onClick={() => setOpen(false)}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -53,7 +53,7 @@ export default function FiltersDrawer({
 
             {/* sliding panel */}
             <motion.aside
-              className="fixed inset-y-0 left-0 z-[999] w-[320px] max-w-[85vw] border-r border-neutral-200 bg-white shadow-xl dark:border-neutral-800 dark:bg-neutral-900"
+              className="fixed inset-y-0 left-0 z-[50] w-[320px] max-w-[85vw] border-r border-neutral-200 bg-white shadow-xl"
               role="dialog"
               aria-label="Filters"
               initial={{ x: -340, opacity: 0 }}
@@ -61,13 +61,13 @@ export default function FiltersDrawer({
               exit={{ x: -340, opacity: 0 }}
               transition={{ type: "spring", stiffness: 300, damping: 28 }}
             >
-              <div className="flex items-center justify-between border-b border-neutral-200 p-4 dark:border-neutral-800">
+              <div className="flex items-center justify-between border-b border-neutral-200 p-4 ">
                 <div className="text-xs uppercase tracking-wide">Filters</div>
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
                   aria-label="Close filters"
-                  className="rounded p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                  className="rounded p-1 hover:bg-neutral-100 "
                 >
                   <XMarkIcon className="h-5 w-5" />
                 </button>

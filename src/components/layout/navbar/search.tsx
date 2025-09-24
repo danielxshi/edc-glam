@@ -1,99 +1,173 @@
-// app/components/.../search.tsx (or wherever "./search" points)
-"use client";
+// components/layout/navbar/search.tsx
+'use client'
 
-import { useEffect, useRef, useState } from "react";
-import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useSearchParams } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
+import { Fragment, useEffect, useRef, useState } from 'react'
+import { Dialog, Transition } from '@headlessui/react'
+import { Search as SearchIcon, X } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import Grid from '@/components/grid'
+import ProductGridItems from '@/components/layout/product-grid-items'
 
-export default function Search({ linkClassName }: { linkClassName?: string }) {
-  const [open, setOpen] = useState(false);
+type Props = {
+  linkClassName?: string
+  placeholder?: string
+  initialQuery?: string
+  offsetTopPx?: number
+}
+type ApiResult = { products: any[]; error?: string }
+
+export default function Search({
+  linkClassName,
+  placeholder = 'Search products…',
+  initialQuery = '',
+  offsetTopPx = 0,
+}: Props) {
+  const [open, setOpen] = useState(false)
+  const [query, setQuery] = useState(initialQuery)
+  const [debounced, setDebounced] = useState(initialQuery)
+  const [loading, setLoading] = useState(false)
+  const [results, setResults] = useState<ApiResult>({ products: [] })
+  const [error, setError] = useState<string | null>(null)
+  const inputRef = useRef<HTMLInputElement | null>(null)
+  const router = useRouter()
+
+  // Debounce keystrokes (for live results)
+  useEffect(() => {
+    const t = setTimeout(() => setDebounced(query.trim()), 250)
+    return () => clearTimeout(t)
+  }, [query])
+
+  // Fetch live results from API (unchanged)
+  useEffect(() => {
+    let cancelled = false
+    ;(async () => {
+      if (!debounced) {
+        setResults({ products: [] })
+        setError(null)
+        return
+      }
+      setLoading(true)
+      setError(null)
+      try {
+        const res = await fetch(`/api/search?q=${encodeURIComponent(debounced)}&limit=24`, {
+          cache: 'no-store',
+          headers: { Accept: 'application/json' },
+        })
+        let json: ApiResult | null = null
+        let text = ''
+        const ct = res.headers.get('content-type') || ''
+        if (ct.includes('application/json')) json = await res.json()
+        else text = await res.text()
+
+        if (!res.ok || !json) throw new Error(json?.error || text || `${res.status} ${res.statusText}`)
+        if (!cancelled) setResults(json)
+      } catch (e: any) {
+        if (!cancelled) setError(e?.message || 'Search error')
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    })()
+    return () => { cancelled = true }
+  }, [debounced])
+
+  // Focus on open
+  useEffect(() => {
+    if (open) setTimeout(() => inputRef.current?.focus(), 0)
+  }, [open])
+
+  // Submit handler for Enter
+  const onSubmit = (e?: React.FormEvent) => {
+    e?.preventDefault()
+    const q = query.trim()
+    if (!q) return
+    router.push(`/search?q=${encodeURIComponent(q)}`)
+    setOpen(false)
+  }
 
   return (
     <>
       <button
-        type="button"
         aria-label="Search"
+        className={linkClassName || 'text-xxs hover:opacity-70 transition'}
         onClick={() => setOpen(true)}
-        className={[
-          linkClassName || "text-sm transition-colors duration-300 hover:opacity-70",
-          "relative inline-flex h-9 w-fit items-center justify-center rounded-md"
-        ].join(" ")}
       >
-        {/* Inherit color from parent (no text-black/white here) */}
-        <MagnifyingGlassIcon className="h-5 w-5" />
+        <SearchIcon className="inline-block h-5 w-5 align-middle" />
       </button>
 
-      <AnimatePresence>
-        {open && <SearchOverlay onClose={() => setOpen(false)} />}
-      </AnimatePresence>
-    </>
-  );
-}
+      <Transition show={open} as={Fragment}>
+        <Dialog onClose={setOpen} className="relative z-[60]">
+          {/* Backdrop */}
+          <Transition.Child as={Fragment} enter="transition-opacity duration-200" enterFrom="opacity-0" enterTo="opacity-100" leave="transition-opacity duration-150" leaveFrom="opacity-100" leaveTo="opacity-0">
+            <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+          </Transition.Child>
 
-function SearchOverlay({ onClose }: { onClose: () => void }) {
-  const searchParams = useSearchParams();
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
-    document.addEventListener("keydown", onKey);
-    document.body.classList.add("overflow-hidden");
-    return () => {
-      document.removeEventListener("keydown", onKey);
-      document.body.classList.remove("overflow-hidden");
-    };
-  }, [onClose]);
-
-  useEffect(() => {
-    inputRef.current?.focus();
-    inputRef.current?.select();
-  }, []);
-
-  return (
-    <>
-      {/* Backdrop */}
-      <motion.div
-        className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm"
-        onClick={onClose}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-      />
-
-      {/* Panel */}
-      <motion.div
-        className="absolute left-0 right-0 top-0 z-50 mx-auto w-full max-w-5xl"
-        role="dialog"
-        aria-modal="true"
-        initial={{ y: -40, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        exit={{ y: -40, opacity: 0 }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      >
-        <div className="mx-4 mt-6 rounded-xl border border-neutral-200 bg-white shadow-lg dark:border-neutral-800 dark:bg-neutral-900">
-          <form action="/search" method="GET" className="relative flex items-center gap-3 px-4 py-4">
-            <MagnifyingGlassIcon className="h-5 w-5 text-neutral-500" />
-            <input
-              ref={inputRef}
-              name="q"
-              type="text"
-              autoComplete="off"
-              defaultValue={searchParams?.get("q") ?? ""}
-              placeholder="Search for products…"
-              className="flex-1 bg-transparent text-base text-black outline-none placeholder:text-neutral-400 dark:text-white"
-            />
-            <button
-              type="button"
-              onClick={onClose}
-              aria-label="Close search"
-              className="rounded-md p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+          {/* Full-width panel */}
+          <Transition.Child as={Fragment} enter="transition-transform duration-200" enterFrom="-translate-y-3 opacity-0" enterTo="translate-y-0 opacity-100" leave="transition-transform duration-150" leaveFrom="translate-y-0 opacity-100" leaveTo="-translate-y-2 opacity-0">
+            <Dialog.Panel
+              className="fixed inset-x-0 w-screen rounded-none border-b border-neutral-200 bg-white shadow-xl"
+              style={{ top: offsetTopPx }}
             >
-              <XMarkIcon className="h-5 w-5" />
-            </button>
-          </form>
-        </div>
-      </motion.div>
+              {/* Header row */}
+              <form onSubmit={onSubmit} className="flex items-center gap-3 px-4 py-3 sm:px-6">
+                <SearchIcon className="my-auto h-5 w-5 text-neutral-600" aria-hidden />
+                <input
+                  ref={inputRef}
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder={placeholder}
+                  className="h-10 w-full bg-transparent text-sm outline-none"
+                  // No need for onKeyDown; Enter will submit the form
+                />
+                {query && (
+                  <button
+                    type="button"
+                    className="text-xs uppercase tracking-wide text-neutral-600 hover:opacity-70"
+                    onClick={() => setQuery('')}
+                  >
+                    Clear
+                  </button>
+                )}
+                <button aria-label="Close search" type="button" className="rounded p-2 hover:bg-neutral-100" onClick={() => setOpen(false)}>
+                  <X className="h-5 w-5" />
+                </button>
+                {/* Hidden submit so Enter works on mobile keyboards too */}
+                <button type="submit" className="sr-only">Search</button>
+              </form>
+
+              <hr className="border-neutral-200" />
+
+              {/* Results */}
+              <div className="max-h-[80vh] overflow-auto px-4 pb-8 sm:px-6">
+                <div className="mt-4 mb-3 flex items-center justify-between">
+                  <h2 className="text-xs font-semibold uppercase tracking-wider text-neutral-600">Products</h2>
+                  {results.products.length > 0 && (
+                    <button
+                      onClick={() => onSubmit()}
+                      className="text-xs uppercase tracking-wide text-neutral-700 hover:opacity-70"
+                    >
+                      View all results →
+                    </button>
+                  )}
+                </div>
+
+                {error ? (
+                  <div className="p-3 text-sm text-red-600">{error}</div>
+                ) : loading && !results.products.length ? (
+                  <div className="p-3 text-sm text-neutral-500">Searching…</div>
+                ) : !debounced ? (
+                  <div className="p-3 text-sm text-neutral-500">Start typing to search…</div>
+                ) : results.products.length === 0 ? (
+                  <div className="p-3 text-sm text-neutral-500">No results.</div>
+                ) : (
+                  <Grid className="grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+                    <ProductGridItems products={results.products} />
+                  </Grid>
+                )}
+              </div>
+            </Dialog.Panel>
+          </Transition.Child>
+        </Dialog>
+      </Transition>
     </>
-  );
+  )
 }

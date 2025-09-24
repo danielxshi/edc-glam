@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { shopifyFetch } from "@/lib/shopify";
 import { QUERY_CUSTOMER_ORDERS } from "@/lib/customer-queries";
+import AccountNav from "@/components/account/AccountNav";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -23,7 +24,9 @@ type OrderNode = {
       node: {
         title: string;
         quantity: number;
-        variant?: { image?: { url: string; altText: string | null } | null } | null;
+        variant?: {
+          image?: { url: string; altText: string | null } | null;
+        } | null;
       };
     }[];
   };
@@ -31,7 +34,9 @@ type OrderNode = {
 
 export default async function OrderHistoryPage({
   searchParams,
-}: { searchParams: Promise<{ after?: string | string[] }> }) {
+}: {
+  searchParams: Promise<{ after?: string | string[] }>;
+}) {
   const token = (await cookies()).get("sf_customer_token")?.value;
   if (!token) redirect("/account/login?next=/account/order-history");
 
@@ -59,15 +64,7 @@ export default async function OrderHistoryPage({
     <main className="mx-auto max-w-6xl px-4 py-10 min-h-[84vh] pt-36">
       <div className="grid grid-cols-12 gap-8">
         <aside className="col-span-12 md:col-span-3">
-          <div className="sticky top-24">
-            <h2 className="mb-4 text-lg font-medium">Account</h2>
-            <nav className="space-y-3 text-sm flex flex-col">
-              <Link href="/account/order-history" className="underline">Order History</Link>
-              <Link href="/account" className="hover:underline">Account Details</Link>
-              <Link href="/account/addresses" className="hover:underline">Addresses</Link>
-              <Link href="/account/logout" className="hover:underline">Logout</Link>
-            </nav>
-          </div>
+        <AccountNav />
         </aside>
 
         <section className="col-span-12 md:col-span-9">
@@ -113,7 +110,12 @@ function OrderRow({ order }: { order: OrderNode }) {
       <div className="mb-4 flex items-start justify-between">
         <div className="text-xs font-medium tracking-wider">{dateLabel}</div>
         {order.statusUrl && (
-          <a href={order.statusUrl} target="_blank" rel="noopener noreferrer" className="text-sm underline">
+          <a
+            href={order.statusUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm underline"
+          >
             View Details
           </a>
         )}
@@ -122,10 +124,17 @@ function OrderRow({ order }: { order: OrderNode }) {
       <div className="flex items-center justify-between gap-6">
         <div className="space-y-1 text-sm">
           {/* <div className="uppercase text-gray-700">{pretty(order.fulfillmentStatus) || "—"}</div> */}
-          <div className="text-gray-800">Order <span className="font-medium">{order.orderNumber}</span></div>
+          <div className="text-gray-800">
+            Order <span className="font-medium">{order.orderNumber}</span>
+          </div>
           <div className="text-gray-800">{total}</div>
           {order.statusUrl && (
-            <a href={order.statusUrl} target="_blank" rel="noopener noreferrer" className="underline">
+            <a
+              href={order.statusUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline"
+            >
               Track Order
             </a>
           )}
@@ -134,7 +143,12 @@ function OrderRow({ order }: { order: OrderNode }) {
         <div className="flex items-center gap-3">
           {thumbs.map((src, i) => (
             // eslint-disable-next-line @next/next/no-img-element
-            <img key={i} src={src} alt="" className="h-32 w-32 rounded object-cover" />
+            <img
+              key={i}
+              src={src}
+              alt=""
+              className="h-32 w-32 rounded object-cover"
+            />
           ))}
           {hasMoreItems && <span className="text-sm text-gray-500">…</span>}
         </div>
@@ -147,7 +161,10 @@ function EmptyState() {
   return (
     <div className="py-10 text-center">
       <p className="text-sm text-gray-600">You don’t have any orders yet.</p>
-      <Link href="/shop" className="mt-4 inline-block rounded-full border px-4 py-2 text-sm hover:bg-gray-50">
+      <Link
+        href="/shop"
+        className="mt-4 inline-block rounded-full border px-4 py-2 text-sm hover:bg-gray-50"
+      >
         Start shopping
       </Link>
     </div>
@@ -157,7 +174,10 @@ function EmptyState() {
 function formatMoney(m: Money) {
   const amount = Number.parseFloat(m.amount);
   try {
-    return new Intl.NumberFormat(undefined, { style: "currency", currency: m.currencyCode }).format(amount);
+    return new Intl.NumberFormat(undefined, {
+      style: "currency",
+      currency: m.currencyCode,
+    }).format(amount);
   } catch {
     return `${m.amount} ${m.currencyCode}`;
   }
@@ -165,12 +185,19 @@ function formatMoney(m: Money) {
 
 function formatDateUpper(iso: string) {
   const d = new Date(iso);
-  return new Intl.DateTimeFormat(undefined, { year: "numeric", month: "long", day: "2-digit" })
+  return new Intl.DateTimeFormat(undefined, {
+    year: "numeric",
+    month: "long",
+    day: "2-digit",
+  })
     .format(d)
     .toUpperCase();
 }
 
 function pretty(s: string | null) {
   if (!s) return "";
-  return s.toLowerCase().replace(/_/g, " ").replace(/^\w/, (c) => c.toUpperCase());
+  return s
+    .toLowerCase()
+    .replace(/_/g, " ")
+    .replace(/^\w/, (c) => c.toUpperCase());
 }

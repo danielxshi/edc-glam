@@ -1,9 +1,30 @@
-// src/app/api/auth/logout/route.ts
-import { NextResponse } from "next/server";
+// app/api/auth/logout/route.ts
+import { NextRequest, NextResponse } from 'next/server'
 
-export async function POST() {
-  const res = NextResponse.redirect(new URL("/", process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"));
-  // Clear the customer token cookie
-  res.cookies.set("sf_customer_token", "", { path: "/", httpOnly: true, secure: true, maxAge: 0 });
-  return res;
+export const dynamic = 'force-dynamic'
+
+function clearToken(res: NextResponse) {
+  // On localhost, `secure: false` is required; in prod, `secure: true`
+  res.cookies.set('sf_customer_token', '', {
+    path: '/',
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 0, // delete
+  })
+}
+
+// POST for programmatic logout (fetch)
+export async function POST(req: NextRequest) {
+  const res = NextResponse.json({ ok: true, redirect: '/' })
+  clearToken(res)
+  return res
+}
+
+// GET for link-based logout fallbacks (direct navigation)
+export async function GET(req: NextRequest) {
+  const url = new URL('/', req.url)
+  const res = NextResponse.redirect(url)
+  clearToken(res)
+  return res
 }

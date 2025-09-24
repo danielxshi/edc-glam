@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { shopifyFetch } from "@/lib/shopify";
 import { QUERY_ACCOUNT_DETAILS } from "@/lib/customer-queries";
 import AccountDetailsForm from "@/components/account/AccountDetailsForm";
-
+import AccountNav from "@/components/account/AccountNav";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
@@ -35,15 +35,7 @@ export default async function AccountDetailsPage() {
       <div className="grid grid-cols-12 gap-8">
         {/* Sidebar */}
         <aside className="col-span-12 md:col-span-3">
-          <div className="sticky top-24">
-            <h2 className="mb-4 text-lg font-medium">Account</h2>
-            <nav className="space-y-3 text-sm flex flex-col">
-              <Link href="/account/order-history" className="hover:underline">Order History</Link>
-              <Link href="/account/addresses" className="hover:underline">Addresses</Link>
-              <Link href="/account" className="underline">Account Details</Link>
-              <Link href="/account/logout" className="hover:underline">Logout</Link>
-            </nav>
-          </div>
+          <AccountNav />
         </aside>
 
         {/* Content */}
