@@ -1,5 +1,6 @@
 "use client";
 
+import FallbackImage from "@/components/fallback-image";
 import { useState, useEffect, useRef } from "react";
 
 type Row = { size: string; chest: string; waist: string };
@@ -19,6 +20,13 @@ export default function SizingGuide({
 
   useEffect(() => {
     if (open) closeBtnRef.current?.focus();
+
+    // Optional: lock body scroll while modal is open
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = open ? "hidden" : prev;
+    return () => {
+      document.body.style.overflow = prev;
+    };
   }, [open]);
 
   return (
@@ -36,39 +44,66 @@ export default function SizingGuide({
       {open && (
         <div
           id="sizing-guide-modal"
-          aria-modal="true"
           role="dialog"
+          aria-modal="true"
           className="fixed inset-0 z-50 flex items-center justify-center"
         >
+          {/* Backdrop */}
           <div
             className="absolute inset-0 bg-black/50"
             onClick={() => setOpen(false)}
             aria-hidden="true"
           />
-          <div className="relative bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-            <h3 className="text-lg font-semibold mb-3">Sizing Guide</h3>
-            <p className="text-sm text-gray-700 mb-4">
-              To ensure the best fit, please refer to our sizing chart below.
-            </p>
 
-            <table className="w-full text-sm border border-gray-200">
-              <thead>
-                <tr className="bg-gray-100">
-                  <th className="border px-3 py-2 text-left">Size</th>
-                  <th className="border px-3 py-2 text-left">Chest (in)</th>
-                  <th className="border px-3 py-2 text-left">Waist (in)</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map((r) => (
-                  <tr key={r.size}>
-                    <td className="border px-3 py-2">{r.size}</td>
-                    <td className="border px-3 py-2">{r.chest}</td>
-                    <td className="border px-3 py-2">{r.waist}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          {/* Panel — now scrollable */}
+          <div
+            className="
+              relative bg-white p-3 rounded-sm shadow-lg
+              w-[90vw] max-w-3xl
+              max-h-[80vh] overflow-y-auto
+            "
+          >
+            <h3
+              id="sizing-guide-title"
+              className="text-base uppercase font-semibold mb-3"
+            >
+              Sizing Guide
+            </h3>
+            <div className="mb-4 space-y-1">
+              <p className="text-xs uppercase text-gray-700 ">
+                To ensure the best fit, please refer to our sizing chart below.
+              </p>
+              <p className="text-xs uppercase text-gray-700 ">
+                All measurements are in MM
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              {/* Image sections: keep aspect ratio, no cropping */}
+              {/* <div className="border border-gray-200 rounded">
+                <FallbackImage
+                  src="/images/sizing-instructions.jpg"
+                  alt="Nail sizing instructions"
+                  width={1080}
+                  height={592}
+                  className="w-full h-auto block"
+                  priority
+                />
+              </div> */}
+
+              {/* Add here */}
+
+              <div className="border border-gray-200 rounded">
+                <FallbackImage
+                  src="/images/sizing-guide.jpg"
+                  alt="Nail sizing guide"
+                  width={1080}
+                  height={592}
+                  className="w-full h-auto block"
+                  priority
+                />
+              </div>
+            </div>
 
             <button
               ref={closeBtnRef}

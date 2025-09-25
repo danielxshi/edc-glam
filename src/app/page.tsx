@@ -89,7 +89,7 @@ export default function Home() {
                       prefetch={false}
                     >
                       <div className="relative w-full aspect-[4/5] overflow-hidden rounded-[2px]">
-                        <h3 className="z-[100] text-center w-full absolute bottom-2 mx-auto text-sm px-2 py-1 text-white tracking-[1px]">
+                        <h3 className="z-[10] text-center w-full absolute bottom-2 mx-auto text-sm px-2 py-1 text-white tracking-[1px]">
                           {item.title}
                         </h3>
                         {/* keep your existing image component here if needed */}
@@ -117,7 +117,7 @@ export default function Home() {
       {/* BANNERS / CAROUSEL */}
       <FullScreenBanner
         imageUrl="/images/emerald-tide.jpg"
-        title="Explore Our Midnight Mist Collection"
+        title="Explore Our Emerald Tide Collection"
         // description="Don't miss out on our amazing deals and discounts."
       />
 

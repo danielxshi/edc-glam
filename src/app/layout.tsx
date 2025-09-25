@@ -10,6 +10,7 @@ import { getCart } from "../lib/shopify";
 import PageWrapper from "@/components/layout/page-wrapper";
 import { TransitionProvider } from "@/components/layout/transition/transition-provider";
 import AnnouncementBar from "@/components/announcements/index";
+import RevealingFooter from "@/components/layout/footer/footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,7 +35,8 @@ export default async function RootLayout({
           <AnnouncementBar />
           <Navbar />
           <PageWrapper>{children}</PageWrapper>
-          <Footer />
+          {/* <Footer /> */}
+          <RevealingFooter />
           {/* </TransitionProvider> */}
         </CartProvider>
       </body>

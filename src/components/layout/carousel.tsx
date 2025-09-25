@@ -1,27 +1,27 @@
-'use client';
+"use client";
 
-import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
-import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
-import FallbackImage from '../fallback-image';
+import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
+import React, { useEffect, useState } from "react";
+import FallbackImage from "../fallback-image";
 
 const features = [
   {
-    title: 'Easy Application',
+    title: "Easy Application",
     description:
-      'Our press-on nails take under 15 minutes to apply. Learn about application, removal, and more with our tutorials page.',
-    imageUrl: '/images/nail-tutorial-1.png',
-    linkText: 'Tutorials',
-    linkHref: '/tutorials',
+      "Our press-on nails take under 15 minutes to apply. Learn about application, removal, and more with our tutorials page.",
+    imageUrl: "/images/nail-tutorial-1.png",
+    linkText: "Tutorials",
+    linkHref: "/tutorials",
   },
   {
-    title: 'Reusable Quality',
+    title: "Reusable Quality",
     description:
-      'Made to last. Each set is designed for multiple wears with proper care and storage.',
-    imageUrl: '/images/nail-tutorial-2.png',
-    linkText: 'Learn More',
-    linkHref: '/care',
+      "Made to last. Each set is designed for multiple wears with proper care and storage.",
+    imageUrl: "/images/nail-tutorial-2.png",
+    linkText: "Learn More",
+    linkHref: "/care",
   },
 ];
 
@@ -61,7 +61,7 @@ const FeatureCarousel: React.FC = () => {
           </AnimatePresence>
         </div>
 
-        <div className="w-full lg:w-1/2 mt-8 lg:mt-0 lg:pl-8 text-center lg:text-left min-h-[400px] flex items-center justify-center relative">
+        <div className="w-full lg:w-1/2 mt-8 lg:mt-0 lg:pl-8 text-center lg:text-left flex items-center justify-center relative">
           <AnimatePresence mode="wait">
             <motion.div
               key={features[index].title}
@@ -71,8 +71,12 @@ const FeatureCarousel: React.FC = () => {
               transition={{ duration: 0.5 }}
               className="max-w-xl"
             >
-              <h3 className="text-xl font-bold mb-3 uppercase">{features[index].title}</h3>
-              <p className="text-gray-600 mb-3 text-sm">{features[index].description}</p>
+              <h3 className="text-xl font-bold mb-3 uppercase">
+                {features[index].title}
+              </h3>
+              <p className="text-gray-600 mb-3 text-sm">
+                {features[index].description}
+              </p>
               <Link
                 href={features[index].linkHref}
                 className="underline text-xs tracking-wider hover:opacity-70 transition"
@@ -91,7 +95,9 @@ const FeatureCarousel: React.FC = () => {
             key={i}
             onClick={() => setIndex(i)}
             className={`w-2 h-2 rounded-full transition-all duration-300 ${
-              i === index ? 'bg-black scale-110' : 'bg-gray-300 hover:bg-gray-400'
+              i === index
+                ? "bg-black scale-110"
+                : "bg-gray-300 hover:bg-gray-400"
             }`}
             aria-label={`Go to slide ${i + 1}`}
           />
