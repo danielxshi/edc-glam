@@ -5,6 +5,7 @@ import Price from "../price";
 import VariantSelector from "./variant-selector";
 import Prose from "../prose";
 import { AddToCart } from "../cart/add-to-cart";
+import SizingGuide from "@/app/product/[handle]/SizingGuide";
 
 export function ProductDescription({
   product,
@@ -39,13 +40,21 @@ export function ProductDescription({
           html={product.descriptionHtml}
         />
       ) : null}
+      <ul className="product-details-subcontent-header mb-6 text-xxs leading-relaxed w-4/5 ml-0 mr-auto">
+        Each Nail Set includes a complimentary nail kit:
+        <li>1 sheet of jelly pads</li>
+        <li>1 nail glue</li>
+        <li>1 nail file</li>
+        <li>1 cuticle tool</li>
+        <li>1 alcohol swab </li>
+      </ul>
 
       {/* NEW: Sizing / Shipping / Tutorials accordion */}
       <ProductInfoAccordion
         className="mt-6 w-4/5 ml-0 mr-auto"
-        shippingHref="/policies/shipping-policy"
-        faqHref="/pages/faq"
-        tutorialsHref="/pages/tutorials"
+        shippingHref="/shipping"
+        faqHref="/faq"
+        tutorialsHref="/nail-tutorial"
         baseToTip="~26mm"
         modelSize="S"
       />
@@ -77,13 +86,12 @@ function ProductInfoAccordion({
     <div className={className}>
       <InfoSection title="SIZING" defaultOpen>
         <div className="space-y-4 text-xxs leading-relaxed tracking-wide text-zinc-800">
-          <p className="uppercase">Model is wearing size {modelSize}</p>
-          <p className="uppercase">Base to tip length: {baseToTip}</p>
           <p className="uppercase">
             Please correctly measure your size before placing an order. Due to
             hygiene reasons, we do not accept refunds if you select the
             incorrect size.
           </p>
+          <SizingGuide />
         </div>
       </InfoSection>
 
@@ -92,12 +100,12 @@ function ProductInfoAccordion({
           <p className="uppercase font-semibold">International</p>
           <ul className="space-y-2">
             <li className="uppercase">
-              <span className="font-semibold">Standard:</span> 9 USD or equivalent
-              (free over 100 USD or equivalent) — 6–27 business days
+              <span className="font-semibold">Standard:</span> 9 USD or
+              equivalent (free over 100 USD or equivalent) — 6–27 business days
             </li>
             <li className="uppercase">
-              <span className="font-semibold">DHL Express:</span> 19 USD or equivalent
-              (free over 200 USD or equivalent) — 3–5 business days
+              <span className="font-semibold">DHL Express:</span> 19 USD or
+              equivalent (free over 200 USD or equivalent) — 3–5 business days
             </li>
           </ul>
           <p className="uppercase">
@@ -144,7 +152,9 @@ function InfoSection({
     <details className="group border-t border-zinc-300 py-5" open={defaultOpen}>
       {/* remove default marker */}
       <summary className="flex cursor-pointer list-none items-center justify-between">
-        <h4 className="text-xs uppercase tracking-widest text-zinc-800">{title}</h4>
+        <h4 className="text-xs uppercase tracking-widest text-zinc-800">
+          {title}
+        </h4>
         <PlusMinus className="h-4 w-4 text-zinc-700 group-open:[&_.vert]:opacity-0" />
       </summary>
       <div className="mt-4">{children}</div>
@@ -158,9 +168,20 @@ function InfoSection({
 function PlusMinus({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
-      <path d="M4 12h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <path
+        d="M4 12h16"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
       {/* vertical bar hidden when <details> is open via group-open selector above */}
-      <path className="vert" d="M12 4v16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <path
+        className="vert"
+        d="M12 4v16"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
