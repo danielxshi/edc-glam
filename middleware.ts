@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 const COOKIE = "site_authed";
 
-// Set DISABLE_SITE_PASSWORD=1 to force-disable protection
+// Optional kill switch: set DISABLE_SITE_PASSWORD=1 to force-disable
 const DISABLE = process.env.DISABLE_SITE_PASSWORD === "1";
 
-// Only protect when there's a password, we're in prod, and not disabled
+// Only protect in production, when SITE_PASSWORD is set, and not disabled
 const PROTECT =
   Boolean(process.env.SITE_PASSWORD) &&
   process.env.NODE_ENV === "production" &&
@@ -16,6 +16,7 @@ export function middleware(req: NextRequest) {
 
   const { pathname } = req.nextUrl;
 
+  // allowlisted paths
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api") ||
@@ -36,7 +37,7 @@ export function middleware(req: NextRequest) {
   return NextResponse.redirect(url);
 }
 
-// Only match when protection is actually on
+// ❗ MUST be a static object (no conditionals/vars)
 export const config = {
-  matcher: PROTECT ? ["/((?!_next/static|_next/image|favicon.ico).*)"] : [],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
 };
