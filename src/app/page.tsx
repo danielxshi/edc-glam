@@ -77,7 +77,7 @@ export default function Home() {
                 },
                 {
                   href: "/product/midnight-mist",
-                  src: "/images/midnight-mist-model.jpg",
+                  src: "/images/midnight-mist-model-rename.jpg",
                   title: "Midnight Mist",
                 },
               ].map((item, i) => (
