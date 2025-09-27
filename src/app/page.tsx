@@ -19,7 +19,7 @@ export default function Home() {
             <FallbackImage
               width={1920}
               height={1080}
-              src="/images/fleur-crop.jpg"
+              src="/images/fleur-model.JPG"
               alt="Background"
               className="absolute inset-0 h-full w-full object-cover"
             />
@@ -77,7 +77,7 @@ export default function Home() {
                 },
                 {
                   href: "/product/midnight-mist",
-                  src: "/images/midnight-mist-modelled.jpg",
+                  src: "/images/midnight-mist-model.jpg",
                   title: "Midnight Mist",
                 },
               ].map((item, i) => (
@@ -127,7 +127,7 @@ export default function Home() {
         </section>
       </FadeInWhenVisible>
 
-      <ZoomParallaxSection />
+      {/* <ZoomParallaxSection /> */}
     </main>
   );
 }
