@@ -107,7 +107,7 @@ export default function CollectionBanner({
         <FallbackImage
           src={
             collection.image?.url ||
-            "/images/fleur-model.jpg"
+            "/images/fleur-model.JPG" // default image if none on collection
           }
           alt={collection.image?.altText ?? collection.title ?? "Collection"}
           width={collection.image?.width || 1600}
