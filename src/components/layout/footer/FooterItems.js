@@ -21,8 +21,8 @@ const FooterItems = [
     legal: {
       link: [
         {
-          title: "Sizing",
-          link: "/size-guide"
+          title: "Tutorial",
+          link: "/nail-tutorial"
         },
         {
           title: "FAQ",
