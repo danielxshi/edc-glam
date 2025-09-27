@@ -19,7 +19,7 @@ export default function Home() {
             <FallbackImage
               width={1920}
               height={1080}
-              src="/images/fleur-model.JPG"
+              src="/images/fleur-model-rename-crop.jpg"
               alt="Background"
               className="absolute inset-0 h-full w-full object-cover"
             />
@@ -72,7 +72,7 @@ export default function Home() {
               {[
                 {
                   href: "/product/gold-digger",
-                  src: "/images/goal-digger-modelled.jpg",
+                  src: "/images/goal-digger-crop.jpg",
                   title: "Goal Digger",
                 },
                 {
