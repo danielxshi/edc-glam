@@ -2,19 +2,19 @@
 
 import styles from "./zoomparallax.module.scss";
 const Picture1 =
-  "https://nailcissist.com/cdn/shop/collections/banner_4.png?v=1744778764&width=1950";
+  "/images/fleur-model.jpg";
 const Picture2 =
-  "https://nailcissist.com/cdn/shop/collections/banner_4.png?v=1744778764&width=1950";
+  "/images/fleur-model.jpg";
 const Picture3 =
-  "https://nailcissist.com/cdn/shop/collections/banner_4.png?v=1744778764&width=1950";
+  "/images/fleur-model.jpg";
 const Picture4 =
-  "https://nailcissist.com/cdn/shop/collections/banner_4.png?v=1744778764&width=1950";
+  "/images/fleur-model.jpg";
 const Picture5 =
-  "https://nailcissist.com/cdn/shop/collections/banner_4.png?v=1744778764&width=1950";
+  "/images/fleur-model.jpg";
 const Picture6 =
-  "https://nailcissist.com/cdn/shop/collections/banner_4.png?v=1744778764&width=1950";
+  "/images/fleur-model.jpg";
 const Picture7 =
-  "https://nailcissist.com/cdn/shop/collections/banner_4.png?v=1744778764&width=1950";
+  "/images/fleur-model.jpg";
 
 import Image from "next/image";
 import { useScroll, useTransform, motion } from "framer-motion";

@@ -18,7 +18,7 @@ export default function PathAwareBanner() {
 
   const backgroundImage = isBest
     ? ""
-    : "https://nailcissist.com/cdn/shop/collections/banner_4.png?v=1744778764&width=1950";
+    : "/images/fleur-model.jpg";
 
   return <ShortBanner title={title} backgroundImage={backgroundImage} />;
 }

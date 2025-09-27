@@ -15,7 +15,7 @@ export default function Home() {
       <section className="">
         <div className="relative w-full h-screen overflow-hidden">
           <picture>
-            <source media="(max-width: 1025px)" srcSet="/images/fleur.jpg" />
+            <source media="(max-width: 1025px)" srcSet="/images/fleur-model.jpg" />
             <FallbackImage
               width={1920}
               height={1080}

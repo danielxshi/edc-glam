@@ -107,7 +107,7 @@ export default function CollectionBanner({
         <FallbackImage
           src={
             collection.image?.url ||
-            "https://nailcissist.com/cdn/shop/files/Homepage_Banner.png?v=1732345686&width=1728"
+            "/images/fleur-model.jpg"
           }
           alt={collection.image?.altText ?? collection.title ?? "Collection"}
           width={collection.image?.width || 1600}
