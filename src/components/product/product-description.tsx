@@ -40,16 +40,17 @@ export function ProductDescription({
           html={product.descriptionHtml}
         />
       ) : null}
+
       <ul className="product-details-subcontent-header mb-6 text-xxs leading-relaxed w-4/5 ml-0 mr-auto">
         Each Nail Set includes a complimentary nail kit:
         <li>1 sheet of jelly pads</li>
         <li>1 nail glue</li>
         <li>1 nail file</li>
         <li>1 cuticle tool</li>
-        <li>1 alcohol swab </li>
+        <li>1 alcohol swab</li>
       </ul>
 
-      {/* NEW: Sizing / Shipping / Tutorials accordion */}
+      {/* Sizing / Shipping / Tutorials accordion — CLOSED by default */}
       <ProductInfoAccordion
         className="mt-6 w-4/5 ml-0 mr-auto"
         shippingHref="/shipping"
@@ -84,7 +85,8 @@ function ProductInfoAccordion({
 }) {
   return (
     <div className={className}>
-      <InfoSection title="SIZING" defaultOpen>
+      {/* Default closed: do NOT pass defaultOpen here */}
+      <InfoSection title="SIZING">
         <div className="space-y-4 text-xxs leading-relaxed tracking-wide text-zinc-800">
           <p className="uppercase">
             Please correctly measure your size before placing an order. Due to
@@ -92,10 +94,15 @@ function ProductInfoAccordion({
             incorrect size.
           </p>
           <SizingGuide />
+          {/* If you want to show model info, uncomment:
+          <p className="uppercase">
+            Model wears size <span className="font-semibold">{modelSize}</span> · Base to tip {baseToTip}
+          </p>
+          */}
         </div>
       </InfoSection>
 
-      <InfoSection title="SHIPPING & DELIVERY" defaultOpen>
+      <InfoSection title="SHIPPING & DELIVERY">
         <div className="space-y-4 text-xxs leading-relaxed tracking-wide text-zinc-800">
           <p className="uppercase font-semibold">International</p>
           <ul className="space-y-2">
@@ -120,7 +127,7 @@ function ProductInfoAccordion({
         </div>
       </InfoSection>
 
-      <InfoSection title="TUTORIALS & FAQ" defaultOpen>
+      <InfoSection title="TUTORIALS & FAQ">
         <div className="space-y-3 text-xxs leading-relaxed tracking-wide text-zinc-800">
           <p className="uppercase">
             For frequently asked questions please click{" "}
@@ -138,6 +145,7 @@ function ProductInfoAccordion({
 
 /* ---------------------------------------------
    Reusable Section (accordion)
+   - Only apply `open` attribute when defaultOpen === true
 ---------------------------------------------- */
 function InfoSection({
   title,
@@ -149,7 +157,10 @@ function InfoSection({
   defaultOpen?: boolean;
 }) {
   return (
-    <details className="group border-t border-zinc-300 py-5" open={defaultOpen}>
+    <details
+      className="group border-t border-zinc-300 py-5"
+      {...(defaultOpen ? { open: true } : {})}
+    >
       {/* remove default marker */}
       <summary className="flex cursor-pointer list-none items-center justify-between">
         <h4 className="text-xs uppercase tracking-widest text-zinc-800">

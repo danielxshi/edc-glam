@@ -56,21 +56,24 @@ export default function HowToSteps({
                 className="grid grid-cols-1 items-center gap-8 md:grid-cols-12"
               >
                 {/* Image */}
-                <figure
+                <div
                   className={[
                     "relative aspect-[16/11] w-full overflow-hidden rounded md:col-span-7",
                     odd ? "md:order-2" : "",
                   ].join(" ")}
                 >
-                  <FallbackImage
+                  {/* <FallbackImage
                     src={s.image}
                     alt={s.alt || s.title}
                     fill
                     className="object-cover"
                     sizes="(min-width: 1024px) 56vw, (min-width: 768px) 60vw, 92vw"
                     priority={i === 0}
-                  />
-                </figure>
+                  /> */}
+                  <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+                    <h2 className="text-8xl font-bold">Step&nbsp;{i + 1}</h2>
+                  </div>
+                </div>
 
                 {/* Text */}
                 <div

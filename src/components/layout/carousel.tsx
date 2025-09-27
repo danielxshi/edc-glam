@@ -11,7 +11,7 @@ const features = [
     title: "Easy Application",
     description:
       "Our press-on nails take under 15 minutes to apply. Learn about application, removal, and more with our tutorials page.",
-    imageUrl: "/images/nail-tutorial-1.png",
+    imageUrl: "/images/fleur-hand-model.jpg",
     linkText: "Tutorials",
     linkHref: "/tutorials",
   },
@@ -19,7 +19,7 @@ const features = [
     title: "Reusable Quality",
     description:
       "Made to last. Each set is designed for multiple wears with proper care and storage.",
-    imageUrl: "/images/nail-tutorial-2.png",
+    imageUrl: "/images/fleur-hand-model.jpg",
     linkText: "Learn More",
     linkHref: "/care",
   },

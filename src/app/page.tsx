@@ -68,7 +68,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="mx-auto grid items-start justify-center grid-cols-2 gap-2 w-full">
+            <div className="mx-auto grid items-start justify-center grid-cols-1 md:grid-cols-2 gap-2 w-full">
               {[
                 {
                   href: "/product/gold-digger",

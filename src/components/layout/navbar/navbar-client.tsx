@@ -1,7 +1,6 @@
-// NavbarClient.tsx
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu } from "../../../lib/shopify/types";
 import MobileMenu from "./mobile-menu";
 import Search from "./search";
@@ -11,6 +10,7 @@ import Link from "next/link";
 import ShopMegaMenu from "./mega-menu";
 import { usePathname } from "next/navigation";
 import AccountMenu from "@/components/layout/navbar/account-menu";
+import NavHoverLink from "./NavHoverLink";
 
 interface Props {
   menu: Menu[];
@@ -33,7 +33,6 @@ export default function NavbarClient({
   const pathname = usePathname();
   const isHome = pathname === "/";
   const headerHeightPx = isHome ? (scrolled ? 48 : 56) : 48;
-  const styleThis = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const thresholdDown = 120,
@@ -57,9 +56,11 @@ export default function NavbarClient({
 
   const onHero = isHome && !scrolled;
 
-  const baseLink = "text-xxs transition-colors duration-300 hover:opacity-70";
+  const baseLink = "text-xxs transition-colors duration-300";
   // ⬇️ Add shadow on hero (home + not scrolled)
-  const navLinkClassHome = `${baseLink} ${scrolled ? "text-black" : "text-white"} ${onHero ? "text-shadow-hero" : ""}`;
+  const navLinkClassHome = `${baseLink} ${scrolled ? "text-black" : "text-white"} ${
+    onHero ? "text-shadow-hero" : ""
+  }`;
   const navLinkClassNotHome = `${baseLink} text-black`;
   const triggerClass = isHome ? navLinkClassHome : navLinkClassNotHome;
 
@@ -74,8 +75,8 @@ export default function NavbarClient({
         scrolled
           ? "bg-[#fff9f9f4] shadow-md"
           : !isHome
-            ? "bg-white/70 shadow-md"
-            : "bg-transparent",
+          ? "bg-white/70 shadow-md"
+          : "bg-transparent",
         "transition-colors duration-300 mt-7",
         onHero ? "text-shadow-hero" : "", // harmless here, real effect is on links
       ].join(" ")}
@@ -91,7 +92,9 @@ export default function NavbarClient({
 
         <Link href="/">
           <div
-            className={`lg:flex hidden space-x-2 transition-transform duration-300 ${scrolled ? "scale-90" : "scale-100"}`}
+            className={`lg:flex hidden space-x-2 transition-transform duration-300 ${
+              scrolled ? "scale-90" : "scale-100"
+            }`}
           >
             <LogoSquare />
           </div>
@@ -100,7 +103,9 @@ export default function NavbarClient({
         <div className="flex lg:hidden justify-center">
           <Link href="/">
             <div
-              className={`flex items-center space-x-2 transition-transform duration-300 ${scrolled ? "scale-90" : "scale-100"}`}
+              className={`flex items-center space-x-2 transition-transform duration-300 ${
+                scrolled ? "scale-90" : "scale-100"
+              }`}
             >
               <LogoSquare />
             </div>
@@ -111,7 +116,10 @@ export default function NavbarClient({
           {menu.length > 0 && (
             <ul className="*:mx-1 hidden gap-3 text-xxs font-normal nav-text lg:flex h-full align-middle items-center">
               {menu.map((item: Menu) => (
-                <li className="whitespace-nowrap h-full align-middle items-center self-center my-auto flex" key={item.title}>
+                <li
+                  className="whitespace-nowrap h-full align-middle items-center self-center my-auto flex"
+                  key={item.title}
+                >
                   {item.title?.toLowerCase() === "shop" ? (
                     <ShopMegaMenu
                       collectionsMenu={collectionsMenu}
@@ -122,14 +130,15 @@ export default function NavbarClient({
                       scrolled={isHome ? scrolled : true}
                       headerHeightPx={headerHeightPx}
                     />
-                  ) : isHome ? (
-                    <Link href={item.path} className={navLinkClassHome}>
-                      {item.title}
-                    </Link>
                   ) : (
-                    <Link href={item.path} className={navLinkClassNotHome}>
+                    <NavHoverLink
+                      href={item.path}
+                      className={isHome ? navLinkClassHome : navLinkClassNotHome}
+                      active={pathname === item.path}
+                      ariaLabel={item.title}
+                    >
                       {item.title}
-                    </Link>
+                    </NavHoverLink>
                   )}
                 </li>
               ))}
@@ -139,7 +148,7 @@ export default function NavbarClient({
 
         {/* Right: search + cart + account */}
         <div className="flex justify-center gap-x-3">
-          <div className="hidden lg:block">
+          <div className="hidden lg:flex">
             <Search linkClassName={triggerClass} />
           </div>
           <CartModal linkClassName={triggerClass} />

@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import type { Menu as SfMenuItem } from "@/lib/shopify/types";
+import NavHoverLink from "../NavHoverLink";
 
 /** A single rendered column in the mega menu */
 type Item = { label: string; href: string };
@@ -247,7 +248,7 @@ export default function ShopMegaMenu({
             style={{ top: headerHeightPx }}
             onPointerEnter={clearClose}
             onPointerLeave={leaveHandler}
-            className="bg-transparent pt-3 fixed left-0 right-0 z-[1000]"
+            className="bg-transparent pt-3 fixed left-0 right-0 z-[100]"
           >
             <div className=" border-t border-neutral-200 bg-white  rounded-[3px]">
               <div className="mx-auto max-w-7xl px-6 py-8">
@@ -262,17 +263,19 @@ export default function ShopMegaMenu({
                         {col.title}
                       </div>
 
-                      <ul className="space-y-3">
+                      <ul className="space-y-2">
                         {col.items.map((item) => (
-                          <li key={item.href} className="min-w-0 max-w-full">
-                            <Link
+                          <li
+                            key={item.href}
+                            className="min-w-0 max-w-full py-1"
+                            onPointerDown={() => setOpen(false)} // ← works for mouse + touch
+                          >
+                            <NavHoverLink
                               href={item.href}
-                              /* ⬇️ wrap long labels instead of overflowing */
-                              className="block max-w-full text-xs leading-6 hover:underline whitespace-normal break-words text-shadow-none"
-                              onClick={() => setOpen(false)}
+                              className="block max-w-full text-xs leading-5 whitespace-normal break-words text-shadow-none"
                             >
                               {item.label}
-                            </Link>
+                            </NavHoverLink>
                           </li>
                         ))}
                       </ul>

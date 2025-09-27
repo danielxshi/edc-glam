@@ -88,7 +88,7 @@ export default function Search({
     <>
       <button
         aria-label="Search"
-        className={linkClassName || 'text-xxs hover:opacity-70 transition'}
+        className={linkClassName || 'text-xxs hover:opacity-70 transition my-auto align-middle flex'}
         onClick={() => setOpen(true)}
       >
         <SearchIcon className="inline-block h-5 w-5 align-middle" />

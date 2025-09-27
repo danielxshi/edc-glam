@@ -14,11 +14,11 @@ export default function MobileMenu({ menu }: { menu: Menu[] }) {
   const closeMobileMenu = () => setIsOpen(false);
 
   return (
-    <div className="mobile-menu flex gap-x-4 align-middle lg:hidden">
+    <div className="mobile-menu flex gap-x-3 align-middle lg:hidden">
       <button
         onClick={openMobileMenu}
         aria-label="Open mobile menu"
-        className="flex h-11 w-fit items-center justify-center rounded-md lg:hidden"
+        className="flex h-11 w-6 items-center justify-center rounded-md lg:hidden"
       >
         {/* Icon mirrors menu state */}
         <TwoBarHamburger
